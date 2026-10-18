@@ -60,10 +60,6 @@ export interface Target11 {
   extensions: string[];
 }
 
-export function principal(t: Target11): string {
-  return t.stems[0]!;
-}
-
 /** Single stem, no extension — fits in an ordinary code field. */
 export function isSimple(t: Target11): boolean {
   return t.stems.length === 1 && t.extensions.length === 0;

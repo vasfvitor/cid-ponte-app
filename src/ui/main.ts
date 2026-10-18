@@ -151,8 +151,8 @@ function renderTarget(t: Target, b: Bridge): HTMLElement {
       notice(
         "warn",
         parsed.stems.length > 1
-          ? "Alvo em <strong>cluster</strong>: mais de um código-tronco ligado por “/”. Campos de 4 caracteres herdados do SUS não comportam este formato."
-          : "Alvo com <strong>extensão</strong> (“&amp;”): código-tronco mais código de extensão. Campos de 4 caracteres herdados do SUS não comportam este formato.",
+          ? "Alvo em <strong>cluster</strong>: mais de um código-tronco ligado por “/”. Não cabe em campos de 4 caracteres do SUS."
+          : "Alvo com <strong>extensão</strong> (“&amp;”): código-tronco mais código de extensão. Não cabe em campos de 4 caracteres do SUS.",
       ),
       ul,
     );
@@ -161,7 +161,7 @@ function renderTarget(t: Target, b: Bridge): HTMLElement {
   const entity = t.code ? b.entity(parsed?.stems[0] ?? t.code) : undefined;
   if (entity?.isResidual) {
     card.append(
-      notice("warn", "Categoria <strong>residual</strong> (“outros especificados” ou “não especificado”). A CID-11 provavelmente tem um código mais específico para o caso; vale refinar."),
+      notice("warn", "Categoria <strong>residual</strong> (outros/não especificado). Provavelmente há código mais específico."),
     );
   }
 
@@ -208,7 +208,7 @@ function render(lk: Lookup): void {
       break;
     case "no_br_path":
       origin.append(
-        notice("bad", "<strong>Código nacional sem correspondente.</strong> Este código existe na CID-10 brasileira mas não aparece no mapa da OMS, nem a sua categoria. Não há conversão automática; consulte a orientação do Ministério da Saúde ou use o Coding Tool para codificar pelo diagnóstico."),
+        notice("bad", "<strong>Código nacional sem correspondente.</strong> Existe na CID-10 brasileira, mas nem ele nem a categoria aparecem no mapa da OMS. Codifique pelo diagnóstico no Coding Tool."),
       );
       break;
     case "no_mapping":
@@ -216,7 +216,7 @@ function render(lk: Lookup): void {
       break;
     case "parent_category":
       origin.append(
-        notice("warn", `O 4º caractere indica <strong>local de ocorrência</strong>, que a CID-11 trata por extensão. A OMS mapeia a categoria <code>${esc(lk.effectiveCode ?? "")}</code>; o resultado abaixo é dela.`),
+        notice("warn", `O 4º caractere é <strong>local de ocorrência</strong>, que a CID-11 trata por extensão. Resultado da categoria <code>${esc(lk.effectiveCode ?? "")}</code>.`),
       );
       break;
     case "mapped":
@@ -228,7 +228,7 @@ function render(lk: Lookup): void {
   const card0 = main[0];
   if (card0?.cardinality === "1:N") {
     origin.append(
-      notice("warn", `<strong>Mais de um código possível</strong> (${1 + alternatives.length} opções). O primeiro é o que a OMS indica como principal; os demais são alternativas da tabela “múltiplas categorias”. A escolha depende do caso clínico.`),
+      notice("warn", `<strong>Mais de um código possível</strong> (${1 + alternatives.length} opções). O primeiro é o principal da OMS; a escolha depende do caso clínico.`),
     );
   } else if (card0?.cardinality === "block") {
     origin.append(notice("warn", "O alvo é um <strong>bloco</strong> (agrupamento) da CID-11, sem código próprio. Escolha uma categoria dentro dele."));

@@ -21,14 +21,10 @@
       <section id="license" class="panel" hidden aria-labelledby="license-title">
         <h2 id="license-title">Antes de começar</h2>
         <p>
-          As tabelas de mapeamento e os títulos em português são da Organização Mundial da Saúde e
-          são baixados direto do servidor da OMS (<code>icdcdn.who.int</code>), cerca de
-          <span id="download-size">10</span>&nbsp;MB, uma única vez. Nada é enviado a lugar nenhum;
-          tudo fica no seu navegador.
-        </p>
-        <p>
-          O uso está sujeito aos
-          <a id="license-link" href="#" target="_blank" rel="noopener">termos de uso da CID-11</a>
+          As tabelas de mapeamento e os títulos em português são da OMS. São baixados uma única vez
+          de <code>icdcdn.who.int</code> (~<span id="download-size">10</span>&nbsp;MB) e ficam só no
+          seu navegador. Uso sujeito aos
+          <a id="license-link" href="#" target="_blank" rel="noopener">termos da CID-11</a>
           (CC BY-ND 3.0 IGO).
         </p>
         <label class="check">
@@ -54,15 +50,13 @@
               type="text"
               inputmode="text"
               autocapitalize="characters"
-              placeholder="ex. I219 ou I21.9"
+              placeholder="ex. I21.9"
               spellcheck="false"
-              aria-describedby="code-hint"
               autofocus
             />
           </div>
           <button type="submit" class="primary">Consultar</button>
         </form>
-        <p id="code-hint" class="hint">Com ou sem ponto, maiúsculas ou minúsculas.</p>
         <ul class="examples" aria-label="Exemplos de códigos">
           <li class="examples-label" aria-hidden="true">Exemplos:</li>
           <li><button type="button" class="chip" data-code="I10">I10</button></li>
@@ -84,13 +78,12 @@
     <footer class="foot">
       <p>
         <strong>Não substitui a codificação clínica.</strong> O mapa da OMS aponta para
-        códigos-tronco; a CID-11 ganha especificidade por pós-coordenação. Para causa básica de
-        óbito a CID-11 usa regras próprias (DORIS) e o mapa é só aproximação.
+        códigos-tronco; para causa básica de óbito é só aproximação (a CID-11 usa as regras DORIS).
       </p>
       <p id="citation"></p>
       <p>
-        Release <span id="release"></span>. Projeto independente, sem vínculo com a OMS ou com o
-        Ministério da Saúde. CID-10 brasileira v2019: CC BR-FIC / Ministério da Saúde.
+        Release <span id="release"></span>. Sem vínculo com a OMS ou o Ministério da Saúde.
+        CID-10 brasileira v2019: CC BR-FIC / MS.
         <a href="https://github.com/vasfvitor/cid-ponte-app" target="_blank" rel="noopener">Código</a>
         · <button type="button" id="clear-cache" class="link">limpar dados baixados</button>
       </p>
