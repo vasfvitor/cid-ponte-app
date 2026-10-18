@@ -10,6 +10,7 @@ Tudo roda no navegador. As tabelas de mapeamento e os títulos em português sã
 
 - CID-10 → CID-11 pelas tabelas oficiais da OMS (`10To11MapToOneCategory` e `10To11MapToMultipleCategories`), com a relação Equivalent/Subclass da tabela `foundation_10To11MapToOneCategory`.
 - Títulos em português da release oficial "pt" da CID-11.
+- Busca da CID-10 brasileira **por nome**, sem acento e em qualquer ordem de palavras ("infarto agudo" → I21.x). O Coding Tool da OMS busca a CID-11 por texto; a CID-10 brasileira ninguém buscava.
 - Regras da CID-10 brasileira (CC BR-FIC v2019, embarcada): título do código de origem; fallback para a categoria de 3 caracteres nos códigos de local de ocorrência (W00–Y34); lista dos códigos nacionais sem caminho na OMS (O93.x, U06, U92, I84 e outros).
 - Link para a entidade no Browser da CID-11 e para o Coding Tool da OMS, para refinar ou pós-coordenar.
 

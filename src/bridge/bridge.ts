@@ -1,6 +1,7 @@
 /** `Bridge`: applies the WHO 10↔11 tables to Brazilian ICD-10 codes. Port of cid-ponte's `Mapa`. */
 
 import { BrTable, NO_BR_PATH, mappableParent } from "./br";
+import type { BrCode } from "./br";
 import { normalize10, parse11 } from "./codes";
 import { MAPPING_FILES, readMappingTable, readSimpleTabulation, simpleTabulationFile } from "./tables";
 import type {
@@ -208,6 +209,11 @@ export class Bridge {
       multiple: [...(this.multiple.get(key) ?? [])],
       foundation: foundation ? [foundation] : [],
     };
+  }
+
+  /** Brazilian ICD-10 codes whose title matches `query` (see `BrTable.search`). */
+  searchBr(query: string, limit = 12): BrCode[] {
+    return this.br.search(query, limit);
   }
 
   /** ICD-10 codes an ICD-11 code points back to (11To10 table). */

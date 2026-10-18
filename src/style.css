@@ -206,8 +206,6 @@ button {
   font: inherit;
   font-family: var(--mono);
   font-size: 1.2rem;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
   color: var(--fg);
   background: var(--surface);
   border: 1px solid var(--line-strong);
@@ -216,8 +214,6 @@ button {
 
 #code::placeholder {
   color: #7a808b;
-  text-transform: none;
-  letter-spacing: 0;
   font-family: var(--sans);
   font-size: 1rem;
 }
@@ -262,6 +258,60 @@ button {
 .chip:hover {
   border-color: var(--line-strong);
   background: #eef1f5;
+}
+
+/* name search suggestions */
+
+.suggestions {
+  margin: 10px 0 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.suggestion {
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+  width: 100%;
+  min-height: 44px;
+  padding: 8px 12px;
+  background: var(--surface);
+  border: 0;
+  border-top: 1px solid var(--line);
+  text-align: left;
+  color: var(--fg);
+}
+
+.suggestion:first-child {
+  border-top: 0;
+}
+
+.suggestion:hover,
+.suggestion[aria-selected="true"] {
+  background: var(--bg);
+}
+
+.suggestion:focus-visible {
+  outline-offset: -3px;
+  border-radius: 0;
+}
+
+.suggestion .code {
+  flex: none;
+  min-width: 4.5ch;
+  font-weight: 600;
+}
+
+.suggestion .inactive {
+  color: var(--fg-muted);
+  font-size: 0.8125rem;
+}
+
+.suggestions .empty {
+  padding: 10px 12px;
+  margin: 0;
+  color: var(--fg-muted);
 }
 
 /* loading */

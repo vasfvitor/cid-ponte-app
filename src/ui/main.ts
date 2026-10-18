@@ -1,7 +1,7 @@
-/** Page wiring: license gate → download → search → render. All user-facing text in pt-BR. */
+/** Page wiring: license gate → download → search (code or name) → render. User-facing text in pt-BR. */
 
 import type { Bridge, Lookup, Target } from "../bridge";
-import { isSimple, parse11 } from "../bridge";
+import { isSimple, kind10, normalize10, parse11 } from "../bridge";
 import {
   ChecksumMismatch, LicenseNotAccepted, acceptLicense, clearCache, isCached, licenseAccepted,
   loadBridge, type Status,
@@ -78,7 +78,7 @@ async function start(): Promise<void> {
   try {
     bridge = await loadBridge(release, onStatus);
     show("search");
-    $<HTMLInputElement>("code").focus();
+    input().focus();
     const fromHash = decodeURIComponent(location.hash.slice(1));
     if (fromHash) query(fromHash);
   } catch (e) {
@@ -95,10 +95,98 @@ async function start(): Promise<void> {
   }
 }
 
+// ---------------------------------------------------------------- search: code or name
+
+const input = (): HTMLInputElement => $<HTMLInputElement>("code");
+
+/** "I219", "i21.9", "A00-A09", "IX" are codes; anything else is a name to search for. */
+function looksLikeCode(text: string): boolean {
+  const c = normalize10(text);
+  return c !== null && kind10(c) !== "other";
+}
+
+/** Run a lookup for a code and show it. */
 function query(code: string): void {
   if (!bridge) return;
-  $<HTMLInputElement>("code").value = code;
+  input().value = code;
+  hideSuggestions();
   render(bridge.lookup(code));
+}
+
+function hideSuggestions(): void {
+  const box = $<HTMLElement>("suggestions");
+  box.hidden = true;
+  box.replaceChildren();
+  input().setAttribute("aria-expanded", "false");
+}
+
+/** Show CID-10 codes whose title matches the typed text. */
+function suggest(text: string): void {
+  if (!bridge) return;
+  const box = $<HTMLElement>("suggestions");
+  const status = $<HTMLElement>("search-status");
+  const hits = bridge.searchBr(text);
+  box.replaceChildren();
+  if (hits.length === 0) {
+    box.append(el("p", "empty", "Nenhum código da CID-10 brasileira com esse nome."));
+    status.textContent = "Nenhum resultado.";
+  } else {
+    for (const h of hits) {
+      const b = el("button", "suggestion");
+      b.type = "button";
+      b.setAttribute("role", "option");
+      b.append(el("span", "code", h.code), el("span", undefined, h.title));
+      if (!h.active) b.append(el("span", "inactive", "inativo"));
+      b.addEventListener("click", () => query(h.code));
+      box.append(b);
+    }
+    status.textContent = `${hits.length} ${hits.length === 1 ? "código encontrado" : "códigos encontrados"}. Use Tab ou as setas para escolher.`;
+  }
+  box.hidden = false;
+  input().setAttribute("aria-expanded", "true");
+}
+
+/** Submit: a code goes straight to the result; a name opens (or keeps) the suggestions. */
+function submit(): void {
+  const text = input().value.trim();
+  if (!text || looksLikeCode(text)) {
+    query(text);
+    return;
+  }
+  suggest(text);
+  $<HTMLElement>("suggestions").querySelector<HTMLButtonElement>(".suggestion")?.focus();
+}
+
+let suggestTimer: number | undefined;
+
+function onInput(): void {
+  const text = input().value.trim();
+  window.clearTimeout(suggestTimer);
+  if (text.length < 3 || looksLikeCode(text)) {
+    hideSuggestions();
+    return;
+  }
+  suggestTimer = window.setTimeout(() => suggest(text), 150);
+}
+
+/** Arrow keys move between the field and the suggestions; Escape closes them. */
+function onKeydown(ev: KeyboardEvent): void {
+  const box = $<HTMLElement>("suggestions");
+  if (box.hidden) return;
+  const items = [...box.querySelectorAll<HTMLButtonElement>(".suggestion")];
+  if (items.length === 0) return;
+  const idx = items.findIndex((b) => b === document.activeElement);
+  if (ev.key === "ArrowDown") {
+    ev.preventDefault();
+    items[Math.min(idx + 1, items.length - 1)]!.focus();
+  } else if (ev.key === "ArrowUp") {
+    ev.preventDefault();
+    if (idx <= 0) input().focus();
+    else items[idx - 1]!.focus();
+  } else if (ev.key === "Escape") {
+    hideSuggestions();
+    input().focus();
+  }
 }
 
 // ---------------------------------------------------------------- rendering
@@ -204,7 +292,7 @@ function render(lk: Lookup): void {
 
   switch (lk.reason) {
     case "empty":
-      origin.append(notice("bad", "Digite um código CID-10."));
+      origin.append(notice("bad", "Digite um código ou um nome da CID-10."));
       break;
     case "unknown":
       origin.append(notice("bad", "Código não encontrado no mapa da OMS nem na CID-10 brasileira. Confira a digitação."));
@@ -278,8 +366,10 @@ async function boot(): Promise<void> {
 
   $<HTMLFormElement>("form").addEventListener("submit", (ev) => {
     ev.preventDefault();
-    query($<HTMLInputElement>("code").value);
+    submit();
   });
+  input().addEventListener("input", onInput);
+  panels.search.addEventListener("keydown", onKeydown);
   for (const chip of document.querySelectorAll<HTMLButtonElement>(".chip")) {
     chip.addEventListener("click", () => query(chip.dataset["code"] ?? ""));
   }

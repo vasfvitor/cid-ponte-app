@@ -49,20 +49,25 @@
         <h2 id="search-title" class="sr-only">Consulta</h2>
         <form id="form" autocomplete="off" novalidate>
           <div class="field">
-            <label for="code" class="field-label">Código CID-10</label>
+            <label for="code" class="field-label">Código ou nome na CID-10</label>
             <input
               id="code"
               name="code"
               type="text"
               inputmode="text"
-              autocapitalize="characters"
-              placeholder="ex. I21.9"
+              placeholder="ex. I21.9 ou infarto agudo"
               spellcheck="false"
+              role="combobox"
+              aria-expanded="false"
+              aria-controls="suggestions"
+              aria-autocomplete="list"
               autofocus
             />
           </div>
           <button type="submit" class="primary">Consultar</button>
         </form>
+        <div id="suggestions" class="suggestions" role="listbox" aria-label="Códigos CID-10 encontrados" hidden></div>
+        <p id="search-status" class="sr-only" role="status" aria-live="polite"></p>
         <ul class="examples" aria-label="Exemplos de códigos">
           <li class="examples-label" aria-hidden="true">Exemplos:</li>
           <li><button type="button" class="chip" data-code="I10">I10</button></li>

@@ -6,6 +6,9 @@
  *   3-character category. `mappableParent()` returns that category.
  * - National codes, or codes Brazil kept after WHO removed them, with no path at all in the
  *   WHO map: `NO_BR_PATH`.
+ * - Title search (`BrTable.search`): the WHO Coding Tool searches ICD-11 by text, but nothing
+ *   searches the *Brazilian* ICD-10 by name. A physician who remembers "infarto agudo" but not
+ *   I21 starts here and then crosses to ICD-11.
  */
 
 import { category10, normalize10 } from "./codes";
@@ -26,6 +29,7 @@ export const NO_BR_PATH: ReadonlySet<string> = new Set([
 
 /** What the app reads from a Brazilian CID-10 record. The CSV has more columns; see FONTES.md. */
 export interface BrCode {
+  code: string;
   title: string;
   active: boolean;
 }
@@ -36,9 +40,23 @@ export interface BrInfo {
   title: string | null;
 }
 
+/** Lowercase, no diacritics, single spaces. CC BR-FIC titles come without accents; users type them. */
+export function foldText(s: string): string {
+  return s
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim();
+}
+
+interface Indexed extends BrCode {
+  folded: string;
+}
+
 /** The embedded CID-10 v2019 table (all records, including inactive ones). */
 export class BrTable {
-  private constructor(private readonly rows: Map<string, BrCode>) {}
+  private constructor(private readonly rows: Map<string, Indexed>) {}
 
   static empty(): BrTable {
     return new BrTable(new Map());
@@ -50,10 +68,12 @@ export class BrTable {
     const iCode = col("codigo");
     const iTitle = col("titulo");
     const iActive = col("ativo");
-    const map = new Map<string, BrCode>();
+    const map = new Map<string, Indexed>();
     for (const r of rows) {
       const code = r[iCode];
-      if (code) map.set(code, { title: r[iTitle] ?? "", active: r[iActive] === "1" });
+      if (!code) continue;
+      const title = r[iTitle] ?? "";
+      map.set(code, { code, title, active: r[iActive] === "1", folded: foldText(title) });
     }
     return new BrTable(map);
   }
@@ -70,6 +90,25 @@ export class BrTable {
       active2019: entry?.active ?? false,
       title: entry?.title ?? null,
     };
+  }
+
+  /**
+   * Codes whose title contains every word of `query` (accent- and case-insensitive).
+   * Ranked: active before inactive, title starting with the query first, then shorter titles,
+   * then by code. Subcategories and their category both appear; the caller decides.
+   */
+  search(query: string, limit = 12): BrCode[] {
+    const words = foldText(query).split(" ").filter(Boolean);
+    if (words.length === 0) return [];
+    const phrase = words.join(" ");
+    const hits: { r: Indexed; rank: number }[] = [];
+    for (const r of this.rows.values()) {
+      if (!words.every((w) => r.folded.includes(w))) continue;
+      const rank = (r.active ? 0 : 1_000_000) + (r.folded.startsWith(phrase) ? 0 : 100_000) + r.folded.length;
+      hits.push({ r, rank });
+    }
+    hits.sort((a, b) => a.rank - b.rank || a.r.code.localeCompare(b.r.code));
+    return hits.slice(0, limit).map(({ r }) => ({ code: r.code, title: r.title, active: r.active }));
   }
 }
 
