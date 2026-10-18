@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { isSimple, isValid11, kind10, normalize10, parse11, split11, undot10 } from "../src/bridge";
 import { parseDelimited } from "../src/bridge/dsv";
+import { browserUrl, codingToolUrl } from "../src/data/sources";
 
 describe("normalize10", () => {
   it("adds the dot and uppercases", () => {
@@ -67,5 +68,15 @@ describe("parseDelimited (python csv semantics)", () => {
   });
   it("no trailing newline", () => {
     expect(parseDelimited("a,b", ",")).toEqual([["a", "b"]]);
+  });
+});
+
+describe("WHO links (formats checked against icd.who.int on 2026-10-18)", () => {
+  it("coding tool and browser URLs", () => {
+    expect(codingToolUrl("2026-01")).toBe("https://icd.who.int/ct/icd11_mms/pt/2026-01");
+    expect(browserUrl("2026-01", "http://id.who.int/icd/entity/761947693")).toBe(
+      "https://icd.who.int/browse/2026-01/mms/pt#761947693",
+    );
+    expect(browserUrl("2026-01", null)).toBeNull();
   });
 });

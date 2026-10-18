@@ -7,7 +7,7 @@ import {
   loadBridge, type Status,
 } from "../data/load";
 import {
-  APPROX_DOWNLOAD_MB, CITATION, CODING_TOOL_URL, DEFAULT_RELEASE, LICENSE_URL, browserUrl,
+  APPROX_DOWNLOAD_MB, CITATION, DEFAULT_RELEASE, LICENSE_URL, browserUrl, codingToolUrl,
 } from "../data/sources";
 
 const $ = <T extends HTMLElement>(id: string): T => {
@@ -240,7 +240,7 @@ function render(lk: Lookup): void {
   if (lk.code) {
     const ct = el("p", "hint");
     const a = el("a", undefined, "Refinar ou pós-coordenar no Coding Tool da OMS");
-    a.href = CODING_TOOL_URL;
+    a.href = codingToolUrl(b.release);
     a.target = "_blank";
     a.rel = "noopener";
     ct.append(a);

@@ -8,7 +8,6 @@
 
 export const CDN = "https://icdcdn.who.int/static/releasefiles";
 export const LICENSE_URL = "https://icd.who.int/en/docs/icd11-license.pdf";
-export const CODING_TOOL_URL = "https://icd.who.int/ct11";
 export const CITATION =
   "International Classification of Diseases, Eleventh Revision (ICD-11), " +
   "World Health Organization (WHO) 2019. https://icd.who.int/browse11. " +
@@ -36,6 +35,11 @@ export const simpleTabulationUrl = (release: string, lang = "pt"): string =>
 
 /** Approximate download size shown before the user accepts (mapping ≈ 6.8 MB + pt ≈ 3 MB). */
 export const APPROX_DOWNLOAD_MB = 10;
+
+/** WHO's ICD-11 Coding Tool (Portuguese) for a release, e.g. https://icd.who.int/ct/icd11_mms/pt/2026-01 */
+export function codingToolUrl(release: string, lang = "pt"): string {
+  return `https://icd.who.int/ct/icd11_mms/${lang}/${release}`;
+}
 
 /** Link to the entity in WHO's ICD-11 browser (Portuguese), from its Foundation URI. */
 export function browserUrl(release: string, foundationUri: string | null): string | null {
