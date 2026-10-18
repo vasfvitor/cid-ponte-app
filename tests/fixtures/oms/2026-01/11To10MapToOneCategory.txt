@@ -1,0 +1,56 @@
+Linearization (release) URI	icd11Code	icd11Chapter	icd11Title	icd10Code	icd10Chapter	icd10Title	2026-Jan-17
+http://id.who.int/icd/release/11/2026-01/mms/257068234	1A00	01	Cholera	A00.9	I	Cholera, unspecified
+http://id.who.int/icd/release/11/2026-01/mms/416025325	1A01	01	Intestinal infection due to other Vibrio	A04	I	Other bacterial intestinal infections
+http://id.who.int/icd/release/11/2026-01/mms/2080365623	1A02	01	Intestinal infections due to Shigella	A03.9	I	Shigellosis, unspecified
+http://id.who.int/icd/release/11/2026-01/mms/344162786/unspecified	1A03.Z	01	Intestinal infections due to Escherichia coli, unspecified	A04	I	Other bacterial intestinal infections
+http://id.who.int/icd/release/11/2026-01/mms/1528414070/unspecified	1A07.Z	01	Typhoid fever, unspecified	A01.0	I	Typhoid fever
+http://id.who.int/icd/release/11/2026-01/mms/1780040028	1A08	01	Paratyphoid fever	A01	I	Typhoid and paratyphoid fevers
+http://id.who.int/icd/release/11/2026-01/mms/515117475/unspecified	1A09.Z	01	Salmonella infection, unspecified	A02.8	I	Other specified salmonella infections
+http://id.who.int/icd/release/11/2026-01/mms/135352227/unspecified	1A0Z	01	Bacterial intestinal infections, unspecified	A04.9	I	Bacterial intestinal infection, unspecified
+http://id.who.int/icd/release/11/2026-01/mms/1834648119/unspecified	1A1Z	01	Bacterial foodborne intoxications, unspecified	A05.9	I	Bacterial foodborne intoxication, unspecified
+http://id.who.int/icd/release/11/2026-01/mms/30738976/unspecified	1A2Z	01	Viral intestinal infections, unspecified	A08	I	Viral and other specified intestinal infections
+http://id.who.int/icd/release/11/2026-01/mms/1777228366/other	1A36.1Y	01	Amoebiasis of other specified sites	A06.9	I	Amoebiasis, unspecified
+http://id.who.int/icd/release/11/2026-01/mms/435671752/unspecified	1A36.Z	01	Amoebiasis, unspecified	A06.9	I	Amoebiasis, unspecified
+http://id.who.int/icd/release/11/2026-01/mms/2092703582/unspecified	1A3Z	01	Protozoal intestinal infections, unspecified	A07.9	I	Protozoal intestinal disease, unspecified
+http://id.who.int/icd/release/11/2026-01/mms/1688127370	1A40	01	Gastroenteritis or colitis without specification of infectious agent	A09	I	Other gastroenteritis and colitis of infectious and unspecified origin
+http://id.who.int/icd/release/11/2026-01/mms/1688127370/unspecified	1A40.Z	01	Infectious gastroenteritis or colitis without specification of infectious agent	A09	I	Other gastroenteritis and colitis of infectious and unspecified origin
+http://id.who.int/icd/release/11/2026-01/mms/570881596	1B12.40	01	Tuberculosis of bones or joints	M90.0	XIII	Tuberculosis of bone
+http://id.who.int/icd/release/11/2026-01/mms/746680558/other	1B12.Y	01	Tuberculosis of other specified organ or site	A18.8	I	Tuberculosis of other specified organs
+http://id.who.int/icd/release/11/2026-01/mms/2072728114/unspecified	1B1Z	01	Tuberculosis, unspecified	A15-A19	I	Tuberculosis
+http://id.who.int/icd/release/11/2026-01/mms/46117627/unspecified	1B75.Z	01	Deep bacterial folliculitis or pyogenic abscess of the skin, unspecified	No Mapping		
+http://id.who.int/icd/release/11/2026-01/mms/1596449540/unspecified	1B93.Z	01	Plague, unspecified	A20	I	Plague
+http://id.who.int/icd/release/11/2026-01/mms/730510331	1B95	01	Brucellosis	A23	I	Brucellosis
+http://id.who.int/icd/release/11/2026-01/mms/520429137	1C41	01	Bacterial infection of unspecified site	A49	I	Bacterial infection of unspecified site
+http://id.who.int/icd/release/11/2026-01/mms/1128677700/unspecified	1D03.3Z	01	Intracranial abscess, unspecified	G06.0	VI	Intracranial abscess and granuloma
+http://id.who.int/icd/release/11/2026-01/mms/685093552	1D20	01	Dengue without warning signs	A97.0	I	Dengue without warning signs
+http://id.who.int/icd/release/11/2026-01/mms/1959883044/unspecified	1D2Z	01	Dengue, unspecified	A97	I	Dengue
+http://id.who.int/icd/release/11/2026-01/mms/1011250453	1E51.2	01	Chronic hepatitis D	B18.8	I	Other chronic viral hepatitis
+http://id.who.int/icd/release/11/2026-01/mms/622600769	1G40	01	Sepsis without septic shock	A30-A49	I	Other bacterial diseases
+http://id.who.int/icd/release/11/2026-01/mms/1435254666/unspecified	1H0Z	01	Infection, unspecified	I	I	Certain infectious and parasitic diseases
+http://id.who.int/icd/release/11/2026-01/mms/1385484871	2B33.4	02	Leukaemia, unspecified	C95.9	II	Leukaemia, unspecified
+http://id.who.int/icd/release/11/2026-01/mms/1047754165/unspecified	2C6Z	02	Malignant neoplasms of breast, unspecified	C50-C50	II	Malignant neoplasm of breast
+http://id.who.int/icd/release/11/2026-01/mms/1766440644/unspecified	3C0Z	03	Diseases of the blood or blood-forming organs, unspecified	III	III	Diseases of the blood and blood-forming organs and certain disorders involving the immune mechanism
+http://id.who.int/icd/release/11/2026-01/mms/119724091	5A11	05	Type 2 diabetes mellitus	E11	IV	Type 2 diabetes mellitus
+http://id.who.int/icd/release/11/2026-01/mms/1697306310	5A14	05	Diabetes mellitus, type unspecified	E14	IV	Unspecified diabetes mellitus
+http://id.who.int/icd/release/11/2026-01/mms/1736778	5A44	05	Insulin-resistance syndromes	E10-E14	IV	Diabetes mellitus
+http://id.who.int/icd/release/11/2026-01/mms/56162827	6B01	06	Panic disorder	F41.0	V	Panic disorder [episodic paroxysmal anxiety]
+http://id.who.int/icd/release/11/2026-01/mms/991786158/unspecified	6B4Z	06	Disorders specifically associated with stress, unspecified	F43	V	Reaction to severe stress, and adjustment disorders
+http://id.who.int/icd/release/11/2026-01/mms/767044268/unspecified	6C20.Z	06	Bodily distress disorder, unspecified	F45	V	Somatoform disorders
+http://id.who.int/icd/release/11/2026-01/mms/334423054/unspecified	6E8Z	06	Mental, behavioural or neurodevelopmental disorders, unspecified	F99-F99	V	Unspecified mental disorder
+http://id.who.int/icd/release/11/2026-01/mms/761947693/unspecified	BA00.Z	11	Essential hypertension, unspecified	I10	IX	Essential (primary) hypertension
+http://id.who.int/icd/release/11/2026-01/mms/1331849426	BA04	11	Secondary hypertension	I15	IX	Secondary hypertension
+http://id.who.int/icd/release/11/2026-01/mms/426429380/unspecified	BE2Z	11	Diseases of the circulatory system, unspecified	IX	IX	Diseases of the circulatory system
+http://id.who.int/icd/release/11/2026-01/mms/142052508/other	CA40.Y	12	Other specified pneumonia	J09-J18	X	Influenza and pneumonia
+http://id.who.int/icd/release/11/2026-01/mms/142052508/unspecified	CA40.Z	12	Pneumonia, organism unspecified	J09-J18	X	Influenza and pneumonia
+http://id.who.int/icd/release/11/2026-01/mms/236964647/unspecified	ED91.Z	14	Disorders of the sebaceous gland, unspecified	L73.9	XII	Follicular disorder, unspecified
+http://id.who.int/icd/release/11/2026-01/mms/900320365/other	ED9Y	14	Other specified disorders involving the hair follicle	XII	XII	Diseases of the skin and subcutaneous tissue
+http://id.who.int/icd/release/11/2026-01/mms/796132216	EG30.0	14	Scalp folliculitis	L73.9	XII	Follicular disorder, unspecified
+http://id.who.int/icd/release/11/2026-01/mms/216184590	FA10.0	15	Bacterial infection of joint	M00.9	XIII	Pyogenic arthritis, unspecified
+http://id.who.int/icd/release/11/2026-01/mms/1902649856/unspecified	JB20.Z	18	Single spontaneous delivery, unspecified	O80	XV	Single spontaneous delivery
+http://id.who.int/icd/release/11/2026-01/mms/1114138453	PA00	23	Unintentional land transport traffic event injuring a pedestrian	V01-V09	XX	Pedestrian injured in transport accident
+http://id.who.int/icd/release/11/2026-01/mms/415990995	PA60	23	Unintentional fall on the same level or from less than 1 metre	W00-W19	XX	Falls
+http://id.who.int/icd/release/11/2026-01/mms/491063206/unspecified	PJ2Z	23	Maltreatment, unspecified	XX	XX	External causes of morbidity and mortality
+http://id.who.int/icd/release/11/2026-01/mms/33759817	PL11.3	23	Foreign body accidentally left in body, as mode of injury or harm	Y61.9	XX	During unspecified surgical and medical care
+http://id.who.int/icd/release/11/2026-01/mms/814512039	QA51	24	Foreign body accidentally left in body without injury or harm	XXI	XXI	Factors influencing health status and contact with health services
+http://id.who.int/icd/release/11/2026-01/mms/76222516/unspecified	QD6Z	24	Problems associated with drinking water or nutrition, unspecified	XXI	XXI	Factors influencing health status and contact with health services
+http://id.who.int/icd/release/11/2026-01/mms/1790791774	RA01.0	25	COVID-19, virus identified	U07.1	XXII	COVID-19, virus identified

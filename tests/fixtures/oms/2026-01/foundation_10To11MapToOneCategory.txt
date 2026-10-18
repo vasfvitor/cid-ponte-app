@@ -1,0 +1,35 @@
+10ClassKind	10DepthInKind	icd10Code	icd10Chapter	icd10Title	ICD-11 FoundationURI	icd11Title	2026-Jan-17
+Chapter	1	I	I	Certain infectious and parasitic diseases	http://id.who.int/icd/entity/1435254666	Certain infectious or parasitic diseases	Subclass	0
+Block	1	A00-A09	I	Intestinal infectious diseases	http://id.who.int/icd/entity/588616678	Gastroenteritis or colitis of infectious origin	Subclass	-1
+Category	2	A00.0	I	Cholera due to Vibrio cholerae 01, biovar cholerae	http://id.who.int/icd/entity/1205958647	Cholera due to Vibrio cholerae O1, biovar cholerae	Equivalent	0
+Category	2	A02.1	I	Salmonella sepsis	http://id.who.int/icd/entity/1070977756	Sepsis due to Salmonella infection without mention of septic shock	Equivalent	0
+Category	2	A06.6	I	Amoebic brain abscess	http://id.who.int/icd/entity/1992658998	Amoebic brain abscess	Equivalent	0
+Block	1	A15-A19	I	Tuberculosis	http://id.who.int/icd/entity/2072728114	Tuberculosis	Equivalent	0
+Category	1	A18	I	Tuberculosis of other organs	http://id.who.int/icd/entity/746680558	Tuberculosis of other systems or organs	Equivalent	0
+Category	2	A18.0	I	Tuberculosis of bones and joints	http://id.who.int/icd/entity/570881596	Tuberculosis of bones or joints	Subclass	0
+Category	1	A20	I	Plague	http://id.who.int/icd/entity/1596449540	Plague	Subclass	-1
+Category	2	A23.0	I	Brucellosis due to Brucella melitensis	http://id.who.int/icd/entity/1716687275	Brucellosis due to Brucella melitensis	Equivalent	0
+Category	2	A41.3	I	Sepsis due to Haemophilus influenzae	http://id.who.int/icd/entity/1876714317	Sepsis due to Haemophilus influenzae infection without mention of septic shock	Equivalent	0
+Category	1	A97	I	Dengue	http://id.who.int/icd/entity/1959883044	Dengue	Subclass	-1
+Category	2	A97.0	I	Dengue without warning signs	http://id.who.int/icd/entity/685093552	Dengue without warning signs	Equivalent	0
+Category	3	B18.00	I	Chronic viral hepatitis B with delta-agent : immune-tolerant phase	http://id.who.int/icd/entity/1907860138	Chronic hepatitis B, co-infected with hepatitis D virus	Subclass	0
+Category	2	C50.9	II	Malignant neoplasm: Breast, unspecified	http://id.who.int/icd/entity/1047754165	Malignant neoplasms of breast	Subclass	0
+Category	2	C95.7	II	Other leukaemia of unspecified cell type	http://id.who.int/icd/entity/1385484871	Leukaemia, unspecified	Subclass	0
+Chapter	1	III	III	Diseases of the blood and blood-forming organs and certain disorders involving the immune mechanism	No Mapping			-1
+Chapter	1	IV	IV	Endocrine, nutritional and metabolic diseases	http://id.who.int/icd/entity/21500692	Endocrine, nutritional or metabolic diseases	Equivalent	0
+Block	1	E10-E14	IV	Diabetes mellitus	http://id.who.int/icd/entity/465177735	Diabetes mellitus	Equivalent	0
+Category	1	E11	IV	Type 2 diabetes mellitus	http://id.who.int/icd/entity/119724091	Type 2 diabetes mellitus	Subclass	-1
+Category	2	E11.3	IV	Type 2 diabetes mellitus with ophthalmic complications	http://id.who.int/icd/entity/119724091	Type 2 diabetes mellitus	Subclass	0
+Block	1	F40-F48	V	Neurotic, stress-related and somatoform disorders	http://id.who.int/icd/entity/334423054	Mental, behavioural or neurodevelopmental disorders	Subclass	-1
+Category	2	F41.0	V	Panic disorder [episodic paroxysmal anxiety]	http://id.who.int/icd/entity/56162827	Panic disorder	Equivalent	0
+Chapter	1	IX	IX	Diseases of the circulatory system	http://id.who.int/icd/entity/426429380	Diseases of the circulatory system	Equivalent	0
+Block	1	I10-I15	IX	Hypertensive diseases	http://id.who.int/icd/entity/924915526	Hypertensive diseases	Equivalent	0
+Category	1	I10	IX	Essential (primary) hypertension	http://id.who.int/icd/entity/761947693	Essential hypertension	Equivalent	0
+Category	2	J18.9	X	Pneumonia, unspecified	http://id.who.int/icd/entity/142052508	Pneumonia	Subclass	-1
+Category	2	L73.9	XII	Follicular disorder, unspecified	No Mapping			-1
+Category	1	O80	XV	Single spontaneous delivery	http://id.who.int/icd/entity/1902649856	Single spontaneous delivery	Equivalent	0
+Category	2	T74.8	XIX	Other maltreatment syndromes	No Mapping			-1
+Category	2	T81.5	XIX	Foreign body accidentally left in body cavity or operation wound following a procedure	No Mapping			-1
+Category	1	V01	XX	Pedestrian injured in collision with pedal cycle	http://id.who.int/icd/entity/1164216858	Pedestrian injured in collision with pedal cycle	Equivalent	0
+Category	1	W00	XX	Fall on same level involving ice and snow	http://id.who.int/icd/entity/1020759823	Unintentional fall involving ice or snow	Equivalent	0
+Category	2	U07.1	XXII	COVID-19, virus identified	http://id.who.int/icd/entity/1790791774	COVID-19, virus identified	Equivalent	0

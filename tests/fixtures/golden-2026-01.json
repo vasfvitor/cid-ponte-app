@@ -1,0 +1,775 @@
+{
+  "release": "2026-01",
+  "lookups": [
+    {
+      "input": "I10",
+      "code": "I10",
+      "reason": "mapped",
+      "effectiveCode": "I10",
+      "brTitle": "Hipertensao essencial (primaria)",
+      "existsInBr": true,
+      "active2019": true,
+      "targets": [
+        {
+          "code": "BA00.Z",
+          "titleEn": "Essential hypertension, unspecified",
+          "titlePt": "Hipertensão essencial não especificada",
+          "kind": "category",
+          "table": "one",
+          "foundationUri": "http://id.who.int/icd/entity/761947693",
+          "linearizationUri": "http://id.who.int/icd/release/11/2026-01/mms/761947693/unspecified",
+          "relation": "Equivalent",
+          "relationN": 0,
+          "cardinality": "1:1",
+          "normalization": "exact"
+        }
+      ]
+    },
+    {
+      "input": "i10",
+      "code": "I10",
+      "reason": "mapped",
+      "effectiveCode": "I10",
+      "brTitle": "Hipertensao essencial (primaria)",
+      "existsInBr": true,
+      "active2019": true,
+      "targets": [
+        {
+          "code": "BA00.Z",
+          "titleEn": "Essential hypertension, unspecified",
+          "titlePt": "Hipertensão essencial não especificada",
+          "kind": "category",
+          "table": "one",
+          "foundationUri": "http://id.who.int/icd/entity/761947693",
+          "linearizationUri": "http://id.who.int/icd/release/11/2026-01/mms/761947693/unspecified",
+          "relation": "Equivalent",
+          "relationN": 0,
+          "cardinality": "1:1",
+          "normalization": "exact"
+        }
+      ]
+    },
+    {
+      "input": "E113",
+      "code": "E11.3",
+      "reason": "mapped",
+      "effectiveCode": "E11.3",
+      "brTitle": "Diabetes mellitus nao-insulino-dependente - com complicacoes oftalmicas",
+      "existsInBr": true,
+      "active2019": true,
+      "targets": [
+        {
+          "code": "5A11",
+          "titleEn": "Type 2 diabetes mellitus",
+          "titlePt": "Diabetes mellitus tipo 2",
+          "kind": "category",
+          "table": "one",
+          "foundationUri": "http://id.who.int/icd/entity/119724091",
+          "linearizationUri": "http://id.who.int/icd/release/11/2026-01/mms/119724091",
+          "relation": "Subclass",
+          "relationN": 0,
+          "cardinality": "1:1",
+          "normalization": "exact"
+        }
+      ]
+    },
+    {
+      "input": "E11.3",
+      "code": "E11.3",
+      "reason": "mapped",
+      "effectiveCode": "E11.3",
+      "brTitle": "Diabetes mellitus nao-insulino-dependente - com complicacoes oftalmicas",
+      "existsInBr": true,
+      "active2019": true,
+      "targets": [
+        {
+          "code": "5A11",
+          "titleEn": "Type 2 diabetes mellitus",
+          "titlePt": "Diabetes mellitus tipo 2",
+          "kind": "category",
+          "table": "one",
+          "foundationUri": "http://id.who.int/icd/entity/119724091",
+          "linearizationUri": "http://id.who.int/icd/release/11/2026-01/mms/119724091",
+          "relation": "Subclass",
+          "relationN": 0,
+          "cardinality": "1:1",
+          "normalization": "exact"
+        }
+      ]
+    },
+    {
+      "input": "U071",
+      "code": "U07.1",
+      "reason": "mapped",
+      "effectiveCode": "U07.1",
+      "brTitle": "COVID-19, virus identificado",
+      "existsInBr": true,
+      "active2019": true,
+      "targets": [
+        {
+          "code": "RA01.0",
+          "titleEn": "COVID-19, virus identified",
+          "titlePt": "COVID-19, vírus identificado",
+          "kind": "category",
+          "table": "one",
+          "foundationUri": "http://id.who.int/icd/entity/1790791774",
+          "linearizationUri": "http://id.who.int/icd/release/11/2026-01/mms/1790791774",
+          "relation": "Equivalent",
+          "relationN": 0,
+          "cardinality": "1:1",
+          "normalization": "exact"
+        }
+      ]
+    },
+    {
+      "input": "A06.6",
+      "code": "A06.6",
+      "reason": "mapped",
+      "effectiveCode": "A06.6",
+      "brTitle": "Abscesso amebiano do cerebro (G07*)",
+      "existsInBr": true,
+      "active2019": true,
+      "targets": [
+        {
+          "code": "1A36.1Y/1D03.3Z",
+          "titleEn": "Amoebiasis of other specified sites / Intracranial abscess, unspecified",
+          "titlePt": "Amebíase em outros locais especificados",
+          "kind": "category",
+          "table": "one",
+          "foundationUri": "http://id.who.int/icd/entity/1992658998",
+          "linearizationUri": "http://id.who.int/icd/release/11/2026-01/mms/1777228366/other",
+          "relation": "Equivalent",
+          "relationN": 0,
+          "cardinality": "1:1",
+          "normalization": "exact"
+        }
+      ]
+    },
+    {
+      "input": "A00.0",
+      "code": "A00.0",
+      "reason": "mapped",
+      "effectiveCode": "A00.0",
+      "brTitle": "Colera devida a Vibrio cholerae 01, biotipo cholerae",
+      "existsInBr": true,
+      "active2019": true,
+      "targets": [
+        {
+          "code": "1A00&XN8P1",
+          "titleEn": "Cholera [Vibrio cholerae O1, biovar cholerae]",
+          "titlePt": "Cólera",
+          "kind": "category",
+          "table": "one",
+          "foundationUri": "http://id.who.int/icd/entity/1205958647",
+          "linearizationUri": "http://id.who.int/icd/release/11/2026-01/mms/257068234",
+          "relation": "Equivalent",
+          "relationN": 0,
+          "cardinality": "1:1",
+          "normalization": "exact"
+        }
+      ]
+    },
+    {
+      "input": "A41.3",
+      "code": "A41.3",
+      "reason": "mapped",
+      "effectiveCode": "A41.3",
+      "brTitle": "Sepse por Haemophilus influenzae",
+      "existsInBr": true,
+      "active2019": true,
+      "targets": [
+        {
+          "code": "1C41/1G40&XN1P6",
+          "titleEn": "Bacterial infection of unspecified site / Sepsis without septic shock [Haemophilus influenzae]",
+          "titlePt": "Infecção bacteriana de localização não especificada",
+          "kind": "category",
+          "table": "one",
+          "foundationUri": "http://id.who.int/icd/entity/1876714317",
+          "linearizationUri": "http://id.who.int/icd/release/11/2026-01/mms/520429137",
+          "relation": "Equivalent",
+          "relationN": 0,
+          "cardinality": "1:1",
+          "normalization": "exact"
+        }
+      ]
+    },
+    {
+      "input": "W000",
+      "code": "W00.0",
+      "reason": "parent_category",
+      "effectiveCode": "W00",
+      "brTitle": "Queda no mesmo nivel envolvendo gelo e neve - residencia",
+      "existsInBr": true,
+      "active2019": true,
+      "targets": [
+        {
+          "code": "PA60&XE3LV",
+          "titleEn": "Unintentional fall on the same level or from less than 1 metre [Snow, ice]",
+          "titlePt": "Queda não intencional no mesmo nível ou de menos de 1 metro de altura",
+          "kind": "category",
+          "table": "one",
+          "foundationUri": "http://id.who.int/icd/entity/1020759823",
+          "linearizationUri": "http://id.who.int/icd/release/11/2026-01/mms/415990995",
+          "relation": "Equivalent",
+          "relationN": 0,
+          "cardinality": "1:1",
+          "normalization": "parent_category"
+        }
+      ]
+    },
+    {
+      "input": "W00",
+      "code": "W00",
+      "reason": "mapped",
+      "effectiveCode": "W00",
+      "brTitle": "Queda no mesmo nivel envolvendo gelo e neve",
+      "existsInBr": true,
+      "active2019": true,
+      "targets": [
+        {
+          "code": "PA60&XE3LV",
+          "titleEn": "Unintentional fall on the same level or from less than 1 metre [Snow, ice]",
+          "titlePt": "Queda não intencional no mesmo nível ou de menos de 1 metro de altura",
+          "kind": "category",
+          "table": "one",
+          "foundationUri": "http://id.who.int/icd/entity/1020759823",
+          "linearizationUri": "http://id.who.int/icd/release/11/2026-01/mms/415990995",
+          "relation": "Equivalent",
+          "relationN": 0,
+          "cardinality": "1:1",
+          "normalization": "exact"
+        }
+      ]
+    },
+    {
+      "input": "O930",
+      "code": "O93.0",
+      "reason": "no_br_path",
+      "effectiveCode": null,
+      "brTitle": "Morte materna associada a acidente de transito",
+      "existsInBr": true,
+      "active2019": true,
+      "targets": []
+    },
+    {
+      "input": "O93.0",
+      "code": "O93.0",
+      "reason": "no_br_path",
+      "effectiveCode": null,
+      "brTitle": "Morte materna associada a acidente de transito",
+      "existsInBr": true,
+      "active2019": true,
+      "targets": []
+    },
+    {
+      "input": "L73.9",
+      "code": "L73.9",
+      "reason": "no_mapping",
+      "effectiveCode": "L73.9",
+      "brTitle": "Afeccoes foliculares, nao especificadas",
+      "existsInBr": true,
+      "active2019": true,
+      "targets": [
+        {
+          "code": "ED9Y",
+          "titleEn": "Other specified disorders involving the hair follicle",
+          "titlePt": "Outras afecções especificadas envolvendo o folículo piloso",
+          "kind": "category",
+          "table": "multiple",
+          "foundationUri": "http://id.who.int/icd/entity/900320365",
+          "linearizationUri": "http://id.who.int/icd/release/11/2026-01/mms/900320365/other",
+          "relation": null,
+          "relationN": -1,
+          "cardinality": "no_mapping",
+          "normalization": "exact"
+        },
+        {
+          "code": "1B75.Z",
+          "titleEn": "Deep bacterial folliculitis or pyogenic abscess of the skin, unspecified",
+          "titlePt": "Foliculite bacteriana profunda ou abscesso piogênico da pele, não especificado",
+          "kind": "category",
+          "table": "multiple",
+          "foundationUri": "http://id.who.int/icd/entity/46117627",
+          "linearizationUri": "http://id.who.int/icd/release/11/2026-01/mms/46117627/unspecified",
+          "relation": null,
+          "relationN": -1,
+          "cardinality": "no_mapping",
+          "normalization": "exact"
+        },
+        {
+          "code": "EG30.0",
+          "titleEn": "Scalp folliculitis",
+          "titlePt": "Foliculite do couro cabeludo",
+          "kind": "category",
+          "table": "multiple",
+          "foundationUri": "http://id.who.int/icd/entity/796132216",
+          "linearizationUri": "http://id.who.int/icd/release/11/2026-01/mms/796132216",
+          "relation": null,
+          "relationN": -1,
+          "cardinality": "no_mapping",
+          "normalization": "exact"
+        },
+        {
+          "code": "ED91.Z",
+          "titleEn": "Disorders of the sebaceous gland, unspecified",
+          "titlePt": "Transtornos da glândula sebácea, não especificados",
+          "kind": "category",
+          "table": "multiple",
+          "foundationUri": "http://id.who.int/icd/entity/236964647",
+          "linearizationUri": "http://id.who.int/icd/release/11/2026-01/mms/236964647/unspecified",
+          "relation": null,
+          "relationN": -1,
+          "cardinality": "no_mapping",
+          "normalization": "exact"
+        }
+      ]
+    },
+    {
+      "input": "L739",
+      "code": "L73.9",
+      "reason": "no_mapping",
+      "effectiveCode": "L73.9",
+      "brTitle": "Afeccoes foliculares, nao especificadas",
+      "existsInBr": true,
+      "active2019": true,
+      "targets": [
+        {
+          "code": "ED9Y",
+          "titleEn": "Other specified disorders involving the hair follicle",
+          "titlePt": "Outras afecções especificadas envolvendo o folículo piloso",
+          "kind": "category",
+          "table": "multiple",
+          "foundationUri": "http://id.who.int/icd/entity/900320365",
+          "linearizationUri": "http://id.who.int/icd/release/11/2026-01/mms/900320365/other",
+          "relation": null,
+          "relationN": -1,
+          "cardinality": "no_mapping",
+          "normalization": "exact"
+        },
+        {
+          "code": "1B75.Z",
+          "titleEn": "Deep bacterial folliculitis or pyogenic abscess of the skin, unspecified",
+          "titlePt": "Foliculite bacteriana profunda ou abscesso piogênico da pele, não especificado",
+          "kind": "category",
+          "table": "multiple",
+          "foundationUri": "http://id.who.int/icd/entity/46117627",
+          "linearizationUri": "http://id.who.int/icd/release/11/2026-01/mms/46117627/unspecified",
+          "relation": null,
+          "relationN": -1,
+          "cardinality": "no_mapping",
+          "normalization": "exact"
+        },
+        {
+          "code": "EG30.0",
+          "titleEn": "Scalp folliculitis",
+          "titlePt": "Foliculite do couro cabeludo",
+          "kind": "category",
+          "table": "multiple",
+          "foundationUri": "http://id.who.int/icd/entity/796132216",
+          "linearizationUri": "http://id.who.int/icd/release/11/2026-01/mms/796132216",
+          "relation": null,
+          "relationN": -1,
+          "cardinality": "no_mapping",
+          "normalization": "exact"
+        },
+        {
+          "code": "ED91.Z",
+          "titleEn": "Disorders of the sebaceous gland, unspecified",
+          "titlePt": "Transtornos da glândula sebácea, não especificados",
+          "kind": "category",
+          "table": "multiple",
+          "foundationUri": "http://id.who.int/icd/entity/236964647",
+          "linearizationUri": "http://id.who.int/icd/release/11/2026-01/mms/236964647/unspecified",
+          "relation": null,
+          "relationN": -1,
+          "cardinality": "no_mapping",
+          "normalization": "exact"
+        }
+      ]
+    },
+    {
+      "input": "T74.8",
+      "code": "T74.8",
+      "reason": "no_mapping",
+      "effectiveCode": "T74.8",
+      "brTitle": "Outras sindromes especificadas de maus tratos",
+      "existsInBr": true,
+      "active2019": true,
+      "targets": [
+        {
+          "code": "PJ2Z",
+          "titleEn": "Maltreatment, unspecified",
+          "titlePt": "Maus-tratos não especificados",
+          "kind": "category",
+          "table": "multiple",
+          "foundationUri": "http://id.who.int/icd/entity/491063206",
+          "linearizationUri": "http://id.who.int/icd/release/11/2026-01/mms/491063206/unspecified",
+          "relation": null,
+          "relationN": -1,
+          "cardinality": "no_mapping",
+          "normalization": "exact"
+        },
+        {
+          "code": "QD6Z",
+          "titleEn": "Problems associated with drinking water or nutrition, unspecified",
+          "titlePt": "Problemas associados a água potável ou nutrição, não especificados",
+          "kind": "category",
+          "table": "multiple",
+          "foundationUri": "http://id.who.int/icd/entity/76222516",
+          "linearizationUri": "http://id.who.int/icd/release/11/2026-01/mms/76222516/unspecified",
+          "relation": null,
+          "relationN": -1,
+          "cardinality": "no_mapping",
+          "normalization": "exact"
+        }
+      ]
+    },
+    {
+      "input": "Z99.99",
+      "code": "Z99.99",
+      "reason": "unknown",
+      "effectiveCode": null,
+      "brTitle": null,
+      "existsInBr": false,
+      "active2019": false,
+      "targets": []
+    },
+    {
+      "input": "",
+      "code": "",
+      "reason": "empty",
+      "effectiveCode": null,
+      "brTitle": null,
+      "existsInBr": false,
+      "active2019": false,
+      "targets": []
+    },
+    {
+      "input": "   ",
+      "code": "",
+      "reason": "empty",
+      "effectiveCode": null,
+      "brTitle": null,
+      "existsInBr": false,
+      "active2019": false,
+      "targets": []
+    },
+    {
+      "input": "O80",
+      "code": "O80",
+      "reason": "mapped",
+      "effectiveCode": "O80",
+      "brTitle": "Parto unico espontaneo",
+      "existsInBr": true,
+      "active2019": true,
+      "targets": [
+        {
+          "code": "JB20.Z",
+          "titleEn": "Single spontaneous delivery, unspecified",
+          "titlePt": "Parto único espontâneo, não especificado",
+          "kind": "category",
+          "table": "one",
+          "foundationUri": "http://id.who.int/icd/entity/1902649856",
+          "linearizationUri": "http://id.who.int/icd/release/11/2026-01/mms/1902649856/unspecified",
+          "relation": "Equivalent",
+          "relationN": 0,
+          "cardinality": "1:1",
+          "normalization": "exact"
+        }
+      ]
+    },
+    {
+      "input": "C50.9",
+      "code": "C50.9",
+      "reason": "mapped",
+      "effectiveCode": "C50.9",
+      "brTitle": "Mama, nao especificada",
+      "existsInBr": true,
+      "active2019": true,
+      "targets": [
+        {
+          "code": "2C6Z",
+          "titleEn": "Malignant neoplasms of breast, unspecified",
+          "titlePt": "Neoplasias malignas da mama, não especificadas",
+          "kind": "category",
+          "table": "one",
+          "foundationUri": "http://id.who.int/icd/entity/1047754165",
+          "linearizationUri": "http://id.who.int/icd/release/11/2026-01/mms/1047754165/unspecified",
+          "relation": "Subclass",
+          "relationN": 0,
+          "cardinality": "1:1",
+          "normalization": "exact"
+        }
+      ]
+    },
+    {
+      "input": "J18.9",
+      "code": "J18.9",
+      "reason": "mapped",
+      "effectiveCode": "J18.9",
+      "brTitle": "Pneumonia nao especificada",
+      "existsInBr": true,
+      "active2019": true,
+      "targets": [
+        {
+          "code": "CA40.Z",
+          "titleEn": "Pneumonia, organism unspecified",
+          "titlePt": "Pneumonia, organismo não especificado",
+          "kind": "category",
+          "table": "one",
+          "foundationUri": "http://id.who.int/icd/entity/142052508",
+          "linearizationUri": "http://id.who.int/icd/release/11/2026-01/mms/142052508/unspecified",
+          "relation": "Subclass",
+          "relationN": -1,
+          "cardinality": "1:1",
+          "normalization": "exact"
+        },
+        {
+          "code": "CA40.Y",
+          "titleEn": "Other specified pneumonia",
+          "titlePt": "Outra pneumonia especificada",
+          "kind": "category",
+          "table": "multiple",
+          "foundationUri": "http://id.who.int/icd/entity/22148446",
+          "linearizationUri": "http://id.who.int/icd/release/11/2026-01/mms/142052508/other",
+          "relation": "Subclass",
+          "relationN": -1,
+          "cardinality": "1:1",
+          "normalization": "exact"
+        }
+      ]
+    },
+    {
+      "input": "A18.0",
+      "code": "A18.0",
+      "reason": "mapped",
+      "effectiveCode": "A18.0",
+      "brTitle": "Tuberculose ossea e das articulacoes",
+      "existsInBr": true,
+      "active2019": true,
+      "targets": [
+        {
+          "code": "1B12.40",
+          "titleEn": "Tuberculosis of bones or joints",
+          "titlePt": "Tuberculose dos ossos ou das articulações",
+          "kind": "category",
+          "table": "one",
+          "foundationUri": "http://id.who.int/icd/entity/570881596",
+          "linearizationUri": "http://id.who.int/icd/release/11/2026-01/mms/570881596",
+          "relation": "Subclass",
+          "relationN": 0,
+          "cardinality": "1:1",
+          "normalization": "exact"
+        },
+        {
+          "code": "1B12.40/FA10.0",
+          "titleEn": "Tuberculosis of bones or joints / Bacterial infection of joint",
+          "titlePt": "Tuberculose dos ossos ou das articulações",
+          "kind": "category",
+          "table": "multiple",
+          "foundationUri": "http://id.who.int/icd/entity/1055680550",
+          "linearizationUri": "http://id.who.int/icd/release/11/2026-01/mms/570881596",
+          "relation": "Subclass",
+          "relationN": 0,
+          "cardinality": "1:1",
+          "normalization": "exact"
+        }
+      ]
+    },
+    {
+      "input": "A97.0",
+      "code": "A97.0",
+      "reason": "mapped",
+      "effectiveCode": "A97.0",
+      "brTitle": "Dengue sem sinais de alerta",
+      "existsInBr": true,
+      "active2019": true,
+      "targets": [
+        {
+          "code": "1D20",
+          "titleEn": "Dengue without warning signs",
+          "titlePt": "Dengue sem sinais de alarme",
+          "kind": "category",
+          "table": "one",
+          "foundationUri": "http://id.who.int/icd/entity/685093552",
+          "linearizationUri": "http://id.who.int/icd/release/11/2026-01/mms/685093552",
+          "relation": "Equivalent",
+          "relationN": 0,
+          "cardinality": "1:1",
+          "normalization": "exact"
+        }
+      ]
+    },
+    {
+      "input": "A97",
+      "code": "A97",
+      "reason": "mapped",
+      "effectiveCode": "A97",
+      "brTitle": "Dengue",
+      "existsInBr": true,
+      "active2019": true,
+      "targets": [
+        {
+          "code": "1D2Z",
+          "titleEn": "Dengue, unspecified",
+          "titlePt": "Febre da dengue, não especificada",
+          "kind": "category",
+          "table": "one",
+          "foundationUri": "http://id.who.int/icd/entity/1959883044",
+          "linearizationUri": "http://id.who.int/icd/release/11/2026-01/mms/1959883044/unspecified",
+          "relation": "Subclass",
+          "relationN": -1,
+          "cardinality": "1:1",
+          "normalization": "exact"
+        }
+      ]
+    },
+    {
+      "input": "A23.0",
+      "code": "A23.0",
+      "reason": "mapped",
+      "effectiveCode": "A23.0",
+      "brTitle": "Brucelose por Brucella melitensis",
+      "existsInBr": true,
+      "active2019": true,
+      "targets": [
+        {
+          "code": "1B95&XN7ZW",
+          "titleEn": "Brucellosis [Brucella melitensis]",
+          "titlePt": "Brucelose",
+          "kind": "category",
+          "table": "one",
+          "foundationUri": "http://id.who.int/icd/entity/1716687275",
+          "linearizationUri": "http://id.who.int/icd/release/11/2026-01/mms/730510331",
+          "relation": "Equivalent",
+          "relationN": 0,
+          "cardinality": "1:1",
+          "normalization": "exact"
+        }
+      ]
+    },
+    {
+      "input": "B18.00",
+      "code": "B18.00",
+      "reason": "mapped",
+      "effectiveCode": "B18.00",
+      "brTitle": null,
+      "existsInBr": false,
+      "active2019": false,
+      "targets": [
+        {
+          "code": "1E51.2",
+          "titleEn": "Chronic hepatitis D",
+          "titlePt": "Hepatite D crônica",
+          "kind": "category",
+          "table": "one",
+          "foundationUri": "http://id.who.int/icd/entity/1907860138",
+          "linearizationUri": "http://id.who.int/icd/release/11/2026-01/mms/1011250453",
+          "relation": "Subclass",
+          "relationN": 0,
+          "cardinality": "1:1",
+          "normalization": "exact"
+        }
+      ]
+    },
+    {
+      "input": "A02.1",
+      "code": "A02.1",
+      "reason": "mapped",
+      "effectiveCode": "A02.1",
+      "brTitle": "Sepse por salmonela",
+      "existsInBr": true,
+      "active2019": true,
+      "targets": [
+        {
+          "code": "1A09.Z",
+          "titleEn": "Salmonella infection, unspecified",
+          "titlePt": "Infecção por Salmonella, não especificada",
+          "kind": "category",
+          "table": "one",
+          "foundationUri": "http://id.who.int/icd/entity/1070977756",
+          "linearizationUri": "http://id.who.int/icd/release/11/2026-01/mms/515117475/unspecified",
+          "relation": "Equivalent",
+          "relationN": 0,
+          "cardinality": "1:1",
+          "normalization": "exact"
+        }
+      ]
+    },
+    {
+      "input": "C95.7",
+      "code": "C95.7",
+      "reason": "mapped",
+      "effectiveCode": "C95.7",
+      "brTitle": "Outras leucemias de tipo celular nao especificado",
+      "existsInBr": true,
+      "active2019": true,
+      "targets": [
+        {
+          "code": "2B33.4",
+          "titleEn": "Leukaemia, unspecified",
+          "titlePt": "Leucemia, não especificada",
+          "kind": "category",
+          "table": "one",
+          "foundationUri": "http://id.who.int/icd/entity/1385484871",
+          "linearizationUri": "http://id.who.int/icd/release/11/2026-01/mms/1385484871",
+          "relation": "Subclass",
+          "relationN": 0,
+          "cardinality": "1:1",
+          "normalization": "exact"
+        }
+      ]
+    },
+    {
+      "input": "F41.0",
+      "code": "F41.0",
+      "reason": "mapped",
+      "effectiveCode": "F41.0",
+      "brTitle": "Transtorno de panico [ansiedade paroxistica episodica]",
+      "existsInBr": true,
+      "active2019": true,
+      "targets": [
+        {
+          "code": "6B01",
+          "titleEn": "Panic disorder",
+          "titlePt": "Transtorno de pânico",
+          "kind": "category",
+          "table": "one",
+          "foundationUri": "http://id.who.int/icd/entity/56162827",
+          "linearizationUri": "http://id.who.int/icd/release/11/2026-01/mms/56162827",
+          "relation": "Equivalent",
+          "relationN": 0,
+          "cardinality": "1:1",
+          "normalization": "exact"
+        }
+      ]
+    }
+  ],
+  "reverse": {
+    "RA01.0": [
+      {
+        "code": "U07.1",
+        "titleEn": "COVID-19, virus identified",
+        "brTitle": "COVID-19, virus identificado",
+        "existsInBr": true
+      }
+    ],
+    "BA00.Z": [
+      {
+        "code": "I10",
+        "titleEn": "Essential (primary) hypertension",
+        "brTitle": "Hipertensao essencial (primaria)",
+        "existsInBr": true
+      }
+    ],
+    "5A11": [
+      {
+        "code": "E11",
+        "titleEn": "Type 2 diabetes mellitus",
+        "brTitle": "Diabetes mellitus nao-insulino-dependente",
+        "existsInBr": true
+      }
+    ],
+    "ZZZZ": []
+  }
+}
