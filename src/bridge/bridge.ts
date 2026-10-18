@@ -23,12 +23,17 @@ export interface Explanation extends Lookup {
   foundation: Row[];
 }
 
-type Resolved = { effective: string; via: Normalization } | { effective: null; via: Reason };
+/** Result of resolving an input code against the OneCategory table, computed once per lookup. */
+type Resolved =
+  | { code: string; effective: string; row: Row; normalization: Normalization }
+  | { code: string; effective: null; reason: "empty" | "no_br_path" | "unknown" };
+
+/** WHO marks "No Mapping" with an empty target: no class kind on the row. */
+const hasNoMapping = (row: Row): boolean => !row["icd11_class_kind"];
 
 export class Bridge {
   readonly release: string;
   private readonly one = new Map<string, Row>();
-  private readonly oneOrder: string[] = [];
   private readonly multiple = new Map<string, Row[]>();
   private readonly rev = new Map<string, Row[]>();
   private readonly foundation = new Map<string, Row>();
@@ -41,10 +46,7 @@ export class Bridge {
     this.br = src.br ?? BrTable.empty();
     for (const row of src.one) {
       const c = row["icd10_code"];
-      if (c !== null && c !== undefined && !this.one.has(c)) {
-        this.one.set(c, row);
-        this.oneOrder.push(c);
-      }
+      if (c && !this.one.has(c)) this.one.set(c, row);
     }
     for (const row of src.multiple) {
       const c = row["icd10_code"];
@@ -86,30 +88,39 @@ export class Bridge {
     return new Set(this.one.keys());
   }
 
-  /** SimpleTabulation entity of an MMS code (titles, residual flag), if loaded. */
-  entity(code11: string): Entity11 | undefined {
-    return this.titles.get(code11);
-  }
-
   get hasTitles(): boolean {
     return this.titles.size > 0;
   }
 
-  private resolve(code: string | null | undefined): Resolved {
-    const c = normalize10(code);
-    if (!c) return { effective: null, via: "empty" };
-    if (this.one.has(c)) return { effective: c, via: "exact" };
-    if (NO_BR_PATH.has(c)) return { effective: null, via: "no_br_path" };
-    const parent = mappableParent(c, this.one);
-    if (parent) return { effective: parent, via: "parent_category" };
-    return { effective: null, via: "unknown" };
+  /**
+   * SimpleTabulation entity behind an ICD-11 target. Composite targets ("1C41/1G40&XN1P6")
+   * are not in the SimpleTabulation, so the main stem (first before "/") is used. This is the
+   * one place that rule lives; titles and the residual warning both come from here.
+   */
+  entityOf(code11: string | null): Entity11 | undefined {
+    if (!code11) return undefined;
+    const exact = this.titles.get(code11);
+    if (exact) return exact;
+    const p = parse11(code11);
+    return p ? this.titles.get(p.stems[0]!) : undefined;
   }
 
-  private cardinality(effective: string): Cardinality {
-    const row = this.one.get(effective)!;
-    const kind = row["icd11_class_kind"];
-    if (kind === null || kind === undefined) return "no_mapping";
-    if (kind === "block") return "block";
+  private resolve(input: string | null | undefined): Resolved {
+    const code = normalize10(input) ?? "";
+    if (!code) return { code, effective: null, reason: "empty" };
+    const row = this.one.get(code);
+    if (row) return { code, effective: code, row, normalization: "exact" };
+    if (NO_BR_PATH.has(code)) return { code, effective: null, reason: "no_br_path" };
+    const parent = mappableParent(code, this.one);
+    if (parent) {
+      return { code, effective: parent, row: this.one.get(parent)!, normalization: "parent_category" };
+    }
+    return { code, effective: null, reason: "unknown" };
+  }
+
+  private cardinality(effective: string, row: Row): Cardinality {
+    if (hasNoMapping(row)) return "no_mapping";
+    if (row["icd11_class_kind"] === "block") return "block";
     const distinct = new Set<string>();
     for (const r of this.multiple.get(effective) ?? []) {
       const c = r["icd11_code"];
@@ -123,80 +134,71 @@ export class Bridge {
     cardinality: Cardinality,
   ): Target {
     const code = row["icd11_code"] ?? null;
-    // composite targets (1C41/1G40&XN1P6) are not in the SimpleTabulation: use the main stem
-    let t = code ? this.titles.get(code) : undefined;
-    if (!t && code) {
-      const p = parse11(code);
-      t = p ? this.titles.get(p.stems[0]!) : undefined;
-    }
     const f = this.foundation.get(effective);
     const n = f?.["relation_n"];
     return {
       code,
       titleEn: row["icd11_title"] ?? null,
-      titlePt: t ? t.title : null,
+      titlePt: this.entityOf(code)?.title ?? null,
       kind: row["icd11_class_kind"] ?? null,
       table,
       foundationUri: row["icd11_foundation_uri"] ?? null,
       linearizationUri: row["icd11_linearization_uri"] ?? null,
       relation: f?.["relation"] ?? null,
-      relationN: n !== null && n !== undefined && n !== "" ? Number.parseInt(n, 10) : null,
+      relationN: n ? Number.parseInt(n, 10) : null,
       cardinality,
       normalization,
     };
   }
 
-  /**
-   * ICD-11 targets of an ICD-10 code. `mode="one"` returns the OneCategory target;
-   * `mode="all"` adds the distinct MultipleCategories targets. Empty when there is no target;
-   * `lookup().reason` says why.
-   */
-  targets(code: string, mode: "one" | "all" = "one"): Target[] {
-    const r = this.resolve(code);
-    if (r.effective === null) return [];
-    const card = this.cardinality(r.effective);
-    const row = this.one.get(r.effective)!;
+  /** OneCategory target first, then the distinct MultipleCategories targets. */
+  private targetsFor(r: Resolved & { effective: string }): Target[] {
+    const card = this.cardinality(r.effective, r.row);
     const out: Target[] = [];
-    if (row["icd11_code"] || row["icd11_class_kind"]) {
-      out.push(this.target(row, "one", r.effective, r.via, card));
+    // Same predicate as the Python package: a row with a code or a kind yields a target.
+    if (r.row["icd11_code"] || r.row["icd11_class_kind"]) {
+      out.push(this.target(r.row, "one", r.effective, r.normalization, card));
     }
-    if (mode === "all") {
-      const seen = new Set(out.map((t) => t.code));
-      for (const m of this.multiple.get(r.effective) ?? []) {
-        const c = m["icd11_code"];
-        if (c && !seen.has(c)) {
-          out.push(this.target(m, "multiple", r.effective, r.via, card));
-          seen.add(c);
-        }
+    const seen = new Set(out.map((t) => t.code));
+    for (const m of this.multiple.get(r.effective) ?? []) {
+      const c = m["icd11_code"];
+      if (c && !seen.has(c)) {
+        out.push(this.target(m, "multiple", r.effective, r.normalization, card));
+        seen.add(c);
       }
     }
     return out;
   }
 
   /** Everything the map and the Brazilian table know about an ICD-10 code, plus its targets. */
-  lookup(input: string, mode: "one" | "all" = "all"): Lookup {
-    const c = normalize10(input) ?? "";
-    const r = this.resolve(c);
-    const info = this.br.info(c);
+  lookup(input: string): Lookup {
+    const r = this.resolve(input);
+    const info = this.br.info(r.code);
     let reason: Reason;
-    if (r.effective === null) reason = r.via;
-    else if (!this.one.get(r.effective)!["icd11_class_kind"]) reason = "no_mapping";
-    else reason = r.via === "exact" ? "mapped" : "parent_category";
+    let targets: Target[] = [];
+    if (r.effective === null) {
+      reason = r.reason;
+    } else {
+      reason = hasNoMapping(r.row)
+        ? "no_mapping"
+        : r.normalization === "exact" ? "mapped" : "parent_category";
+      targets = this.targetsFor(r);
+    }
     return {
       input,
-      code: c,
+      code: r.code,
       reason,
       effectiveCode: r.effective,
       brTitle: info.title,
       existsInBr: info.exists,
       active2019: info.active2019,
-      targets: this.targets(c, mode),
+      targets,
     };
   }
 
   /** `lookup()` plus the raw WHO rows (one / multiple / foundation) behind it. */
   explain(input: string): Explanation {
-    const base = this.lookup(input, "all");
+    const base = this.lookup(input);
     const key = base.effectiveCode ?? base.code;
     const one = this.one.get(key);
     const foundation = this.foundation.get(key);

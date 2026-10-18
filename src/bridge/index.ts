@@ -1,13 +1,5 @@
 export { Bridge } from "./bridge";
-export type { BridgeSources, Explanation } from "./bridge";
-export { BrTable, NO_BR_PATH, mappableParent } from "./br";
-export type { BrCode, BrInfo } from "./br";
-export {
-  category10, isSimple, isValid11, kind10, normalize10, parse11, split11, undot10,
-} from "./codes";
-export type { Kind10, Target11 } from "./codes";
-export { MAPPING_FILES, readMappingTable, readSimpleTabulation, simpleTabulationFile } from "./tables";
-export type { MappingTable } from "./tables";
-export type {
-  Cardinality, Entity11, Lookup, Normalization, Origin10, Reason, Row, TableName, Target,
-} from "./types";
+export { BrTable, NO_BR_PATH } from "./br";
+export { isSimple, isValid11, kind10, normalize10, parse11, split11, undot10 } from "./codes";
+export { MAPPING_FILES, simpleTabulationFile } from "./tables";
+export type { Cardinality, Entity11, Lookup, Origin10, Reason, Target } from "./types";

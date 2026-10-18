@@ -66,8 +66,11 @@ describe("parseDelimited (python csv semantics)", () => {
   it("quote in the middle of a field is literal", () => {
     expect(parseDelimited('a,5" tall,b', ",")).toEqual([["a", '5" tall', "b"]]);
   });
-  it("no trailing newline", () => {
+  it("no trailing newline, trailing delimiter, unclosed quote", () => {
     expect(parseDelimited("a,b", ",")).toEqual([["a", "b"]]);
+    expect(parseDelimited("a,\n", ",")).toEqual([["a", ""]]);
+    expect(parseDelimited("a,", ",")).toEqual([["a", ""]]);
+    expect(parseDelimited('a,"open\nx', ",")).toEqual([["a", "open\nx"]]);
   });
 });
 

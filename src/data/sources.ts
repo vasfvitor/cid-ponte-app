@@ -29,9 +29,12 @@ export const RELEASES: string[] = Object.keys(MAPPING_SHA256)
   .sort();
 export const DEFAULT_RELEASE = RELEASES[RELEASES.length - 1]!;
 
-export const mappingUrl = (release: string): string => `${CDN}/${release}/mapping.zip`;
+export const MAPPING_ZIP = "mapping.zip";
+export const simpleTabulationZip = (lang = "pt"): string => `SimpleTabulation-ICD-11-MMS-${lang}.zip`;
+
+export const mappingUrl = (release: string): string => `${CDN}/${release}/${MAPPING_ZIP}`;
 export const simpleTabulationUrl = (release: string, lang = "pt"): string =>
-  `${CDN}/${release}/SimpleTabulation-ICD-11-MMS-${lang}.zip`;
+  `${CDN}/${release}/${simpleTabulationZip(lang)}`;
 
 /** Approximate download size shown before the user accepts (mapping ≈ 6.8 MB + pt ≈ 3 MB). */
 export const APPROX_DOWNLOAD_MB = 10;

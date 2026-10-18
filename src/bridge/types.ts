@@ -52,17 +52,11 @@ export interface Origin10 {
   existsInBr: boolean;
 }
 
-/** One entity of the SimpleTabulation (WHO), indexed by MMS code. */
+/** What the app keeps from a SimpleTabulation entity (WHO), indexed by MMS code. */
 export interface Entity11 {
-  code: string;
-  title: string | null;
+  title: string | null; // pt
   titleEn: string | null;
-  foundationUri: string | null;
-  linearizationUri: string | null;
-  classKind: string | null;
-  chapter: string | null;
   isResidual: boolean;
-  isLeaf: boolean;
 }
 
 /** A raw row of one of the WHO mapping tables, keyed by the column names in tables.ts. */

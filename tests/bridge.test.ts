@@ -6,36 +6,26 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 
-import { Bridge, BrTable, MAPPING_FILES, simpleTabulationFile } from "../src/bridge";
+import { Bridge, MAPPING_FILES, simpleTabulationFile } from "../src/bridge";
 import type { Lookup, Origin10 } from "../src/bridge";
-
-const fixtures = new URL("./fixtures/oms/2026-01/", import.meta.url);
-const read = (name: string): string => readFileSync(new URL(name, fixtures), "utf8");
+import { loadBrTable, readFixture } from "./helpers";
 
 const golden = JSON.parse(
   readFileSync(new URL("./fixtures/golden-2026-01.json", import.meta.url), "utf8"),
 ) as { release: string; lookups: Lookup[]; reverse: Record<string, Origin10[]> };
 
-const br = BrTable.parseCsv(
-  readFileSync(new URL("../public/data/cid10_v2019.csv", import.meta.url), "utf8"),
-);
-
+const br = loadBrTable();
+const files = [...Object.values(MAPPING_FILES), simpleTabulationFile("pt")];
 const bridge = Bridge.fromTexts(
   golden.release,
-  {
-    [MAPPING_FILES.one]: read(MAPPING_FILES.one),
-    [MAPPING_FILES.multiple]: read(MAPPING_FILES.multiple),
-    [MAPPING_FILES.rev]: read(MAPPING_FILES.rev),
-    [MAPPING_FILES.foundationOne]: read(MAPPING_FILES.foundationOne),
-    [simpleTabulationFile("pt")]: read(simpleTabulationFile("pt")),
-  },
+  Object.fromEntries(files.map((f) => [f, readFixture(golden.release, f)])),
   br,
 );
 
 describe("golden lookups (same answers as cid-ponte)", () => {
   for (const c of golden.lookups) {
     it(`lookup ${JSON.stringify(c.input)} → ${c.reason}`, () => {
-      expect(bridge.lookup(c.input, "all")).toEqual(c);
+      expect(bridge.lookup(c.input)).toEqual(c);
     });
   }
 });
@@ -59,10 +49,15 @@ describe("Brazilian table", () => {
 
 describe("titles and entities", () => {
   it("exposes residual flag and pt/en titles from the SimpleTabulation", () => {
-    const e = bridge.entity("BA00.Z");
+    const e = bridge.entityOf("BA00.Z");
     expect(e?.isResidual).toBe(true);
     expect(e?.title).toMatch(/hipertens/i);
     expect(e?.titleEn).toBe("Essential hypertension, unspecified");
+  });
+
+  it("composite targets resolve to their main stem", () => {
+    expect(bridge.entityOf("1C41/1G40&XN1P6")).toBe(bridge.entityOf("1C41"));
+    expect(bridge.entityOf(null)).toBeUndefined();
   });
 
   it("explain() carries the raw WHO rows", () => {

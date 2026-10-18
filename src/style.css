@@ -200,8 +200,7 @@ button {
 }
 
 #code {
-  flex: 1;
-  min-width: 0;
+  width: 100%;
   min-height: 48px;
   padding: 0 14px;
   font: inherit;
@@ -284,10 +283,6 @@ progress {
   margin-bottom: 16px;
 }
 
-.origin {
-  margin-bottom: 16px;
-}
-
 .origin:focus-visible {
   outline-offset: 0;
 }
@@ -315,7 +310,6 @@ progress {
   font-family: var(--sans);
   font-size: 0.8125rem;
   font-weight: 500;
-  letter-spacing: 0;
 }
 
 .notice {
@@ -343,6 +337,7 @@ progress {
   width: 1.25rem;
   text-align: center;
   font-weight: 700;
+  color: var(--warn-line);
 }
 
 .notice.ok .icon {
@@ -351,10 +346,6 @@ progress {
 
 .notice.bad .icon {
   color: var(--bad-line);
-}
-
-.notice:not(.ok):not(.bad) .icon {
-  color: var(--warn-line);
 }
 
 .notice p {
@@ -410,10 +401,6 @@ progress {
   font-size: 0.9375rem;
   font-weight: 600;
   color: var(--fg-muted);
-}
-
-.refine {
-  margin: 4px 0 0;
 }
 
 /* ---------- footer ---------- */

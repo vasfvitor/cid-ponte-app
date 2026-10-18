@@ -1,6 +1,7 @@
 /**
- * Network test: downloads the real WHO release (~10 MB), verifies the pinned SHA-256, unzips
- * with the same code the browser uses, and checks a few known answers on the full tables.
+ * Network test: downloads the real WHO release (~10 MB), verifies the pinned SHA-256, and
+ * assembles the Bridge with the same `bridgeFromZips` the browser uses, then checks a few
+ * known answers on the full tables.
  * Run with `LIVE=1 pnpm test`. With `WHO_FILES_DIR=<dir>` the zips are read from that directory
  * (mapping.zip, SimpleTabulation-ICD-11-MMS-pt.zip) instead of downloaded.
  */
@@ -8,11 +9,11 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 
-import { Bridge, BrTable, MAPPING_FILES, simpleTabulationFile } from "../src/bridge";
-import { extractTexts, sha256Hex } from "../src/data/load";
+import { bridgeFromZips, sha256Hex } from "../src/data/load";
 import {
   DEFAULT_RELEASE, MAPPING_SHA256, SIMPLE_TABULATION_PT_SHA256, mappingUrl, simpleTabulationUrl,
 } from "../src/data/sources";
+import { loadBrTable } from "./helpers";
 
 const release = DEFAULT_RELEASE;
 
@@ -26,19 +27,14 @@ async function fetchBytes(url: string): Promise<Uint8Array> {
 
 describe.skipIf(!process.env["LIVE"] && !process.env["WHO_FILES_DIR"])(`live WHO release ${release}`, () => {
   it("downloads, verifies and answers on the full tables", { timeout: 180_000 }, async () => {
-    const mapping = await fetchBytes(mappingUrl(release));
-    expect(await sha256Hex(mapping)).toBe(MAPPING_SHA256[release]);
-    const st = await fetchBytes(simpleTabulationUrl(release, "pt"));
-    expect(await sha256Hex(st)).toBe(SIMPLE_TABULATION_PT_SHA256[release]);
-
-    const texts = extractTexts(mapping, [
-      MAPPING_FILES.one, MAPPING_FILES.multiple, MAPPING_FILES.rev, MAPPING_FILES.foundationOne,
+    const [mapping, titles] = await Promise.all([
+      fetchBytes(mappingUrl(release)),
+      fetchBytes(simpleTabulationUrl(release, "pt")),
     ]);
-    Object.assign(texts, extractTexts(st, [simpleTabulationFile("pt")]));
-    const br = BrTable.parseCsv(
-      readFileSync(new URL("../public/data/cid10_v2019.csv", import.meta.url), "utf8"),
-    );
-    const bridge = Bridge.fromTexts(release, texts, br);
+    expect(await sha256Hex(mapping)).toBe(MAPPING_SHA256[release]);
+    expect(await sha256Hex(titles)).toBe(SIMPLE_TABULATION_PT_SHA256[release]);
+
+    const bridge = bridgeFromZips(release, mapping, titles, loadBrTable());
 
     // 12,597 distinct icd10Code values in OneCategory (2026-01), as in cid-ponte docs/cobertura.md
     expect(bridge.codes10.size).toBe(12_597);
@@ -59,6 +55,7 @@ describe.skipIf(!process.env["LIVE"] && !process.env["WHO_FILES_DIR"])(`live WHO
 
     expect(bridge.lookup("O930").reason).toBe("no_br_path");
     expect(bridge.lookup("L739").reason).toBe("no_mapping");
+
     // K72 (hepatic failure) has several distinct targets in MultipleCategories
     const k72 = bridge.lookup("K72");
     expect(k72.targets[0]?.cardinality).toBe("1:N");

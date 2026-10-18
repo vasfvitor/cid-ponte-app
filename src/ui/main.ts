@@ -1,7 +1,7 @@
 /** Page wiring: license gate → download → search → render. All user-facing text in pt-BR. */
 
 import type { Bridge, Lookup, Target } from "../bridge";
-import { parse11 } from "../bridge";
+import { isSimple, parse11 } from "../bridge";
 import {
   ChecksumMismatch, LicenseNotAccepted, acceptLicense, clearCache, isCached, licenseAccepted,
   loadBridge, type Status,
@@ -36,39 +36,41 @@ function showError(message: string): void {
   panels.error.hidden = false;
 }
 
+// ---------------------------------------------------------------- progress
+
+const PHASE_VERB = { cache: "Lendo", verify: "Verificando integridade de", parse: "Indexando" } as const;
+const downloads = new Map<string, { received: number; total: number | null }>();
+const MB = 1_048_576;
+
 function onStatus(s: Status): void {
   const status = $<HTMLElement>("status");
   const progress = $<HTMLProgressElement>("progress");
-  switch (s.phase) {
-    case "cache":
-      status.textContent = `Lendo ${s.file} do cache…`;
-      progress.removeAttribute("value");
-      break;
-    case "download": {
-      const mb = (s.received / 1_048_576).toFixed(1);
-      if (s.total) {
-        progress.value = (100 * s.received) / s.total;
-        status.textContent = `Baixando ${s.file}: ${mb} de ${(s.total / 1_048_576).toFixed(1)} MB`;
-      } else {
-        progress.removeAttribute("value");
-        status.textContent = `Baixando ${s.file}: ${mb} MB`;
-      }
-      break;
+  if (s.phase === "download") {
+    // Files download in parallel: show the sum.
+    downloads.set(s.file, { received: s.received, total: s.total });
+    let received = 0;
+    let total: number | null = 0;
+    for (const d of downloads.values()) {
+      received += d.received;
+      total = total === null || d.total === null ? null : total + d.total;
     }
-    case "verify":
-      status.textContent = `Verificando integridade de ${s.file}…`;
+    if (total) {
+      progress.value = (100 * received) / total;
+      status.textContent = `Baixando tabelas da OMS: ${(received / MB).toFixed(1)} de ${(total / MB).toFixed(1)} MB`;
+    } else {
       progress.removeAttribute("value");
-      break;
-    case "parse":
-      status.textContent = `Indexando ${s.file}…`;
-      progress.removeAttribute("value");
-      break;
-    case "ready":
-      status.textContent = "Pronto.";
-      progress.value = 100;
-      panels.loading.setAttribute("aria-busy", "false");
-      break;
+      status.textContent = `Baixando tabelas da OMS: ${(received / MB).toFixed(1)} MB`;
+    }
+    return;
   }
+  if (s.phase === "ready") {
+    status.textContent = "Pronto.";
+    progress.value = 100;
+    panels.loading.setAttribute("aria-busy", "false");
+    return;
+  }
+  status.textContent = `${PHASE_VERB[s.phase]} ${s.file}…`;
+  progress.removeAttribute("value");
 }
 
 async function start(): Promise<void> {
@@ -78,10 +80,7 @@ async function start(): Promise<void> {
     show("search");
     $<HTMLInputElement>("code").focus();
     const fromHash = decodeURIComponent(location.hash.slice(1));
-    if (fromHash) {
-      $<HTMLInputElement>("code").value = fromHash;
-      render(bridge.lookup(fromHash));
-    }
+    if (fromHash) query(fromHash);
   } catch (e) {
     show("license");
     if (e instanceof LicenseNotAccepted) return;
@@ -96,6 +95,12 @@ async function start(): Promise<void> {
   }
 }
 
+function query(code: string): void {
+  if (!bridge) return;
+  $<HTMLInputElement>("code").value = code;
+  render(bridge.lookup(code));
+}
+
 // ---------------------------------------------------------------- rendering
 
 function el<K extends keyof HTMLElementTagNameMap>(
@@ -107,8 +112,16 @@ function el<K extends keyof HTMLElementTagNameMap>(
   return node;
 }
 
+function extLink(href: string, text: string): HTMLAnchorElement {
+  const a = el("a", undefined, text);
+  a.href = href;
+  a.target = "_blank";
+  a.rel = "noopener";
+  return a;
+}
+
 function notice(kind: "warn" | "bad" | "ok", html: string): HTMLElement {
-  const n = el("div", `notice${kind === "warn" ? "" : ` ${kind}`}`);
+  const n = el("div", `notice ${kind}`);
   const icon = el("span", "icon", kind === "ok" ? "✓" : kind === "bad" ? "✕" : "!");
   icon.setAttribute("aria-hidden", "true");
   const p = el("p");
@@ -127,24 +140,23 @@ function renderTarget(t: Target, b: Bridge): HTMLElement {
   const codeEl = el("span", "code", t.code ?? "(bloco sem código)");
   codeEl.setAttribute("aria-label", t.code ? `Código CID-11 ${t.code}` : "Bloco sem código");
   head.append(codeEl);
-  if (t.relation) head.append(" ", el("span", "tag", t.relation === "Equivalent" ? "equivalente" : "subclasse"));
-  head.append(" ", el("span", "tag", t.table === "one" ? "principal" : "alternativo"));
+  if (t.relation) head.append(el("span", "tag", t.relation === "Equivalent" ? "equivalente" : "subclasse"));
+  head.append(el("span", "tag", t.table === "one" ? "principal" : "alternativo"));
   card.append(head);
 
-  const pt = t.titlePt;
-  if (pt) card.append(el("p", "title-pt", pt));
+  if (t.titlePt) card.append(el("p", "title-pt", t.titlePt));
   if (t.titleEn) card.append(el("p", "title-en", t.titleEn));
-  if (!pt && t.code) card.append(notice("warn", "Sem título em português na release oficial; título em inglês acima."));
+  if (!t.titlePt && t.code) card.append(notice("warn", "Sem título em português na release oficial; título em inglês acima."));
 
   const parsed = parse11(t.code);
-  if (parsed && (parsed.stems.length > 1 || parsed.extensions.length > 0)) {
+  if (parsed && !isSimple(parsed)) {
     const ul = el("ul", "parts");
     for (const s of parsed.stems) {
-      const e = b.entity(s);
+      const e = b.entityOf(s);
       ul.append(el("li", undefined, `${s} — ${e?.title ?? e?.titleEn ?? "tronco"}`));
     }
     for (const x of parsed.extensions) {
-      const e = b.entity(x);
+      const e = b.entityOf(x);
       ul.append(el("li", undefined, `${x} — ${e?.title ?? e?.titleEn ?? "código de extensão"} (extensão)`));
     }
     card.append(
@@ -158,22 +170,13 @@ function renderTarget(t: Target, b: Bridge): HTMLElement {
     );
   }
 
-  const entity = t.code ? b.entity(parsed?.stems[0] ?? t.code) : undefined;
-  if (entity?.isResidual) {
-    card.append(
-      notice("warn", "Categoria <strong>residual</strong> (outros/não especificado). Provavelmente há código mais específico."),
-    );
+  if (b.entityOf(t.code)?.isResidual) {
+    card.append(notice("warn", "Categoria <strong>residual</strong> (outros/não especificado). Provavelmente há código mais específico."));
   }
 
   const meta = el("p", "meta");
   const link = browserUrl(b.release, t.foundationUri);
-  if (link) {
-    const a = el("a", undefined, "ver no Browser da CID-11");
-    a.href = link;
-    a.target = "_blank";
-    a.rel = "noopener";
-    meta.append(a);
-  }
+  if (link) meta.append(extLink(link, "ver no Browser da CID-11"));
   if (t.relationN !== null && t.relationN < 0) {
     meta.append(el("span", undefined, `relação herdada de ${-t.relationN} nível(is) acima`));
   }
@@ -194,8 +197,8 @@ function render(lk: Lookup): void {
   origin.tabIndex = -1;
   const h = el("div");
   h.append(el("span", "code", lk.code || "—"));
-  if (lk.existsInBr && !lk.active2019) h.append(" ", el("span", "tag", "inativo na v2019"));
-  if (!lk.existsInBr && lk.code) h.append(" ", el("span", "tag", "não consta na CID-10 brasileira"));
+  if (lk.existsInBr && !lk.active2019) h.append(el("span", "tag", "inativo na v2019"));
+  if (!lk.existsInBr && lk.code) h.append(el("span", "tag", "não consta na CID-10 brasileira"));
   origin.append(h);
   if (lk.brTitle) origin.append(el("p", "title", lk.brTitle));
 
@@ -246,17 +249,13 @@ function render(lk: Lookup): void {
   }
 
   if (lk.code) {
-    const ct = el("p", "hint refine");
-    const a = el("a", undefined, "Refinar ou pós-coordenar no Coding Tool da OMS");
-    a.href = codingToolUrl(b.release);
-    a.target = "_blank";
-    a.rel = "noopener";
-    ct.append(a);
+    const ct = el("p", "hint");
+    ct.append(extLink(codingToolUrl(b.release), "Refinar ou pós-coordenar no Coding Tool da OMS"));
     out.append(ct);
   }
   out.hidden = false;
   // Move focus to the result so keyboard and screen-reader users land on the answer.
-  origin.focus({ preventScroll: false });
+  origin.focus();
 }
 
 // ---------------------------------------------------------------- boot
@@ -279,14 +278,10 @@ async function boot(): Promise<void> {
 
   $<HTMLFormElement>("form").addEventListener("submit", (ev) => {
     ev.preventDefault();
-    if (bridge) render(bridge.lookup($<HTMLInputElement>("code").value));
+    query($<HTMLInputElement>("code").value);
   });
   for (const chip of document.querySelectorAll<HTMLButtonElement>(".chip")) {
-    chip.addEventListener("click", () => {
-      const code = chip.dataset["code"] ?? "";
-      $<HTMLInputElement>("code").value = code;
-      if (bridge) render(bridge.lookup(code));
-    });
+    chip.addEventListener("click", () => query(chip.dataset["code"] ?? ""));
   }
   $<HTMLButtonElement>("clear-cache").addEventListener("click", async () => {
     await clearCache();

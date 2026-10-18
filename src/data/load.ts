@@ -4,7 +4,8 @@ import { unzipSync } from "fflate";
 
 import { Bridge, BrTable, MAPPING_FILES, simpleTabulationFile } from "../bridge";
 import {
-  MAPPING_SHA256, SIMPLE_TABULATION_PT_SHA256, mappingUrl, simpleTabulationUrl,
+  MAPPING_SHA256, MAPPING_ZIP, SIMPLE_TABULATION_PT_SHA256, mappingUrl, simpleTabulationUrl,
+  simpleTabulationZip,
 } from "./sources";
 import * as store from "./store";
 
@@ -23,25 +24,47 @@ export class LicenseNotAccepted extends Error {
 }
 
 export type Status =
-  | { phase: "cache"; file: string }
+  | { phase: "cache" | "verify" | "parse"; file: string }
   | { phase: "download"; file: string; received: number; total: number | null }
-  | { phase: "verify"; file: string }
-  | { phase: "parse"; file: string }
   | { phase: "ready" };
 
 export type OnStatus = (s: Status) => void;
 
 const LICENSE_KEY = "license-accepted";
-const fileKey = (release: string, name: string): string => `${release}/${name}`;
+
+/** The two WHO files a release needs. One description drives download, cache and checks. */
+interface WhoFile {
+  name: string;
+  url: string;
+  cacheKey: string;
+  sha256: string | undefined;
+}
+
+function whoFiles(release: string): { mapping: WhoFile; titles: WhoFile } {
+  const titlesZip = simpleTabulationZip("pt");
+  return {
+    mapping: {
+      name: MAPPING_ZIP,
+      url: mappingUrl(release),
+      cacheKey: `${release}/${MAPPING_ZIP}`,
+      sha256: MAPPING_SHA256[release],
+    },
+    titles: {
+      name: titlesZip,
+      url: simpleTabulationUrl(release, "pt"),
+      cacheKey: `${release}/${titlesZip}`,
+      sha256: SIMPLE_TABULATION_PT_SHA256[release],
+    },
+  };
+}
 
 export async function sha256Hex(data: Uint8Array): Promise<string> {
-  const buf = data.buffer.slice(data.byteOffset, data.byteOffset + data.byteLength) as ArrayBuffer;
-  const digest = await crypto.subtle.digest("SHA-256", buf);
+  const digest = await crypto.subtle.digest("SHA-256", data as Uint8Array<ArrayBuffer>);
   return [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, "0")).join("");
 }
 
 export async function licenseAccepted(): Promise<boolean> {
-  return (await store.get<string>(LICENSE_KEY)) !== undefined;
+  return store.has(LICENSE_KEY);
 }
 
 export async function acceptLicense(): Promise<void> {
@@ -49,57 +72,56 @@ export async function acceptLicense(): Promise<void> {
 }
 
 export async function isCached(release: string): Promise<boolean> {
-  const a = await store.get<ArrayBuffer>(fileKey(release, "mapping.zip"));
-  const b = await store.get<ArrayBuffer>(fileKey(release, "simpletab-pt.zip"));
-  return a !== undefined && b !== undefined;
+  const f = whoFiles(release);
+  const [a, b] = await Promise.all([store.has(f.mapping.cacheKey), store.has(f.titles.cacheKey)]);
+  return a && b;
 }
 
 export async function clearCache(): Promise<void> {
   await store.clearAll();
 }
 
-async function download(url: string, file: string, onStatus: OnStatus): Promise<Uint8Array> {
+async function fetchOk(url: string): Promise<Response> {
   const res = await fetch(url);
-  if (!res.ok || !res.body) throw new Error(`${url}: HTTP ${res.status}`);
+  if (!res.ok) throw new Error(`${url}: HTTP ${res.status}`);
+  return res;
+}
+
+async function download(f: WhoFile, onStatus: OnStatus): Promise<Uint8Array> {
+  const res = await fetchOk(f.url);
+  if (!res.body) throw new Error(`${f.url}: empty body`);
   const total = Number(res.headers.get("content-length")) || null;
   const reader = res.body.getReader();
-  const chunks: Uint8Array[] = [];
+  const chunks: Uint8Array<ArrayBuffer>[] = [];
   let received = 0;
   for (;;) {
     const { done, value } = await reader.read();
     if (done) break;
-    chunks.push(value);
+    chunks.push(value as Uint8Array<ArrayBuffer>);
     received += value.byteLength;
-    onStatus({ phase: "download", file, received, total });
+    onStatus({ phase: "download", file: f.name, received, total });
   }
-  const out = new Uint8Array(received);
-  let off = 0;
-  for (const c of chunks) {
-    out.set(c, off);
-    off += c.byteLength;
-  }
-  return out;
+  return new Uint8Array(await new Blob(chunks).arrayBuffer());
 }
 
-/** Return the file bytes from cache if present and valid; otherwise download, verify, cache. */
-async function obtain(
-  url: string, key: string, file: string, expected: string | undefined, onStatus: OnStatus,
-): Promise<Uint8Array> {
-  const cached = await store.get<ArrayBuffer>(key);
+/**
+ * Bytes of a WHO file: from the cache when present (files are only cached after their hash
+ * was verified, so they are trusted on read), otherwise downloaded, verified and cached.
+ */
+async function obtain(f: WhoFile, onStatus: OnStatus): Promise<Uint8Array> {
+  const cached = await store.get<Uint8Array | ArrayBuffer>(f.cacheKey);
   if (cached) {
-    onStatus({ phase: "cache", file });
-    const bytes = new Uint8Array(cached);
-    if (!expected || (await sha256Hex(bytes)) === expected) return bytes;
-    await store.remove(key);
+    onStatus({ phase: "cache", file: f.name });
+    return cached instanceof Uint8Array ? cached : new Uint8Array(cached);
   }
   if (!(await licenseAccepted())) throw new LicenseNotAccepted();
-  const bytes = await download(url, file, onStatus);
-  if (expected) {
-    onStatus({ phase: "verify", file });
+  const bytes = await download(f, onStatus);
+  if (f.sha256) {
+    onStatus({ phase: "verify", file: f.name });
     const got = await sha256Hex(bytes);
-    if (got !== expected) throw new ChecksumMismatch(url, expected, got);
+    if (got !== f.sha256) throw new ChecksumMismatch(f.url, f.sha256, got);
   }
-  await store.put(key, bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength));
+  await store.put(f.cacheKey, bytes);
   return bytes;
 }
 
@@ -114,31 +136,31 @@ export function extractTexts(zip: Uint8Array, wanted: readonly string[]): Record
   return out;
 }
 
+/** Pure assembly step shared by the browser and the live test: zips in, Bridge out. */
+export function bridgeFromZips(
+  release: string, mappingZip: Uint8Array, titlesZip: Uint8Array, br: BrTable,
+): Bridge {
+  const texts = extractTexts(mappingZip, Object.values(MAPPING_FILES));
+  Object.assign(texts, extractTexts(titlesZip, [simpleTabulationFile("pt")]));
+  return Bridge.fromTexts(release, texts, br);
+}
+
 async function loadBrTable(): Promise<BrTable> {
-  const url = `${import.meta.env.BASE_URL}data/cid10_v2019.csv`;
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`${url}: HTTP ${res.status}`);
+  const res = await fetchOk(`${import.meta.env.BASE_URL}data/cid10_v2019.csv`);
   return BrTable.parseCsv(await res.text());
 }
 
 /** Fetch (or read from cache), verify, unzip and index everything for a release. */
 export async function loadBridge(release: string, onStatus: OnStatus = () => {}): Promise<Bridge> {
-  const mappingZip = await obtain(
-    mappingUrl(release), fileKey(release, "mapping.zip"), "mapping.zip",
-    MAPPING_SHA256[release], onStatus,
-  );
-  const stZip = await obtain(
-    simpleTabulationUrl(release, "pt"), fileKey(release, "simpletab-pt.zip"),
-    "SimpleTabulation-ICD-11-MMS-pt.zip", SIMPLE_TABULATION_PT_SHA256[release], onStatus,
-  );
-  onStatus({ phase: "parse", file: "mapping.zip" });
-  const texts = extractTexts(mappingZip, [
-    MAPPING_FILES.one, MAPPING_FILES.multiple, MAPPING_FILES.rev, MAPPING_FILES.foundationOne,
+  const f = whoFiles(release);
+  // The BR table needs no license, so it loads alongside the WHO files.
+  const [mapping, titles, br] = await Promise.all([
+    obtain(f.mapping, onStatus),
+    obtain(f.titles, onStatus),
+    loadBrTable(),
   ]);
-  onStatus({ phase: "parse", file: "SimpleTabulation-ICD-11-MMS-pt.zip" });
-  Object.assign(texts, extractTexts(stZip, [simpleTabulationFile("pt")]));
-  const br = await loadBrTable();
-  const bridge = Bridge.fromTexts(release, texts, br);
+  onStatus({ phase: "parse", file: f.mapping.name });
+  const bridge = bridgeFromZips(release, mapping, titles, br);
   onStatus({ phase: "ready" });
   return bridge;
 }

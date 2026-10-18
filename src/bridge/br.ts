@@ -9,7 +9,7 @@
  */
 
 import { category10, normalize10 } from "./codes";
-import { parseDelimited, stripBom } from "./dsv";
+import { parseWithHeader } from "./dsv";
 
 // Brazilian CID-10 codes whose code *and* parent category are absent from WHO map 2026-01.
 // v2019 (active) and V2008. Verified in cid-ponte docs/cobertura.md; keep in sync.
@@ -24,21 +24,13 @@ export const NO_BR_PATH: ReadonlySet<string> = new Set([
   "U80.0", "U80.1", "U80.8", "U81.0", "U81.8", "U89.8", "U89.9",
 ]);
 
+/** What the app reads from a Brazilian CID-10 record. The CSV has more columns; see FONTES.md. */
 export interface BrCode {
-  code: string;
-  codeNoDot: string;
-  category: string;
-  grouping: string | null;
   title: string;
-  dagger: boolean; // "cruz" (+): etiology code
-  asterisk: boolean; // "asterisco" (*): manifestation code
   active: boolean;
-  includedOn: string | null;
 }
 
 export interface BrInfo {
-  code: string;
-  entry: BrCode | null;
   exists: boolean;
   active2019: boolean;
   title: string | null;
@@ -52,35 +44,16 @@ export class BrTable {
     return new BrTable(new Map());
   }
 
-  /** Parse public/data/cid10_v2019.csv (UTF-8, header: codigo,codigo_sp,categoria,...). */
+  /** Parse public/data/cid10_v2019.csv (UTF-8; columns codigo, titulo, ativo among others). */
   static parseCsv(text: string): BrTable {
-    const rows = parseDelimited(stripBom(text), ",");
-    const header = rows[0] ?? [];
-    const idx = (name: string): number => header.indexOf(name);
-    const iCode = idx("codigo");
-    const iNoDot = idx("codigo_sp");
-    const iCat = idx("categoria");
-    const iGroup = idx("agrupamento");
-    const iTitle = idx("titulo");
-    const iDagger = idx("cruz");
-    const iAsterisk = idx("asterisco");
-    const iActive = idx("ativo");
-    const iIncluded = idx("dt_inclusao");
+    const { rows, col } = parseWithHeader(text, ",");
+    const iCode = col("codigo");
+    const iTitle = col("titulo");
+    const iActive = col("ativo");
     const map = new Map<string, BrCode>();
-    for (const r of rows.slice(1)) {
+    for (const r of rows) {
       const code = r[iCode];
-      if (!code) continue;
-      map.set(code, {
-        code,
-        codeNoDot: r[iNoDot] ?? code.replace(".", ""),
-        category: r[iCat] ?? code.slice(0, 3),
-        grouping: r[iGroup] || null,
-        title: r[iTitle] ?? "",
-        dagger: r[iDagger] === "1",
-        asterisk: r[iAsterisk] === "1",
-        active: r[iActive] === "1",
-        includedOn: r[iIncluded] || null,
-      });
+      if (code) map.set(code, { title: r[iTitle] ?? "", active: r[iActive] === "1" });
     }
     return new BrTable(map);
   }
@@ -91,14 +64,11 @@ export class BrTable {
 
   /** Accepts any form ("I219", "I21.9"); normalizes and looks up. */
   info(code: string | null | undefined): BrInfo {
-    const c = normalize10(code) ?? "";
-    const entry = this.rows.get(c) ?? null;
+    const entry = this.rows.get(normalize10(code) ?? "");
     return {
-      code: c,
-      entry,
-      exists: entry !== null,
-      active2019: entry !== null && entry.active,
-      title: entry ? entry.title : null,
+      exists: entry !== undefined,
+      active2019: entry?.active ?? false,
+      title: entry?.title ?? null,
     };
   }
 }

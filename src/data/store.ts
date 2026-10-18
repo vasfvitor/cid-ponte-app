@@ -3,60 +3,44 @@
 const DB_NAME = "cid-ponte-app";
 const STORE = "files";
 
+let dbPromise: Promise<IDBDatabase> | undefined;
+
 function open(): Promise<IDBDatabase> {
-  return new Promise((resolve, reject) => {
+  dbPromise ??= new Promise((resolve, reject) => {
     const req = indexedDB.open(DB_NAME, 1);
     req.onupgradeneeded = () => {
       if (!req.result.objectStoreNames.contains(STORE)) req.result.createObjectStore(STORE);
     };
     req.onsuccess = () => resolve(req.result);
-    req.onerror = () => reject(req.error);
+    req.onerror = () => {
+      dbPromise = undefined;
+      reject(req.error);
+    };
   });
+  return dbPromise;
 }
 
-function request<T>(r: IDBRequest<T>): Promise<T> {
+async function withStore<T>(
+  mode: IDBTransactionMode, run: (s: IDBObjectStore) => IDBRequest<T>,
+): Promise<T> {
+  const db = await open();
+  const r = run(db.transaction(STORE, mode).objectStore(STORE));
   return new Promise((resolve, reject) => {
     r.onsuccess = () => resolve(r.result);
     r.onerror = () => reject(r.error);
   });
 }
 
-export async function get<T>(key: string): Promise<T | undefined> {
-  const db = await open();
-  try {
-    const tx = db.transaction(STORE, "readonly");
-    return (await request(tx.objectStore(STORE).get(key))) as T | undefined;
-  } finally {
-    db.close();
-  }
-}
+export const get = <T>(key: string): Promise<T | undefined> =>
+  withStore("readonly", (s) => s.get(key)) as Promise<T | undefined>;
 
-export async function put(key: string, value: unknown): Promise<void> {
-  const db = await open();
-  try {
-    const tx = db.transaction(STORE, "readwrite");
-    await request(tx.objectStore(STORE).put(value, key));
-  } finally {
-    db.close();
-  }
-}
+export const has = async (key: string): Promise<boolean> =>
+  (await withStore("readonly", (s) => s.count(key))) > 0;
 
-export async function remove(key: string): Promise<void> {
-  const db = await open();
-  try {
-    const tx = db.transaction(STORE, "readwrite");
-    await request(tx.objectStore(STORE).delete(key));
-  } finally {
-    db.close();
-  }
-}
+export const put = (key: string, value: unknown): Promise<IDBValidKey> =>
+  withStore("readwrite", (s) => s.put(value, key));
 
-export async function clearAll(): Promise<void> {
-  const db = await open();
-  try {
-    const tx = db.transaction(STORE, "readwrite");
-    await request(tx.objectStore(STORE).clear());
-  } finally {
-    db.close();
-  }
-}
+export const remove = (key: string): Promise<undefined> =>
+  withStore("readwrite", (s) => s.delete(key));
+
+export const clearAll = (): Promise<undefined> => withStore("readwrite", (s) => s.clear());
