@@ -7,7 +7,7 @@ import {
   loadBridge, type Status,
 } from "../data/load";
 import {
-  APPROX_DOWNLOAD_MB, CITATION, DEFAULT_RELEASE, LICENSE_URL, browserUrl, codingToolUrl,
+  CITATION, DEFAULT_RELEASE, LICENSE_URL, browserUrl, codingToolUrl, downloadSizeLabel,
 } from "../data/sources";
 
 const $ = <T extends HTMLElement>(id: string): T => {
@@ -262,7 +262,7 @@ function render(lk: Lookup): void {
 
 async function boot(): Promise<void> {
   $<HTMLAnchorElement>("license-link").href = LICENSE_URL;
-  $<HTMLElement>("download-size").textContent = String(APPROX_DOWNLOAD_MB);
+  $<HTMLElement>("download-size").textContent = downloadSizeLabel(release);
   $<HTMLElement>("citation").textContent = CITATION;
   $<HTMLElement>("release").textContent = release;
 

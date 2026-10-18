@@ -36,8 +36,16 @@ export const mappingUrl = (release: string): string => `${CDN}/${release}/${MAPP
 export const simpleTabulationUrl = (release: string, lang = "pt"): string =>
   `${CDN}/${release}/${simpleTabulationZip(lang)}`;
 
-/** Approximate download size shown before the user accepts (mapping ≈ 6.8 MB + pt ≈ 3 MB). */
-export const APPROX_DOWNLOAD_MB = 10;
+/** Bytes of mapping.zip + SimpleTabulation pt per release (data/SHA256SUMS in cid-ponte). */
+export const DOWNLOAD_BYTES: Record<string, number> = {
+  "2026-01": 6_809_366 + 4_951_519,
+};
+
+/** Human size for the consent screen, e.g. "11,8 MB". */
+export function downloadSizeLabel(release: string): string {
+  const bytes = DOWNLOAD_BYTES[release];
+  return bytes ? `${(bytes / 1e6).toLocaleString("pt-BR", { maximumFractionDigits: 1 })} MB` : "cerca de 12 MB";
+}
 
 /** WHO's ICD-11 Coding Tool (Portuguese) for a release, e.g. https://icd.who.int/ct/icd11_mms/pt/2026-01 */
 export function codingToolUrl(release: string, lang = "pt"): string {
