@@ -3,8 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="color-scheme" content="light dark" />
-    <title>cid-ponte</title>
+    <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content="#f6f7f9" />
+    <title>CID-10 → CID-11</title>
     <meta
       name="description"
       content="Digite um código CID-10 e veja o correspondente na CID-11, com título em português e avisos sobre o que o mapa oficial não resolve."
@@ -17,8 +18,8 @@
     </header>
 
     <main id="app">
-      <section id="license" class="panel" hidden>
-        <h2>Antes de começar</h2>
+      <section id="license" class="panel" hidden aria-labelledby="license-title">
+        <h2 id="license-title">Antes de começar</h2>
         <p>
           As tabelas de mapeamento e os títulos em português são da Organização Mundial da Saúde e
           são baixados direto do servidor da OMS (<code>icdcdn.who.int</code>), cerca de
@@ -32,44 +33,52 @@
         </p>
         <label class="check">
           <input type="checkbox" id="license-check" />
-          Li e aceito os termos de uso da OMS.
+          <span>Li e aceito os termos de uso da OMS.</span>
         </label>
         <button id="license-accept" class="primary" disabled>Baixar tabelas e começar</button>
       </section>
 
-      <section id="loading" class="panel" hidden>
-        <p id="status">Preparando…</p>
-        <progress id="progress" max="100" value="0"></progress>
+      <section id="loading" class="panel" hidden aria-busy="true">
+        <p id="status" role="status" aria-live="polite">Preparando…</p>
+        <progress id="progress" max="100" value="0" aria-labelledby="status"></progress>
       </section>
 
-      <section id="search" class="panel" hidden>
-        <form id="form" autocomplete="off">
-          <label for="code" class="sr-only">Código CID-10</label>
-          <input
-            id="code"
-            name="code"
-            type="text"
-            inputmode="text"
-            placeholder="Código CID-10, ex. I219 ou I21.9"
-            spellcheck="false"
-            autofocus
-          />
+      <section id="search" class="panel" hidden aria-labelledby="search-title">
+        <h2 id="search-title" class="sr-only">Consulta</h2>
+        <form id="form" autocomplete="off" novalidate>
+          <div class="field">
+            <label for="code" class="field-label">Código CID-10</label>
+            <input
+              id="code"
+              name="code"
+              type="text"
+              inputmode="text"
+              autocapitalize="characters"
+              placeholder="ex. I219 ou I21.9"
+              spellcheck="false"
+              aria-describedby="code-hint"
+              autofocus
+            />
+          </div>
           <button type="submit" class="primary">Consultar</button>
         </form>
-        <p class="hint">
-          Exemplos:
-          <button type="button" class="chip" data-code="I10">I10</button>
-          <button type="button" class="chip" data-code="E11.3">E11.3</button>
-          <button type="button" class="chip" data-code="A41.3">A41.3</button>
-          <button type="button" class="chip" data-code="W000">W000</button>
-          <button type="button" class="chip" data-code="O93.0">O93.0</button>
-          <button type="button" class="chip" data-code="L73.9">L73.9</button>
-        </p>
+        <p id="code-hint" class="hint">Com ou sem ponto, maiúsculas ou minúsculas.</p>
+        <ul class="examples" aria-label="Exemplos de códigos">
+          <li class="examples-label" aria-hidden="true">Exemplos:</li>
+          <li><button type="button" class="chip" data-code="I10">I10</button></li>
+          <li><button type="button" class="chip" data-code="E11.3">E11.3</button></li>
+          <li><button type="button" class="chip" data-code="A41.3">A41.3</button></li>
+          <li><button type="button" class="chip" data-code="W000">W000</button></li>
+          <li><button type="button" class="chip" data-code="O93.0">O93.0</button></li>
+          <li><button type="button" class="chip" data-code="L73.9">L73.9</button></li>
+        </ul>
       </section>
 
-      <section id="result" hidden></section>
+      <section id="result" hidden aria-live="polite" aria-labelledby="result-title">
+        <h2 id="result-title" class="sr-only">Resultado</h2>
+      </section>
 
-      <section id="error" class="panel error" hidden></section>
+      <section id="error" class="panel error" hidden role="alert"></section>
     </main>
 
     <footer class="foot">

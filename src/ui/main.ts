@@ -66,6 +66,7 @@ function onStatus(s: Status): void {
     case "ready":
       status.textContent = "Pronto.";
       progress.value = 100;
+      panels.loading.setAttribute("aria-busy", "false");
       break;
   }
 }
@@ -108,9 +109,11 @@ function el<K extends keyof HTMLElementTagNameMap>(
 
 function notice(kind: "warn" | "bad" | "ok", html: string): HTMLElement {
   const n = el("div", `notice${kind === "warn" ? "" : ` ${kind}`}`);
+  const icon = el("span", "icon", kind === "ok" ? "✓" : kind === "bad" ? "✕" : "!");
+  icon.setAttribute("aria-hidden", "true");
   const p = el("p");
   p.innerHTML = html;
-  n.append(p);
+  n.append(icon, p);
   return n;
 }
 
@@ -121,7 +124,9 @@ function esc(s: string): string {
 function renderTarget(t: Target, b: Bridge): HTMLElement {
   const card = el("article", "target");
   const head = el("div");
-  head.append(el("span", "code", t.code ?? "(bloco sem código)"));
+  const codeEl = el("span", "code", t.code ?? "(bloco sem código)");
+  codeEl.setAttribute("aria-label", t.code ? `Código CID-11 ${t.code}` : "Bloco sem código");
+  head.append(codeEl);
   if (t.relation) head.append(" ", el("span", "tag", t.relation === "Equivalent" ? "equivalente" : "subclasse"));
   head.append(" ", el("span", "tag", t.table === "one" ? "principal" : "alternativo"));
   card.append(head);
@@ -179,11 +184,14 @@ function renderTarget(t: Target, b: Bridge): HTMLElement {
 function render(lk: Lookup): void {
   const b = bridge!;
   const out = panels.result;
-  out.replaceChildren();
+  const heading = $<HTMLElement>("result-title");
+  out.replaceChildren(heading);
+  heading.textContent = lk.code ? `Resultado para ${lk.code}` : "Resultado";
   panels.error.hidden = true;
   history.replaceState(null, "", lk.code ? `#${encodeURIComponent(lk.code)}` : location.pathname);
 
   const origin = el("div", "origin panel");
+  origin.tabIndex = -1;
   const h = el("div");
   h.append(el("span", "code", lk.code || "—"));
   if (lk.existsInBr && !lk.active2019) h.append(" ", el("span", "tag", "inativo na v2019"));
@@ -238,7 +246,7 @@ function render(lk: Lookup): void {
   }
 
   if (lk.code) {
-    const ct = el("p", "hint");
+    const ct = el("p", "hint refine");
     const a = el("a", undefined, "Refinar ou pós-coordenar no Coding Tool da OMS");
     a.href = codingToolUrl(b.release);
     a.target = "_blank";
@@ -247,6 +255,8 @@ function render(lk: Lookup): void {
     out.append(ct);
   }
   out.hidden = false;
+  // Move focus to the result so keyboard and screen-reader users land on the answer.
+  origin.focus({ preventScroll: false });
 }
 
 // ---------------------------------------------------------------- boot
