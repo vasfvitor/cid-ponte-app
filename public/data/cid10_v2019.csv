@@ -597,7 +597,7 @@ B33.0,B330,B33,14,Mialgia epidemica,0,0,1,
 B33.1,B331,B33,14,Doenca de Ross River,0,0,1,
 B33.2,B332,B33,14,Cardite viral,0,0,1,
 B33.3,B333,B33,14,Infeccao por retrovirus nao classificada em outra parte,0,0,1,
-B33.4,B334,B33,14,S韓drome (cardio)-pulmonar por Hantavirus [SPH][SCPH] (referencia J17.1),0,0,1,
+B33.4,B334,B33,14,Síndrome (cardio)-pulmonar por Hantavirus [SPH][SCPH] (referencia J17.1),0,0,1,
 B33.8,B338,B33,14,Outras doencas especificadas por virus,0,0,1,
 B34,B34,B34,14,"Doencas por virus, de localizacao nao especificada",0,0,1,
 B34.0,B340,B34,14,"Infeccao por adenovirus, nao especificada",0,0,1,
@@ -718,7 +718,7 @@ B49,B49,B49,15,Micose nao especificada,0,0,1,
 B50,B50,B50,16,Malaria por Plasmodium falciparum,0,0,1,
 B50.0,B500,B50,16,Malaria por Plasmodium falciparum com complicacoes cerebrais,0,0,1,
 B50.1,B501,B50,16,Outras formas graves e complicadas de malaria por Plasmodium falciparum,0,0,1,
-B50.8,B508,B50,16,Outras formas graves e complicadas de mal醨ia por Plasmodium falciparum,0,0,1,
+B50.8,B508,B50,16,Outras formas graves e complicadas de malária por Plasmodium falciparum,0,0,1,
 B50.9,B509,B50,16,Malaria nao especificada por Plasmodium falciparum,0,0,1,
 B51,B51,B51,16,Malaria por Plasmodium vivax,0,0,1,
 B51.0,B510,B51,16,Malaria por Plasmodium vivax com rotura do baco,0,0,1,
@@ -3227,7 +3227,7 @@ G90.0,G900,G90,76,Neuropatia autonomica periferica idiopatica,0,0,1,
 G90.1,G901,G90,76,Disautonomia familiar [Sindrome de Riley-Day],0,0,1,
 G90.2,G902,G90,76,Sindrome de Horner,0,0,1,
 G90.3,G903,G90,76,Degeneracao multissistemica,0,0,0,
-G90.4,G904,G90,76,Disreflexia auton鬽ica,0,0,1,
+G90.4,G904,G90,76,Disreflexia autonômica,0,0,1,
 G90.5,G905,G90,76,Sindrome complexa de dor regional tipo 1,0,0,1,
 G90.6,G906,G90,76,Sindrome complexa de dor regional tipo 2,0,0,1,
 G90.7,G907,G90,76,"Sindrome complexa de dor regional, de outros tipos e as nao especificadas",0,0,1,
@@ -3256,7 +3256,7 @@ G94,G94,G94,76,Outros transtornos do encefalo em doencas classificadas em outra 
 G94.0,G940,G94,76,Hidrocefalia em doencas infecciosas e parasitarias classificadas em outra parte (A00-B99+),0,1,1,
 G94.1,G941,G94,76,Hidrocefalia em doencas neoplasicas (C00-D48+),0,1,1,
 G94.2,G942,G94,76,Hidrocefalia em outras doencas classificadas em outra parte,0,1,1,
-G94.3,G943,G94,76,Encefalopatia em doen鏰s classificadas em outra parte,0,1,1,
+G94.3,G943,G94,76,Encefalopatia em doenças classificadas em outra parte,0,1,1,
 G94.8,G948,G94,76,Outros transtornos encefalicos especificados em doencas classificadas em outra parte,0,1,1,
 G95,G95,G95,76,Outras doencas da medula espinal,0,0,1,
 G95.0,G950,G95,76,Siringomielia e siringobulbia,0,0,1,
@@ -3830,7 +3830,7 @@ I26.9,I269,I26,96,Embolia pulmonar sem mencao de cor pulmonale agudo,0,0,1,
 I27,I27,I27,96,Outras formas de doenca cardiaca pulmonar,0,0,1,
 I27.0,I270,I27,96,Hipertensao pulmonar primaria,0,0,1,
 I27.1,I271,I27,96,Cardiopatia cifoescoliotica,0,0,1,
-I27.2,I272,I27,96,Outra hipertens鉶 pulmonar secund醨ia,0,0,1,2010-05-24
+I27.2,I272,I27,96,Outra hipertensão pulmonar secundária,0,0,1,2010-05-24
 I27.8,I278,I27,96,Outras doencas pulmonares do coracao especificadas,0,0,1,
 I27.9,I279,I27,96,Cardiopatia pulmonar nao especificada,0,0,1,
 I28,I28,I28,96,Outras doencas dos vasos pulmonares,0,0,1,
@@ -4604,7 +4604,7 @@ K22.3,K223,K22,113,Perfuracao do esofago,0,0,1,
 K22.4,K224,K22,113,Discinesia do esofago,0,0,1,
 K22.5,K225,K22,113,Diverticulo do esofago adquirido,0,0,1,
 K22.6,K226,K22,113,Sindrome da laceracao hemorragica gastroesofagica,0,0,1,
-K22.7,K227,K22,113,Es鬴ago de Barrett,0,0,1,
+K22.7,K227,K22,113,Esôfago de Barrett,0,0,1,
 K22.8,K228,K22,113,Outras doencas especificadas do esofago,0,0,1,
 K22.9,K229,K22,113,"Doenca do esofago, sem outra especificacao",0,0,1,
 K23,K23,K23,113,Transtornos do esofago em doencas classificadas em outra parte,0,1,1,
@@ -4938,12 +4938,12 @@ K83.5,K835,K83,120,Cisto biliar,0,0,1,
 K83.8,K838,K83,120,Outras doencas especificadas das vias biliares,0,0,1,
 K83.9,K839,K83,120,"Doenca das vias biliares, sem outra especificacao",0,0,1,
 K85,K85,K85,120,Pancreatite aguda,0,0,1,
-K85.0,K850,K85,120,Pancreatite aguda idiop醫ica,0,0,1,
+K85.0,K850,K85,120,Pancreatite aguda idiopática,0,0,1,
 K85.1,K851,K85,120,Pancreatite aguda biliar,0,0,1,
-K85.2,K852,K85,120,Pancreatite aguda induzida por 醠cool,0,0,1,
+K85.2,K852,K85,120,Pancreatite aguda induzida por álcool,0,0,1,
 K85.3,K853,K85,120,Pancreatite aguda induzida por droga,0,0,1,
 K85.8,K858,K85,120,Outras pancreatites agudas,0,0,1,
-K85.9,K859,K85,120,"Pancreatite aguda, n鉶 especificada",0,0,1,
+K85.9,K859,K85,120,"Pancreatite aguda, não especificada",0,0,1,
 K86,K86,K86,120,Outras doencas do pancreas,0,0,1,
 K86.0,K860,K86,120,Pancreatite cronica induzida por alcool,0,0,1,
 K86.1,K861,K86,120,Outras pancreatites cronicas,0,0,1,
@@ -5593,7 +5593,7 @@ M31.3,M313,M31,135,Granulomatose de Wegener,0,0,1,
 M31.4,M314,M31,135,Sindrome do arco aortico [Takayasu],0,0,1,
 M31.5,M315,M31,135,Arterite de celulas gigantes com polimialgia reumatica,0,0,1,
 M31.6,M316,M31,135,Outras arterites de celulas gigantes,0,0,1,
-M31.7,M317,M31,135,Poliange韙e microsc髉ica,0,0,1,
+M31.7,M317,M31,135,Poliangeíte microscópica,0,0,1,
 M31.8,M318,M31,135,Outras vasculopatias necrotizantes especificadas,0,0,1,
 M31.9,M319,M31,135,Vasculopatia necrotizante nao especificada,0,0,1,
 M32,M32,M32,135,Lupus eritematoso disseminado [sistemico],0,0,1,
@@ -6150,10 +6150,10 @@ N17.9,N179,N17,151,Insuficiencia renal aguda nao especificada,0,0,1,
 N18,N18,N18,151,Doenca renal cronica,0,0,1,
 N18.0,N180,N18,151,Doenca renal em estadio final,0,0,0,
 N18.1,N181,N18,151,"Doenca renal cronica, estadio 1",0,0,1,
-N18.2,N182,N18,151,DRC est醙io 2,0,0,1,2023-02-13
-N18.3,N183,N18,151,DRC est醙io 3,0,0,1,2023-02-13
-N18.4,N184,N18,151,DRC est醙io 4,0,0,1,2023-02-13
-N18.5,N185,N18,151,DRC est醙io 5,0,0,1,2023-02-13
+N18.2,N182,N18,151,DRC estágio 2,0,0,1,2023-02-13
+N18.3,N183,N18,151,DRC estágio 3,0,0,1,2023-02-13
+N18.4,N184,N18,151,DRC estágio 4,0,0,1,2023-02-13
+N18.5,N185,N18,151,DRC estágio 5,0,0,1,2023-02-13
 N18.8,N188,N18,151,Outra insuficiencia renal cronica,0,0,0,
 N18.9,N189,N18,151,Doenca renal cronica nao especificada,0,0,1,
 N19,N19,N19,151,Insuficiencia renal nao especificada,0,0,1,
@@ -6997,7 +6997,7 @@ O93.6,O936,O93,271,Morte materna associada a lesoes auto-infligidas,0,0,1,
 O93.7,O937,O93,271,Morte materna associada a agressao,0,0,1,
 O93.8,O938,O93,271,Morte materna associada a demais acidentes que constam na CID-10 e nao foram incluidas no intervalo O930 a O935,0,0,1,
 O93.9,O939,O93,271,Morte materna associada a circunstancia da causa externa nao determinada,0,0,1,
-O94,O94,O94,271,"Seq黣las de complica玢o da gravidez, parto e puerp閞io",0,0,1,2010-05-24
+O94,O94,O94,271,"Seqüelas de complicação da gravidez, parto e puerpério",0,0,1,2010-05-24
 O95,O95,O95,167,Morte obstetrica de causa nao especificada,0,0,1,
 O96,O96,O96,167,"Morte, por qualquer causa obstetrica, que ocorre depois de 42 dias, mas antes de um ano, apos o parto",0,0,1,
 O96.0,O960,O96,167,"Morte materna que ocorre depois de 42 dias, mas antes de um ano, apos o parto, devida a causa obstetrica direta",0,0,1,
@@ -7212,7 +7212,7 @@ P35.0,P350,P35,172,Sindrome da rubeola congenita,0,0,1,
 P35.1,P351,P35,172,Infeccao congenita por citomegalovirus,0,0,1,
 P35.2,P352,P35,172,Infeccao congenita por virus do herpes [simples],0,0,1,
 P35.3,P353,P35,172,Hepatite viral congenita,0,0,1,
-P35.4,P354,P35,172,Doen鏰 congenita pelo Zika virus,0,0,1,2021-06-02
+P35.4,P354,P35,172,Doença congenita pelo Zika virus,0,0,1,2021-06-02
 P35.8,P358,P35,172,Outras doencas virais congenitas,0,0,1,
 P35.9,P359,P35,172,Doenca viral congenita nao especificada,0,0,1,
 P36,P36,P36,172,Septicemia bacteriana do recem-nascido,0,0,1,
@@ -7387,7 +7387,7 @@ P91.2,P912,P91,177,Leucomalacia cerebral neonatal,0,0,1,
 P91.3,P913,P91,177,Irritabilidade cerebral neonatal,0,0,1,
 P91.4,P914,P91,177,Depressao cerebral neonatal,0,0,1,
 P91.5,P915,P91,177,Coma neonatal,0,0,1,
-P91.6,P916,P91,177,Encefalopatia hip髕ico-isqu阭ica do rec閙-nascido,0,0,1,
+P91.6,P916,P91,177,Encefalopatia hipóxico-isquêmica do recém-nascido,0,0,1,
 P91.7,P917,P91,177,Hidrocefalia adquirida do recem-nascido,0,0,1,
 P91.8,P918,P91,177,Outros disturbios especificados da funcao cerebral do recem-nascido,0,0,1,
 P91.9,P919,P91,177,Disturbio nao especificado da funcao cerebral do recem-nascido,0,0,1,
@@ -7631,7 +7631,7 @@ Q31.1,Q311,Q31,181,Estenose subglotica congenita,0,0,1,
 Q31.2,Q312,Q31,181,Hipoplasia da laringe,0,0,1,
 Q31.3,Q313,Q31,181,Laringocele,0,0,1,
 Q31.4,Q314,Q31,181,Estridor congenito da laringe,0,0,0,
-Q31.5,Q315,Q31,181,Laringomal醕ia cong阯ita,0,0,1,2010-05-24
+Q31.5,Q315,Q31,181,Laringomalácia congênita,0,0,1,2010-05-24
 Q31.8,Q318,Q31,181,Outras malformacoes congenitas da laringe,0,0,1,
 Q31.9,Q319,Q31,181,Malformacao congenita nao especificada da laringe,0,0,1,
 Q32,Q32,Q32,181,Malformacoes congenitas da traqueia e dos bronquios,0,0,1,
@@ -8238,7 +8238,7 @@ R29.1,R291,R29,192,Meningismo,0,0,1,
 R29.2,R292,R29,192,Reflexos anormais,0,0,1,
 R29.3,R293,R29,192,Postura anormal,0,0,1,
 R29.4,R294,R29,192,Quadril estalante,0,0,1,
-R29.6,R296,R29,192,"Tend阯cia a queda, n鉶 classificada em outra parte",0,0,1,
+R29.6,R296,R29,192,"Tendência a queda, não classificada em outra parte",0,0,1,
 R29.8,R298,R29,192,Outros sintomas e sinais relativos aos sistemas nervoso e osteomuscular e os nao especificados,0,0,1,
 R30,R30,R30,193,Dor associada a miccao,0,0,1,
 R30.0,R300,R30,193,Disuria,0,0,1,
@@ -8861,7 +8861,7 @@ S44.1,S441,S44,206,Traumatismo do nervo mediano ao nivel do braco,0,0,1,
 S44.2,S442,S44,206,Traumatismo do nervo radial ao nivel do braco,0,0,1,
 S44.3,S443,S44,206,Traumatismo do nervo axilar,0,0,1,
 S44.4,S444,S44,206,Traumatismo do nervo musculocutaneo,0,0,1,
-S44.5,S445,S44,206,Traumatismo do nervo sensitivo cut鈔eo ao n韛el do ombro e do bra鏾,0,0,1,
+S44.5,S445,S44,206,Traumatismo do nervo sensitivo cutâneo ao nível do ombro e do braço,0,0,1,
 S44.6,S446,S44,206,Traumatismo do nervo sensitivo cutaneo ao nivel do ombro e do braco,0,0,1,
 S44.7,S447,S44,206,Traumatismo de multiplos nervos ao nivel do ombro e do braco,0,0,1,
 S44.8,S448,S44,206,Traumatismo de outros nervos ao nivel do ombro e do braco,0,0,1,
@@ -8946,7 +8946,7 @@ S56.8,S568,S56,207,Traumatismo de outros musculos e tendoes e dos nao especifica
 S57,S57,S57,207,Lesao por esmagamento do antebraco,0,0,1,
 S57.0,S570,S57,207,Lesao por esmagamento do cotovelo,0,0,1,
 S57.1,S571,S57,207,Lesao por esmagamento de outras partes do antebraco,0,0,1,
-S57.8,S578,S57,207,Les鉶 por esmagamento de outras partes do antebra鏾,0,0,1,
+S57.8,S578,S57,207,Lesão por esmagamento de outras partes do antebraço,0,0,1,
 S57.9,S579,S57,207,Lesao por esmagamento de parte nao especificada do antebraco,0,0,1,
 S58,S58,S58,207,Amputacao traumatica do cotovelo e do antebraco,0,0,1,
 S58.0,S580,S58,207,Amputacao traumatica ao nivel do cotovelo,0,0,1,
@@ -9990,7 +9990,7 @@ T98.3,T983,T98,225,Sequelas de complicacoes dos cuidados medicos e cirurgicos na
 U04,U04,U04,273,Sindrome respiratoria aguda grave (Severe acute respiratory syndrome) [SARS],0,0,1,
 U04.9,U049,U04,273,"Sindrome respiratoria aguda grave (Severe acute respiratory syndrome) [SARS], nao especificada",0,0,1,2010-05-24
 U06,U06,U06,280,Doenca pelo Zika virus,0,0,1,
-U06.9,U069,U06,280,"Doen鏰 pelo Zika virus, nao especificada",0,0,1,
+U06.9,U069,U06,280,"Doença pelo Zika virus, nao especificada",0,0,1,
 U07,U07,U07,282,Uso emergencial do U07,0,0,1,2020-04-30
 U07.0,U070,U07,283,Doenca relacionada ao uso de cigarro eletronico,0,0,1,2020-04-30
 U07.1,U071,U07,284,"COVID-19, virus identificado",0,0,1,2020-04-30
@@ -10008,10 +10008,10 @@ U12.9,U129,U12,273,"Vacinas contra a COVID-19 que causam efeitos adversos usadas
 U80,U80,U80,277,Agente resistente,0,0,1,
 U80.0,U800,U80,277,Agente resistente,0,0,0,2010-05-24
 U80.1,U801,U80,277,Agente resistente,0,0,0,2010-05-24
-U80.8,U808,U80,277,Agente resistente a outro antibi髏ico relacionado,0,0,0,2010-05-24
+U80.8,U808,U80,277,Agente resistente a outro antibiótico relacionado,0,0,0,2010-05-24
 U81,U81,U81,278,Agente resistente,0,0,1,
 U81.0,U810,U81,278,Agente resistente,0,0,0,2010-05-24
-U81.8,U818,U81,278,Agente resistente a outros antibi髏icos relacionados,0,0,0,2010-05-24
+U81.8,U818,U81,278,Agente resistente a outros antibióticos relacionados,0,0,0,2010-05-24
 U82,U82,U82,280,Resistencia a antibioticos betalactamicos,0,0,1,
 U82.0,U820,U82,280,Resistencia a,0,0,1,
 U82.1,U821,U82,280,Resistencia a meticilina,0,0,1,
@@ -10020,8 +10020,8 @@ U82.8,U828,U82,280,Resistencia a outros antibioticos betalactamicos,0,0,1,
 U82.9,U829,U82,280,"Resistencia a antibioticos betalactamicos, nao especificados",0,0,1,
 U83,U83,U83,280,Resistencia a outros antibioticos,0,0,1,
 U83.0,U830,U83,280,Resistencia a,0,0,1,
-U83.1,U831,U83,280,Resistencia a outros antibioticos relacionados 脿 vancomicina,0,0,1,
-U83.2,U832,U83,280,Resistencia a爏 quinolonas,0,0,1,
+U83.1,U831,U83,280,Resistencia a outros antibioticos relacionados à vancomicina,0,0,1,
+U83.2,U832,U83,280,Resistencia às quinolonas,0,0,1,
 U83.7,U837,U83,280,Resistencia a multiplos antibioticos,0,0,1,
 U83.8,U838,U83,280,Resistencia a outro antibiotico especificado,0,0,1,
 U83.9,U839,U83,280,Resistencia a antibiotico nao especificado,0,0,1,
@@ -10035,9 +10035,9 @@ U84.8,U848,U84,280,Resistencia a outra droga antimicrobiana especificada,0,0,1,
 U84.9,U849,U84,280,Resistencia a droga antimicrobiana nao especificada,0,0,1,
 U85,U85,U85,280,Resistencia a drogas antineoplasicas,0,0,1,
 U88,U88,U88,271,Agente resistente,0,0,0,
-U89,U89,U89,276,Agente resistente a outro antibi髏ico especificado 鷑ico,0,0,1,
-U89.8,U898,U89,276,Agente resistente a outro antibi髏ico especificado 鷑ico,0,0,0,2010-05-24
-U89.9,U899,U89,276,Agente resistente a antibi髏ico n鉶 especificado,0,0,0,2010-05-24
+U89,U89,U89,276,Agente resistente a outro antibiótico especificado único,0,0,1,
+U89.8,U898,U89,276,Agente resistente a outro antibiótico especificado único,0,0,0,2010-05-24
+U89.9,U899,U89,276,Agente resistente a antibiótico não especificado,0,0,0,2010-05-24
 U92,U92,U92,273,Reincidencia de Covid-19,0,0,1,2021-06-02
 U92.1,U921,U92,273,"Reincidencia de Covid-19, confirmada",0,0,1,2021-06-02
 U99,U99,U99,275,CID 10,0,0,1,
@@ -11419,17 +11419,17 @@ W45.6,W456,W45,241,Penetracao de corpo ou objeto estranho atraves da pele - area
 W45.7,W457,W45,241,Penetracao de corpo ou objeto estranho atraves da pele - fazenda,0,0,1,
 W45.8,W458,W45,241,Penetracao de corpo ou objeto estranho atraves da pele - outros locais especificados,0,0,1,
 W45.9,W459,W45,241,Penetracao de corpo ou objeto estranho atraves da pele - local nao especificado,0,0,1,
-W46,W46,W46,272,Contato com agulha hipod閞mica,0,0,1,2010-05-24
-W46.0,W460,W46,272,Contato com agulha hipod閞mica - resid阯cia,0,0,1,2012-03-29
-W46.1,W461,W46,272,Contato com agulha hipod閞mica - habita玢o coletiva,0,0,1,2012-03-29
-W46.2,W462,W46,272,"Contato com agulha hipod閞mica - escolas, outras institui珲es e 醨eas de administra玢o p鷅lica",0,0,1,2012-03-29
-W46.3,W463,W46,272,Contato com agulha hipod閞mica - 醨ea para a pr醫ica de esportes e atletismo,0,0,1,2012-03-29
-W46.4,W464,W46,272,Contato com agulha hipod閞mica - rua e estrada,0,0,1,2012-03-29
-W46.5,W465,W46,272,Contato com agulha hipod閞mica - 醨eas de com閞cio e de servi鏾s,0,0,1,2012-03-29
-W46.6,W466,W46,272,Contato com agulha hipod閞mica - 醨eas industriais e em constru玢o,0,0,1,2012-03-29
-W46.7,W467,W46,272,Contato com agulha hipod閞mica - fazenda,0,0,1,2012-03-29
-W46.8,W468,W46,272,Contato com agulha hipod閞mica - outros locais especificados,0,0,1,2012-03-29
-W46.9,W469,W46,272,Contato com agulha hipod閞mica - local n鉶 especificado,0,0,1,2012-03-29
+W46,W46,W46,272,Contato com agulha hipodérmica,0,0,1,2010-05-24
+W46.0,W460,W46,272,Contato com agulha hipodérmica - residência,0,0,1,2012-03-29
+W46.1,W461,W46,272,Contato com agulha hipodérmica - habitação coletiva,0,0,1,2012-03-29
+W46.2,W462,W46,272,"Contato com agulha hipodérmica - escolas, outras instituições e áreas de administração pública",0,0,1,2012-03-29
+W46.3,W463,W46,272,Contato com agulha hipodérmica - área para a prática de esportes e atletismo,0,0,1,2012-03-29
+W46.4,W464,W46,272,Contato com agulha hipodérmica - rua e estrada,0,0,1,2012-03-29
+W46.5,W465,W46,272,Contato com agulha hipodérmica - áreas de comércio e de serviços,0,0,1,2012-03-29
+W46.6,W466,W46,272,Contato com agulha hipodérmica - áreas industriais e em construção,0,0,1,2012-03-29
+W46.7,W467,W46,272,Contato com agulha hipodérmica - fazenda,0,0,1,2012-03-29
+W46.8,W468,W46,272,Contato com agulha hipodérmica - outros locais especificados,0,0,1,2012-03-29
+W46.9,W469,W46,272,Contato com agulha hipodérmica - local não especificado,0,0,1,2012-03-29
 W49,W49,W49,241,Exposicao a outras forcas mecanicas inanimadas e as nao especificadas,0,0,1,
 W49.0,W490,W49,241,Exposicao a outras forcas mecanicas inanimadas e as nao especificadas - residencia,0,0,1,
 W49.1,W491,W49,241,Exposicao a outras forcas mecanicas inanimadas e as nao especificadas - habitacao coletiva,0,0,1,
@@ -12498,7 +12498,7 @@ X58.7,X587,X58,252,Exposicao a outros fatores especificados - fazenda,0,0,1,
 X58.8,X588,X58,252,Exposicao a outros fatores especificados - outros locais especificados,0,0,1,
 X58.9,X589,X58,252,Exposicao a outros fatores especificados - local nao especificado,0,0,1,
 X59,X59,X59,252,Exposicao a fatores nao especificados,0,0,1,
-X59.0,X590,X59,252,Exposi玢o a fator n鉶 especificado causando fratura,0,0,1,
+X59.0,X590,X59,252,Exposição a fator não especificado causando fratura,0,0,1,
 X59.1,X591,X59,252,Exposicao a fatores nao especificados - habitacao coletiva,0,0,1,
 X59.2,X592,X59,252,"Exposicao a fatores nao especificados - escolas, outras instituicoes e areas de administracao publica",0,0,1,
 X59.3,X593,X59,252,Exposicao a fatores nao especificados - area para a pratica de esportes e atletismo,0,0,1,
@@ -12507,7 +12507,7 @@ X59.5,X595,X59,252,Exposicao a fatores nao especificados - areas de comercio e d
 X59.6,X596,X59,252,Exposicao a fatores nao especificados - areas industriais e em construcao,0,0,1,
 X59.7,X597,X59,252,Exposicao a fatores nao especificados - fazenda,0,0,1,
 X59.8,X598,X59,252,Exposicao a fatores nao especificados - outros locais especificados,0,0,1,
-X59.9,X599,X59,252,Exposi玢o a fator n鉶 especificado causando outro traumatismo e traumatismo n鉶 especificado,0,0,1,
+X59.9,X599,X59,252,Exposição a fator não especificado causando outro traumatismo e traumatismo não especificado,0,0,1,
 X60,X60,X60,253,"Auto-intoxicacao por e exposicao, intencional, a analgesicos, antipireticos e anti-reumaticos, nao-opiaceos",0,0,1,
 X60.0,X600,X60,253,"Auto-intoxicacao por e exposicao, intencional, a analgesicos, antipireticos e anti-reumaticos, nao-opiaceos - residencia",0,0,1,
 X60.1,X601,X60,253,"Auto-intoxicacao por e exposicao, intencional, a analgesicos, antipireticos e anti-reumaticos, nao-opiaceos - habitacao coletiva",0,0,1,
@@ -14127,7 +14127,7 @@ Z58.3,Z583,Z58,268,Exposicao a poluicao do solo,0,0,1,
 Z58.4,Z584,Z58,268,Exposicao a radiacao,0,0,1,
 Z58.5,Z585,Z58,268,Exposicao a outras poluicoes,0,0,1,
 Z58.6,Z586,Z58,268,Agua potavel insuficiente,0,0,1,
-Z58.7,Z587,Z58,268,Exposi玢o,0,0,1,2010-05-24
+Z58.7,Z587,Z58,268,Exposição à fumaça do tabaco,0,0,1,2010-05-24
 Z58.8,Z588,Z58,268,Outros problemas relacionados com o ambiente fisico,0,0,1,
 Z58.9,Z589,Z58,268,Problema nao especificado relacionado com o ambiente fisico,0,0,1,
 Z59,Z59,Z59,268,Problemas relacionados com a habitacao e com as condicoes economicas,0,0,1,
@@ -14381,7 +14381,7 @@ Z92.2,Z922,Z92,270,Historia pessoal de uso de longo prazo (atual) de outros medi
 Z92.3,Z923,Z92,270,Historia pessoal de irradiacao,0,0,1,
 Z92.4,Z924,Z92,270,Historia pessoal de cirurgia de grande porte nao classificada em outra parte,0,0,1,
 Z92.5,Z925,Z92,270,Historia pessoal de medidas de reabilitacao,0,0,1,
-Z92.6,Z926,Z92,270,Hist髍ia pessoal de quimioterapia para doen鏰 neopl醩ica,0,0,1,2010-05-24
+Z92.6,Z926,Z92,270,História pessoal de quimioterapia para doença neoplásica,0,0,1,2010-05-24
 Z92.8,Z928,Z92,270,Historia pessoal de outros tratamentos medicos,0,0,1,
 Z92.9,Z929,Z92,270,Historia pessoal de tratamento medico nao especificado,0,0,1,
 Z93,Z93,Z93,270,Orificios artificiais,0,0,1,

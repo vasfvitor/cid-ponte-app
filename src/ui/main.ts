@@ -1,16 +1,15 @@
-/** Page wiring: license gate → download → search (code or name) → render. User-facing text in pt-BR. */
+/** Page wiring: download → search (code or name) → render. User-facing text in pt-BR. */
 
 import Combobox from "@github/combobox-nav";
 import { html, nothing, render, type TemplateResult } from "lit-html";
 
 import type { BrCode, Bridge, Lookup, Target } from "../bridge";
-import { isSimple, kind10, normalize10, parse11 } from "../bridge";
+import { isPlaceOfOccurrence, isSimple, kind10, normalize10, parse11, type Target11 } from "../bridge";
 import {
-  ChecksumMismatch, LicenseNotAccepted, acceptLicense, clearCache, isCached, licenseAccepted,
-  loadBridge, type Status,
+  ChecksumMismatch, clearCache, loadBridge, type Status,
 } from "../data/load";
 import {
-  CITATION, DEFAULT_RELEASE, LICENSE_URL, browserUrl, codingToolUrl, downloadSizeLabel,
+  CITATION, DEFAULT_RELEASE, LICENSE_URL, browserUrl, codingToolUrl,
 } from "../data/sources";
 import { mountGlossary, term, type TermId } from "./glossary";
 
@@ -21,7 +20,6 @@ const $ = <T extends HTMLElement>(id: string): T => {
 };
 
 const panels = {
-  license: $<HTMLElement>("license"),
   loading: $<HTMLElement>("loading"),
   search: $<HTMLElement>("search"),
   result: $<HTMLElement>("result"),
@@ -35,8 +33,12 @@ function show(...visible: (keyof typeof panels)[]): void {
   for (const [name, el] of Object.entries(panels)) el.hidden = !visible.includes(name as keyof typeof panels);
 }
 
-function showError(message: string): void {
-  panels.error.textContent = message;
+/** Show an error; with `retry`, a button to run it again (there may be no reload button in an installed app). */
+function showError(message: string, retry?: () => void): void {
+  render(
+    html`${message}${retry ? html` <button type="button" class="link" @click=${retry}>Tentar de novo</button>` : nothing}`,
+    panels.error,
+  );
   panels.error.hidden = false;
 }
 
@@ -81,25 +83,44 @@ function onStatus(s: Status): void {
   progress.removeAttribute("value");
 }
 
+/** The code in the URL fragment, or "" (also for a malformed one like "#I21%"). */
+function codeFromHash(): string {
+  try {
+    return decodeURIComponent(location.hash.slice(1));
+  } catch {
+    return "";
+  }
+}
+
+/** The "limpar dados baixados" button, while it exists (clicking replaces it with a note). */
+const clearButton = (): HTMLButtonElement | null => document.getElementById("clear-cache") as HTMLButtonElement | null;
+
 async function start(): Promise<void> {
   show("loading");
+  downloads.clear();
+  // Clearing while files download would let them be saved again right after.
+  const clear = clearButton();
+  if (clear) clear.disabled = true;
   try {
     bridge = await loadBridge(release, onStatus);
     show("search");
+    $<HTMLElement>("guide").hidden = false;
     input.focus();
-    const fromHash = decodeURIComponent(location.hash.slice(1));
-    if (fromHash) query(fromHash);
+    const fromHash = codeFromHash();
+    if (fromHash) query(fromHash, true);
   } catch (e) {
-    show("license");
-    if (e instanceof LicenseNotAccepted) return;
+    show();
     if (e instanceof ChecksumMismatch) {
       showError(
         "O arquivo baixado da OMS não confere com a versão esperada (talvez a OMS o tenha atualizado). " +
-          "Nada foi salvo. Detalhe técnico: " + e.message,
+          "O arquivo com problema não foi salvo. Detalhe técnico: " + e.message,
+        start,
       );
     } else {
-      showError(`Não foi possível carregar as tabelas. Verifique a conexão e tente de novo. Detalhe técnico: ${(e as Error).message}`);
+      showError(`Não foi possível carregar as tabelas. Verifique a conexão. Detalhe técnico: ${(e as Error).message}`, start);
     }
+  } finally {
+    if (clear) clear.disabled = false;
   }
 }
 
@@ -116,15 +137,43 @@ function looksLikeCode(text: string): boolean {
   return c !== null && kind10(c) !== "other";
 }
 
-/** Run a lookup for a code and show it. */
-function query(code: string): void {
+/**
+ * Run a lookup for a code and show it. Each new code is a history entry (#code), so the
+ * phone's back button returns to the previous result or the empty search, not off the page.
+ * `replace` is for the code the page was opened with (it may be written "#i219").
+ */
+function query(code: string, replace = false): void {
   if (!bridge) return;
   input.value = code;
   hideSuggestions();
-  showLookup(bridge.lookup(code));
+  const lk = bridge.lookup(code);
+  const url = lk.code ? `#${encodeURIComponent(lk.code)}` : location.pathname + location.search;
+  if (lk.code && url !== location.hash && !replace) history.pushState(null, "", url);
+  else history.replaceState(null, "", url);
+  showLookup(lk);
 }
 
+/** Back/forward: show the code in the URL again, or the empty search screen. */
+function onPopState(): void {
+  if (!bridge) return;
+  const code = codeFromHash();
+  input.value = code;
+  hideSuggestions();
+  if (code) {
+    showLookup(bridge.lookup(code));
+    return;
+  }
+  render(nothing, panels.result);
+  panels.result.hidden = true;
+  panels.error.hidden = true;
+  window.scrollTo({ top: 0 });
+}
+
+let suggestTimer: number | undefined;
+
+/** Also cancels a pending suggest(), which would otherwise reopen the list after a pick. */
 function hideSuggestions(): void {
+  window.clearTimeout(suggestTimer);
   combobox.stop();
   box.hidden = true;
   render(nothing, box);
@@ -150,6 +199,7 @@ function suggest(text: string): void {
 
 /** Submit: a code goes straight to the result; a name opens (or keeps) the suggestions. */
 function submit(): void {
+  window.clearTimeout(suggestTimer);
   const text = input.value.trim();
   if (!text || looksLikeCode(text)) {
     query(text);
@@ -158,8 +208,6 @@ function submit(): void {
   suggest(text);
   combobox.navigate(1);
 }
-
-let suggestTimer: number | undefined;
 
 function onInput(): void {
   const text = input.value.trim();
@@ -170,7 +218,6 @@ function onInput(): void {
   }
   suggestTimer = window.setTimeout(() => suggest(text), 150);
 }
-
 
 // ---------------------------------------------------------------- rendering
 
@@ -202,6 +249,19 @@ const notice = (kind: keyof typeof ICON, body: unknown): TemplateResult => html`
   <div class="notice ${kind}"><span class="icon" aria-hidden="true">${ICON[kind]}</span><p>${body}</p></div>
 `;
 
+/**
+ * Portuguese title of a composite target, in WHO's own format for the English one:
+ * "stem / stem [extension, extension]". Each part falls back to English, then to its code.
+ */
+function compositeTitle(c: Target11, b: Bridge): string {
+  const title = (code: string): string => {
+    const e = b.entityOf(code);
+    return e?.title ?? e?.titleEn ?? code;
+  };
+  const exts = c.extensions.length ? ` [${c.extensions.map(title).join(", ")}]` : "";
+  return c.stems.map(title).join(" / ") + exts;
+}
+
 function targetCard(t: Target, b: Bridge): TemplateResult {
   const parsed = parse11(t.code);
   const composite = parsed && !isSimple(parsed) ? parsed : null;
@@ -209,9 +269,15 @@ function targetCard(t: Target, b: Bridge): TemplateResult {
     const e = b.entityOf(c);
     return `${c} — ${e?.title ?? e?.titleEn ?? "sem título"}`;
   };
-  const link = browserUrl(b.release, t.foundationUri);
-  const up = t.relationN !== null && t.relationN < 0 ? -t.relationN : 0;
-  const relationTag = t.relation === "Equivalent" ? tag("equivalente", "equivalente") : t.relation ? tag("mais-ampla") : nothing;
+  // entityOf() of a composite is its first stem: its title and residual flag are not the whole code's.
+  const titlePt = composite ? compositeTitle(composite, b) : t.titlePt;
+  const residual = !composite && b.entityOf(t.code)?.isResidual;
+  const link = browserUrl(b.release, t.linearizationUri);
+  // WHO's relation (foundation table) describes the OneCategory target only; the bridge copies
+  // it onto every target (parity with the Python package), so show it on the main card only.
+  const relation = t.table === "one" ? t.relation : null;
+  const up = relation && t.relationN !== null && t.relationN < 0 ? -t.relationN : 0;
+  const relationTag = relation === "Equivalent" ? tag("equivalente", "equivalente") : relation ? tag("mais-ampla") : nothing;
   const compositeNote = !composite ? nothing : composite.stems.length > 1
     ? html`<strong>${term("cluster")}</strong> (cluster): a CID-11 representa este caso juntando mais de um código com “/”.`
     : html`<strong>${term("extensao", "Código com detalhe extra")}</strong> (extensão): a CID-11 acrescenta um código com “&amp;” para detalhar o caso (agente, local, lado do corpo etc.).`;
@@ -223,9 +289,9 @@ function targetCard(t: Target, b: Bridge): TemplateResult {
         ${relationTag}
         ${t.table === "one" ? tag("principal", "principal") : tag("alternativo", "alternativo")}
       </div>
-      ${t.titlePt ? html`<p class="title-pt">${t.titlePt}</p>` : nothing}
+      ${titlePt ? html`<p class="title-pt">${titlePt}</p>` : nothing}
       ${t.titleEn ? html`<p class="title-en">${t.titleEn}</p>` : nothing}
-      ${!t.titlePt && t.code ? notice("warn", "A OMS ainda não traduziu este título; acima, o original em inglês.") : nothing}
+      ${!titlePt && t.code ? notice("warn", "A OMS ainda não traduziu este título; acima, o original em inglês.") : nothing}
       ${composite
         ? html`
             ${notice("warn", compositeNote)}
@@ -235,7 +301,7 @@ function targetCard(t: Target, b: Bridge): TemplateResult {
             </ul>
           `
         : nothing}
-      ${b.entityOf(t.code)?.isResidual
+      ${residual
         ? notice("warn", html`<strong>${term("residual")}</strong> (“outros” ou “não especificado”). A CID-11 pode ter um código mais específico para o caso.`)
         : nothing}
       <p class="meta">
@@ -258,8 +324,16 @@ function reasonNotice(lk: Lookup, codingTool: TemplateResult): TemplateResult | 
       return notice("bad", html`<strong>Sem correspondente no ${mapa}.</strong> Este código existe na CID-10 brasileira, mas nem ele nem a categoria dele constam no mapa. Codifique a partir do diagnóstico na ${codingTool}.`);
     case "no_mapping":
       return notice("bad", html`<strong>A OMS não indica um correspondente direto</strong> para este código. Codifique a partir do diagnóstico na ${codingTool}.`);
-    case "parent_category":
-      return notice("warn", html`O 4º caractere indica o <strong>${term("local", "local da ocorrência")}</strong> (residência, escola, rua etc.), que o mapa da OMS não cobre. O resultado abaixo é da categoria <code>${lk.effectiveCode}</code>; na CID-11, o local entra como ${term("extensao", "detalhe extra")}.`);
+    case "parent_category": {
+      const category = html`<code>${lk.effectiveCode}</code>`;
+      if (!lk.existsInBr) {
+        return notice("bad", html`<strong>${lk.code} não existe na CID-10 brasileira.</strong> Confira a digitação. Abaixo, o resultado da categoria ${category}.`);
+      }
+      if (isPlaceOfOccurrence(lk.effectiveCode ?? "")) {
+        return notice("warn", html`O 4º caractere indica o <strong>${term("local", "local da ocorrência")}</strong> (residência, escola, rua etc.), que o mapa da OMS não cobre. O resultado abaixo é da categoria ${category}; na CID-11, o local entra como ${term("extensao", "detalhe extra")}.`);
+      }
+      return notice("warn", html`Esta subcategoria não está no ${mapa}; o resultado abaixo é da categoria ${category}, mais geral.`);
+    }
     case "mapped":
       return nothing;
   }
@@ -268,11 +342,13 @@ function reasonNotice(lk: Lookup, codingTool: TemplateResult): TemplateResult | 
 /** The notice for how many targets there are and how they relate, if any. */
 function cardinalityNotice(lk: Lookup, main: Target[], alternatives: Target[], codingTool: TemplateResult): TemplateResult | typeof nothing {
   const first = main[0];
-  if (first?.cardinality === "1:N") {
-    return notice("warn", html`<strong>Há ${1 + alternatives.length} opções na CID-11.</strong> A primeira é a ${term("principal", "indicada pela OMS")}; as outras são ${term("alternativo", "alternativas")}. Escolha conforme o caso clínico.`);
-  }
   if (first?.cardinality === "block") {
     return notice("warn", html`<strong>A OMS aponta para um ${term("bloco", "grupo")}</strong> da CID-11, não para um código. Escolha um código dentro do grupo na ${codingTool}.`);
+  }
+  // Any alternative means a choice, whatever the bridge's cardinality says (it only counts the
+  // MultipleCategories codes). Without a main target ("no mapping") WHO indicates nothing.
+  if (first && alternatives.length) {
+    return notice("warn", html`<strong>Há ${main.length + alternatives.length} opções na CID-11.</strong> A primeira é a ${term("principal", "indicada pela OMS")}; as outras são ${term("alternativo", "alternativas")}. Escolha conforme o caso clínico.`);
   }
   if (first?.cardinality === "1:1" && lk.reason === "mapped" && first.relation === "Equivalent") {
     return notice("ok", html`<strong>${term("equivalente", "Correspondência direta")}</strong>: segundo a OMS, os dois códigos têm o mesmo significado.`);
@@ -283,7 +359,6 @@ function cardinalityNotice(lk: Lookup, main: Target[], alternatives: Target[], c
 function showLookup(lk: Lookup): void {
   const b = bridge!;
   panels.error.hidden = true;
-  history.replaceState(null, "", lk.code ? `#${encodeURIComponent(lk.code)}` : location.pathname);
 
   const main = lk.targets.filter((t) => t.table === "one");
   const alternatives = lk.targets.filter((t) => t.table === "multiple");
@@ -299,7 +374,7 @@ function showLookup(lk: Lookup): void {
         <div>
           <span class="code">${lk.code || "—"}</span>
           ${lk.existsInBr && !lk.active2019 ? tag("fora-de-uso", "fora de uso no Brasil") : nothing}
-          ${!lk.existsInBr && lk.code ? html`<span class="tag">não consta na CID-10 brasileira</span>` : nothing}
+          ${!lk.existsInBr && ["category", "subcategory"].includes(kind10(lk.code)) ? html`<span class="tag">não consta na CID-10 brasileira</span>` : nothing}
         </div>
         ${lk.brTitle ? html`<p class="title">${lk.brTitle}</p>` : nothing}
         ${reasonNotice(lk, codingTool)}
@@ -330,21 +405,16 @@ function showLookup(lk: Lookup): void {
 
 async function boot(): Promise<void> {
   $<HTMLAnchorElement>("license-link").href = LICENSE_URL;
-  $<HTMLElement>("download-size").textContent = downloadSizeLabel(release);
   $<HTMLElement>("citation").textContent = CITATION;
   $<HTMLElement>("release").textContent = release;
   mountGlossary($<HTMLElement>("glossary"));
-
-  $<HTMLButtonElement>("license-accept").addEventListener("click", async () => {
-    await acceptLicense();
-    await start();
-  });
 
   $<HTMLFormElement>("form").addEventListener("submit", (ev) => {
     ev.preventDefault();
     submit();
   });
   input.addEventListener("input", onInput);
+  window.addEventListener("popstate", onPopState);
   // Escape closes the suggestions (Combobox only clears the highlighted one).
   input.addEventListener("keydown", (ev) => {
     if (ev.key === "Escape") hideSuggestions();
@@ -352,14 +422,14 @@ async function boot(): Promise<void> {
   for (const chip of document.querySelectorAll<HTMLButtonElement>(".chip")) {
     chip.addEventListener("click", () => query(chip.dataset["code"] ?? ""));
   }
-  $<HTMLButtonElement>("clear-cache").addEventListener("click", async () => {
+  // No reload: loading is automatic, so a reload would download everything again right away.
+  const clear = $<HTMLButtonElement>("clear-cache");
+  clear.addEventListener("click", async () => {
     await clearCache();
-    location.hash = "";
-    location.reload();
+    clear.replaceWith("dados apagados (serão baixados de novo na próxima vez que abrir o app)");
   });
 
-  if ((await licenseAccepted()) || (await isCached(release))) await start();
-  else show("license");
+  await start();
 }
 
 boot().catch((e: Error) => showError(e.message));

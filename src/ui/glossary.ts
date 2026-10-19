@@ -63,21 +63,21 @@ export const GLOSSARY = {
   },
   mapa: {
     label: "Mapa da OMS",
-    text: html`As tabelas oficiais da OMS que ligam cada código da CID-10 a um código da CID-11. Não incluem os códigos criados só no Brasil.`,
+    text: html`As tabelas oficiais da OMS que ligam os códigos da CID-10 (versão da OMS) aos da CID-11. Não incluem os códigos criados só no Brasil.`,
   },
   local: {
     label: "Local da ocorrência",
     official: "4º caractere",
-    text: html`Nas causas externas (W00–Y34), o 4º caractere indica onde aconteceu (0 = residência, 2 = escola, 4 = rua e estrada…). O mapa da OMS só cobre a categoria de 3 caracteres; na CID-11, o local entra como detalhe extra.`,
+    text: html`Nas causas externas (W00–Y34, exceto Y06–Y07), o 4º caractere indica onde aconteceu (0 = residência, 2 = escolas e outras instituições, 4 = rua e estrada…). O mapa da OMS só cobre a categoria de 3 caracteres; na CID-11, o local entra como detalhe extra.`,
   },
   "causa-basica": {
     label: "Causa básica de óbito",
-    text: html`A doença ou lesão que iniciou a cadeia de eventos que levou à morte. É escolhida por regras da OMS a partir da declaração de óbito inteira, por isso não basta converter um código isolado.`,
+    text: html`A doença ou lesão que iniciou a cadeia de eventos que levou diretamente à morte, ou as circunstâncias do acidente ou violência que produziram a lesão fatal. É selecionada por regras da OMS a partir da declaração de óbito inteira, por isso não basta converter um código isolado.`,
   },
   "coding-tool": {
     label: "Ferramenta de codificação da OMS",
     official: "Coding Tool",
-    text: html`Ferramenta oficial e gratuita da OMS para buscar e montar códigos da CID-11 a partir do texto do diagnóstico. Ela monta sozinha os códigos compostos e os detalhes extras.`,
+    text: html`Ferramenta oficial e gratuita da OMS para buscar e montar códigos da CID-11 a partir do texto do diagnóstico. Ela ajuda a montar os códigos compostos e os detalhes extras.`,
   },
   versao: {
     label: "Versão da CID-11",
@@ -144,8 +144,11 @@ export function mountGlossary(list: HTMLElement): void {
       let stop: (() => void) | undefined;
       // Start before it shows: autoUpdate re-measures once it has a size, before the first paint.
       const onBeforeToggle = (ev: ToggleEvent): void => {
+        const pop = ev.target as HTMLElement;
         stop?.();
-        stop = ev.newState === "open" && anchor ? follow(ev.target as HTMLElement, anchor) : undefined;
+        stop = ev.newState === "open" && anchor ? follow(pop, anchor) : undefined;
+        // The footer list is hidden until the data loads; then there is nothing to jump to.
+        pop.querySelector("a")!.hidden = !!document.getElementById(entryId(id))?.closest("[hidden]");
       };
       const onMore = (ev: Event): void => {
         ev.preventDefault();

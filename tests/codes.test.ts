@@ -77,9 +77,18 @@ describe("parseDelimited (python csv semantics)", () => {
 describe("WHO links (formats checked against icd.who.int on 2026-10-18)", () => {
   it("coding tool and browser URLs", () => {
     expect(codingToolUrl("2026-01")).toBe("https://icd.who.int/ct/icd11_mms/pt/2026-01");
-    expect(browserUrl("2026-01", "http://id.who.int/icd/entity/761947693")).toBe(
-      "https://icd.who.int/browse/2026-01/mms/pt#761947693",
+    const mms = "http://id.who.int/icd/release/11/2026-01/mms";
+    expect(browserUrl("2026-01", `${mms}/257068234`)).toBe(
+      "https://icd.who.int/browse/2026-01/mms/pt#257068234",
+    );
+    // Residuals point at their own entity, not the parent (BA00.Z, CA40.Y)
+    expect(browserUrl("2026-01", `${mms}/761947693/unspecified`)).toBe(
+      "https://icd.who.int/browse/2026-01/mms/pt#761947693/mms/unspecified",
+    );
+    expect(browserUrl("2026-01", `${mms}/142052508/other`)).toBe(
+      "https://icd.who.int/browse/2026-01/mms/pt#142052508/mms/other",
     );
     expect(browserUrl("2026-01", null)).toBeNull();
+    expect(browserUrl("2026-01", "http://id.who.int/icd/entity/761947693")).toBeNull();
   });
 });

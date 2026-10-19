@@ -18,21 +18,12 @@
     </header>
 
     <main id="app">
-      <section id="license" class="panel" hidden aria-labelledby="license-title">
-        <h2 id="license-title">Antes de começar</h2>
-        <p>
-          Este app baixa dados da OMS. Ao continuar, você concorda com os
-          <a id="license-link" href="#" target="_blank" rel="noopener">termos de uso da CID-11</a>
-          (CC BY-ND 3.0 IGO).
-        </p>
-        <div class="notice warn" role="note">
-          <span class="icon" aria-hidden="true">!</span>
-          <p>
-            <strong>Download de <span id="download-size">cerca de 12 MB</span></strong>
-          </p>
-        </div>
-        <button id="license-accept" class="primary">Baixar tabelas e começar</button>
-      </section>
+      <!-- Implicit acceptance (WHO terms: "by installing and/or using"): keep this visible. -->
+      <p class="terms-note">
+        Ao usar, você concorda com os
+        <a id="license-link" href="#" target="_blank" rel="noopener">termos de uso da CID-11</a>
+        (CC BY-ND 3.0 IGO). Dados da OMS.
+      </p>
 
       <section id="loading" class="panel" hidden aria-busy="true">
         <p id="status" role="status" aria-live="polite">Preparando…</p>
@@ -75,35 +66,44 @@
     </main>
 
     <footer class="foot">
-      <p>
-        <strong>Use como ponto de partida, não como código final.</strong> O
-        <button type="button" class="term" data-term="mapa" popovertarget="term-mapa">mapa da OMS</button>
-        dá só o código básico; a CID-11 permite
-        <button type="button" class="term" data-term="pos-coordenacao" popovertarget="term-pos-coordenacao">detalhar</button>
-        (gravidade, lado do corpo, causa etc.). Para
-        <button type="button" class="term" data-term="causa-basica" popovertarget="term-causa-basica">causa básica de óbito</button>,
-        a conversão é apenas aproximada, porque a CID-11 aplica regras próprias.
-      </p>
-      <ul>
-        <li>
-          <code>E11.3</code> (diabetes tipo 2 com complicações oftálmicas) vira <code>5A11</code>
-          (diabetes tipo 2): a complicação no olho precisa ser codificada à parte.
-        </li>
-        <li>
-          <code>W00.0</code> (queda no gelo ou neve, na residência) vira <code>PA60&amp;XE3LV</code>:
-          o local “residência” não vem no mapa e entra como
-          <button type="button" class="term" data-term="extensao" popovertarget="term-extensao">detalhe extra</button>.
-        </li>
-        <li>
-          <code>O93.0</code> (morte materna associada a acidente de trânsito) é um código nacional sem
-          correspondente: a causa básica precisa ser recodificada a partir da declaração de óbito.
-        </li>
-      </ul>
-      <details class="glossary">
-        <summary>Glossário</summary>
-        <dl id="glossary"></dl>
-      </details>
-      <hr />
+      <!-- How to read the result: shown once the WHO data is loaded (main.ts start). -->
+      <div id="guide" hidden>
+        <p><strong>Use como ponto de partida, não como código final.</strong></p>
+        <ul class="rules">
+          <li>
+            <strong>O correspondente pode ser menos específico que o original.</strong>
+            <button type="button" class="chip" data-code="E11.3">E11.3</button>
+            (diabetes tipo 2 com complicações oftálmicas) vira <code>5A11</code> (diabetes tipo 2). A
+            complicação deve ser codificada também, por exemplo <code>9B71.0</code> (retinopatia
+            diabética); veja
+            <button type="button" class="term" data-term="pos-coordenacao" popovertarget="term-pos-coordenacao">detalhar</button>.
+          </li>
+          <li>
+            <strong>O
+            <button type="button" class="term" data-term="local" popovertarget="term-local">local da ocorrência</button>
+            (4º caractere) fica de fora.</strong>
+            <button type="button" class="chip" data-code="W00.0">W00.0</button>
+            (queda no mesmo nível em gelo ou neve, na residência) vira <code>PA60&amp;XE3LV</code> (queda + neve/gelo). O local
+            entra como
+            <button type="button" class="term" data-term="extensao" popovertarget="term-extensao">detalhe extra</button>:
+            <code>&amp;XE266</code> (casa).
+          </li>
+          <li>
+            <strong>Para
+            <button type="button" class="term" data-term="causa-basica" popovertarget="term-causa-basica">causa básica de óbito</button>,
+            a conversão é só aproximada.</strong>
+            <button type="button" class="chip" data-code="O93.0">O93.0</button>
+            (morte materna associada a acidente de trânsito) não tem correspondente no
+            <button type="button" class="term" data-term="mapa" popovertarget="term-mapa">mapa da OMS</button>;
+            a causa básica deve ser selecionada de novo a partir da declaração de óbito, pelas regras da CID-11.
+          </li>
+        </ul>
+        <details class="glossary">
+          <summary>Glossário</summary>
+          <dl id="glossary"></dl>
+        </details>
+        <hr />
+      </div>
       <p id="citation"></p>
       <p>
         <button type="button" class="term" data-term="versao" popovertarget="term-versao">Versão da CID-11</button>:

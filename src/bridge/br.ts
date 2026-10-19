@@ -108,23 +108,28 @@ export class BrTable {
 
   /**
    * Codes whose title has every word of `query`, accent- and case-insensitive, as a prefix
-   * ("infart") or with a typo ("infrato"). Ranked by relevance (shorter titles win), with
-   * active codes far ahead of inactive ones and titles that start with the query doubled.
-   * Subcategories and their category both appear; the caller decides.
+   * ("infart"). Only when that finds nothing are typos tolerated ("infrato"): with typos on
+   * from the start, "hipertireoidismo" would also bring hypothyroidism (hiper/hipo is 2 edits).
+   * Ranked by relevance (shorter titles win), with active codes far ahead of inactive ones and
+   * titles that start with the query doubled. Subcategories and their category both appear.
    */
   search(query: string, limit = 12): BrCode[] {
     const phrase = foldText(query);
     if (!phrase) return [];
-    const hits = this.index.search(phrase, {
+    const options = {
       prefix: true,
-      // Edits allowed per word: none up to 3 letters, 1 up to 6, then 2 (a swap like "infrato").
-      fuzzy: (term) => (term.length <= 3 ? false : term.length <= 6 ? 1 : 2),
       combineWith: "AND",
       boostDocument: (code: string) => {
         const r = this.rows.get(code)!;
         return (r.active ? 1 : 0.01) * (r.folded.startsWith(phrase) ? 2 : 1);
       },
-    });
+    } as const;
+    let hits = this.index.search(phrase, options);
+    if (hits.length === 0) {
+      // Edits allowed per word: none up to 3 letters, 1 up to 6, then 2 (a swap like "infrato").
+      const fuzzy = (term: string): number | false => (term.length <= 3 ? false : term.length <= 6 ? 1 : 2);
+      hits = this.index.search(phrase, { ...options, fuzzy });
+    }
     return hits.slice(0, limit).map((h) => toBrCode(this.rows.get(h.id as string)!));
   }
 
@@ -149,4 +154,13 @@ export function mappableParent(code: string, known: { has(c: string): boolean })
   if (known.has(c) || !c.includes(".")) return null;
   const cat = category10(c);
   return known.has(cat) ? cat : null;
+}
+
+/**
+ * Whether a 3-character category takes the place-of-occurrence 4th character: W00–Y34,
+ * except Y06–Y07 (there the 4th character is the perpetrator).
+ */
+export function isPlaceOfOccurrence(category: string): boolean {
+  const c = category.slice(0, 3).toUpperCase();
+  return c >= "W00" && c <= "Y34" && c !== "Y06" && c !== "Y07";
 }

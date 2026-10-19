@@ -10,7 +10,7 @@
 
 export type Reason =
   | "mapped"
-  | "parent_category" // 4th character is place of occurrence (W00–Y34); WHO maps the 3-char category
+  | "parent_category" // subcategory absent from the map (e.g. W00–Y34 place of occurrence); WHO maps the 3-char category
   | "no_mapping" // WHO row exists but declares no target
   | "no_br_path" // Brazilian national code with no path in the WHO map
   | "unknown" // not in the map, not a known Brazilian exception

@@ -37,25 +37,20 @@ export const mappingUrl = (release: string): string => `${CDN}/${release}/${MAPP
 export const simpleTabulationUrl = (release: string, lang = "pt"): string =>
   `${CDN}/${release}/${simpleTabulationZip(lang)}`;
 
-/** Bytes of mapping.zip + SimpleTabulation pt per release (data/SHA256SUMS in cid-ponte). */
-export const DOWNLOAD_BYTES: Record<string, number> = {
-  "2026-01": 6_809_366 + 4_951_519,
-};
-
-/** Human size for the consent screen, e.g. "11,8 MB". */
-export function downloadSizeLabel(release: string): string {
-  const bytes = DOWNLOAD_BYTES[release];
-  return bytes ? `${(bytes / 1e6).toLocaleString("pt-BR", { maximumFractionDigits: 1 })} MB` : "cerca de 12 MB";
-}
-
 /** WHO's ICD-11 Coding Tool (Portuguese) for a release, e.g. https://icd.who.int/ct/icd11_mms/pt/2026-01 */
 export function codingToolUrl(release: string, lang = "pt"): string {
   return `https://icd.who.int/ct/icd11_mms/${lang}/${release}`;
 }
 
-/** Link to the entity in WHO's ICD-11 browser (Portuguese), from its Foundation URI. */
-export function browserUrl(release: string, foundationUri: string | null): string | null {
-  if (!foundationUri) return null;
-  const id = foundationUri.split("/").pop();
-  return id ? `https://icd.who.int/browse/${release}/mms/pt#${id}` : null;
+/**
+ * Link to the MMS entity in WHO's ICD-11 browser (Portuguese), from its linearization URI.
+ * Same fragment as the SimpleTabulation BrowserLink column: ".../mms/761947693" -> "#761947693",
+ * ".../mms/761947693/unspecified" (a residual such as BA00.Z) -> "#761947693/mms/unspecified".
+ * The Foundation URI is not used: for residuals and composites it is not the entity shown.
+ */
+export function browserUrl(release: string, linearizationUri: string | null): string | null {
+  const path = linearizationUri?.split("/mms/")[1];
+  if (!path) return null;
+  const [id, residual] = path.split("/");
+  return `https://icd.who.int/browse/${release}/mms/pt#${id}${residual ? `/mms/${residual}` : ""}`;
 }

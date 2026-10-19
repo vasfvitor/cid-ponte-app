@@ -161,8 +161,10 @@ button {
   text-underline-offset: 2px;
 }
 
-#license-accept {
-  margin-top: 16px;
+.terms-note {
+  margin: 0 0 16px;
+  color: var(--fg-muted);
+  font-size: 0.875rem;
 }
 
 /* search */
@@ -452,6 +454,15 @@ progress {
   margin-bottom: 10px;
 }
 
+.foot .rules {
+  margin: 0 0 12px;
+  padding-left: 20px;
+}
+
+.foot .rules li + li {
+  margin-top: 8px;
+}
+
 /* ---------- glossary ---------- */
 
 /* A term inside text: reads as text, dotted underline says "tap for meaning".
@@ -553,6 +564,7 @@ a[target="_blank"]::after {
 
   #form {
     flex-direction: column;
+    align-items: stretch; /* flex-end (bottom-align with the button) would push the field right */
   }
 
   .primary {

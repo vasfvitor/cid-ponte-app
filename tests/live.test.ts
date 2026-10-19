@@ -11,7 +11,8 @@ import { describe, expect, it } from "vitest";
 
 import { bridgeFromZips, sha256Hex } from "../src/data/load";
 import {
-  DEFAULT_RELEASE, MAPPING_SHA256, SIMPLE_TABULATION_PT_SHA256, mappingUrl, simpleTabulationUrl,
+  DEFAULT_RELEASE, MAPPING_SHA256, SIMPLE_TABULATION_PT_SHA256, browserUrl, mappingUrl,
+  simpleTabulationUrl,
 } from "../src/data/sources";
 import { loadBrTable } from "./helpers";
 
@@ -54,7 +55,16 @@ describe.skipIf(!process.env["LIVE"] && !process.env["WHO_FILES_DIR"])(`live WHO
     expect(w000.targets.length).toBeGreaterThan(0);
 
     expect(bridge.lookup("O930").reason).toBe("no_br_path");
+
+    // Codes the footer cites as what completes E11.3 and W00.0 (index.html, "Use como ponto de partida")
+    expect(bridge.entityOf("9B71.0")?.title).toMatch(/retinopatia diabética/i);
+    expect(bridge.entityOf("XE266")?.title).toMatch(/casa/i);
     expect(bridge.lookup("L739").reason).toBe("no_mapping");
+
+    // "Definição" opens the residual itself (BA00.Z), not its parent BA00
+    const i10 = bridge.lookup("I10").targets[0]!;
+    expect(i10.code).toBe("BA00.Z");
+    expect(browserUrl(release, i10.linearizationUri)).toMatch(/#761947693\/mms\/unspecified$/);
 
     // K72 (hepatic failure) has several distinct targets in MultipleCategories
     const k72 = bridge.lookup("K72");
