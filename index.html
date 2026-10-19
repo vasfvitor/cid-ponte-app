@@ -21,24 +21,17 @@
       <section id="license" class="panel" hidden aria-labelledby="license-title">
         <h2 id="license-title">Antes de começar</h2>
         <p>
-          Para funcionar, o app baixa da OMS as tabelas de correspondência CID-10 → CID-11 e os
-          títulos em português. O download sai direto do site da OMS (<code>icdcdn.who.int</code>),
-          e os dados ficam só no seu navegador. O uso segue os
-          <a id="license-link" href="#" target="_blank" rel="noopener">termos da CID-11<span aria-hidden="true"> ↗</span><span class="sr-only"> (abre em nova aba)</span></a>
+          Este app baixa dados da OMS. Ao continuar, você concorda com os
+          <a id="license-link" href="#" target="_blank" rel="noopener">termos de uso da CID-11</a>
           (CC BY-ND 3.0 IGO).
         </p>
         <div class="notice warn" role="note">
           <span class="icon" aria-hidden="true">!</span>
           <p>
-            <strong>Download de <span id="download-size">cerca de 12 MB</span></strong>, uma única
-            vez. Em rede móvel, prefira Wi-Fi.
+            <strong>Download de <span id="download-size">cerca de 12 MB</span></strong>
           </p>
         </div>
-        <label class="check">
-          <input type="checkbox" id="license-check" />
-          <span>Li e aceito os termos de uso da OMS.</span>
-        </label>
-        <button id="license-accept" class="primary" disabled>Baixar tabelas e começar</button>
+        <button id="license-accept" class="primary">Baixar tabelas e começar</button>
       </section>
 
       <section id="loading" class="panel" hidden aria-busy="true">
@@ -58,10 +51,6 @@
               inputmode="text"
               placeholder="ex. I21.9 ou infarto agudo"
               spellcheck="false"
-              role="combobox"
-              aria-expanded="false"
-              aria-controls="suggestions"
-              aria-autocomplete="list"
               autofocus
             />
           </div>
@@ -80,9 +69,7 @@
         </ul>
       </section>
 
-      <section id="result" hidden aria-live="polite" aria-labelledby="result-title">
-        <h2 id="result-title" class="sr-only">Resultado</h2>
-      </section>
+      <section id="result" hidden aria-live="polite" aria-labelledby="result-title"></section>
 
       <section id="error" class="panel error" hidden role="alert"></section>
     </main>
@@ -122,7 +109,7 @@
         <button type="button" class="term" data-term="versao" popovertarget="term-versao">Versão da CID-11</button>:
         <span id="release"></span>. Sem vínculo com a OMS ou o Ministério da Saúde.
         CID-10 brasileira v2019: CC BR-FIC / MS.
-        <a href="https://github.com/vasfvitor/cid-ponte-app" target="_blank" rel="noopener">Código-fonte<span aria-hidden="true"> ↗</span><span class="sr-only"> (abre em nova aba)</span></a>
+        <a href="https://github.com/vasfvitor/cid-ponte-app" target="_blank" rel="noopener">Código-fonte</a>
         · <button type="button" id="clear-cache" class="link">limpar dados baixados</button>
       </p>
     </footer>

@@ -1,46 +1,15 @@
-/** Tiny IndexedDB key-value store for the downloaded WHO files and the license-acceptance flag. */
+/** IndexedDB key-value store for the downloaded WHO files and the license-acceptance flag. */
 
-const DB_NAME = "cid-ponte-app";
-const STORE = "files";
+import { clear, createStore, get as idbGet, keys, set } from "idb-keyval";
 
-let dbPromise: Promise<IDBDatabase> | undefined;
+// Do not rename: downloaded files and the license flag already live in this database/store.
+const files = createStore("cid-ponte-app", "files");
 
-function open(): Promise<IDBDatabase> {
-  dbPromise ??= new Promise((resolve, reject) => {
-    const req = indexedDB.open(DB_NAME, 1);
-    req.onupgradeneeded = () => {
-      if (!req.result.objectStoreNames.contains(STORE)) req.result.createObjectStore(STORE);
-    };
-    req.onsuccess = () => resolve(req.result);
-    req.onerror = () => {
-      dbPromise = undefined;
-      reject(req.error);
-    };
-  });
-  return dbPromise;
-}
+export const get = <T>(key: string): Promise<T | undefined> => idbGet<T>(key, files);
 
-async function withStore<T>(
-  mode: IDBTransactionMode, run: (s: IDBObjectStore) => IDBRequest<T>,
-): Promise<T> {
-  const db = await open();
-  const r = run(db.transaction(STORE, mode).objectStore(STORE));
-  return new Promise((resolve, reject) => {
-    r.onsuccess = () => resolve(r.result);
-    r.onerror = () => reject(r.error);
-  });
-}
+/** By key listing, not `get`: a cached zip is several MB and only its presence matters. */
+export const has = async (key: string): Promise<boolean> => (await keys(files)).includes(key);
 
-export const get = <T>(key: string): Promise<T | undefined> =>
-  withStore("readonly", (s) => s.get(key)) as Promise<T | undefined>;
+export const put = (key: string, value: unknown): Promise<void> => set(key, value, files);
 
-export const has = async (key: string): Promise<boolean> =>
-  (await withStore("readonly", (s) => s.count(key))) > 0;
-
-export const put = (key: string, value: unknown): Promise<IDBValidKey> =>
-  withStore("readwrite", (s) => s.put(value, key));
-
-export const remove = (key: string): Promise<undefined> =>
-  withStore("readwrite", (s) => s.delete(key));
-
-export const clearAll = (): Promise<undefined> => withStore("readwrite", (s) => s.clear());
+export const clearAll = (): Promise<void> => clear(files);

@@ -7,7 +7,8 @@
  */
 
 export const CDN = "https://icdcdn.who.int/static/releasefiles";
-export const LICENSE_URL = "https://icd.who.int/en/docs/icd11-license.pdf";
+// HTML page naming the license, which links the full terms (PDF, icd.who.int/en/docs/icd11-license.pdf).
+export const LICENSE_URL = "https://icd.who.int/docs/icd-api/license";
 export const CITATION =
   "International Classification of Diseases, Eleventh Revision (ICD-11), " +
   "World Health Organization (WHO) 2019. https://icd.who.int/browse11. " +

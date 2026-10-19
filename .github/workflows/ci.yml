@@ -24,7 +24,7 @@ jobs:
       - run: pnpm build
       - name: dist contains only the expected files (nothing from WHO)
         run: |
-          if find dist -type f | sort | grep -vE '^dist/(index\.html|assets/index-[A-Za-z0-9_-]+\.(js|css)|data/(cid10_v2019\.csv|FONTES\.md))$'; then
+          if find dist -type f | sort | grep -vE '^dist/(index\.html|assets/[A-Za-z0-9_-]+\.(js|css|woff2)|data/(cid10_v2019\.csv|FONTES\.md))$'; then
             echo "unexpected files in dist/"; exit 1
           fi
       - uses: actions/upload-pages-artifact@v5

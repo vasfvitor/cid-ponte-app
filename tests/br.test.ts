@@ -28,6 +28,11 @@ describe("BrTable.search (CID-10 by name)", () => {
     expect(diabetes.every((r) => r.active)).toBe(true);
   });
 
+  it("tolerates a typo and matches word prefixes", () => {
+    expect(br.search("infrato agudo").map((r) => r.code)).toContain("I21");
+    expect(br.search("infart agud").map((r) => r.code)).toContain("I21");
+  });
+
   it("respects the limit and returns nothing for empty or unmatched queries", () => {
     expect(br.search("dor", 5)).toHaveLength(5);
     expect(br.search("   ")).toEqual([]);

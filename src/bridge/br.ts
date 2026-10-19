@@ -8,8 +8,11 @@
  *   WHO map: `NO_BR_PATH`.
  * - Title search (`BrTable.search`): the WHO Coding Tool searches ICD-11 by text, but nothing
  *   searches the *Brazilian* ICD-10 by name. A physician who remembers "infarto agudo" but not
- *   I21 starts here and then crosses to ICD-11.
+ *   I21 starts here and then crosses to ICD-11. Indexed with MiniSearch (prefix and typo
+ *   tolerant) when the table is built.
  */
+
+import MiniSearch from "minisearch";
 
 import { category10, normalize10 } from "./codes";
 import { parseWithHeader } from "./dsv";
@@ -54,9 +57,20 @@ interface Indexed extends BrCode {
   folded: string;
 }
 
+const toBrCode = ({ code, title, active }: Indexed): BrCode => ({ code, title, active });
+
 /** The embedded CID-10 v2019 table (all records, including inactive ones). */
 export class BrTable {
-  private constructor(private readonly rows: Map<string, Indexed>) {}
+  private readonly index = new MiniSearch<Indexed>({
+    idField: "code",
+    // Rows carry their folded title, and `search` folds the query: no per-token folding.
+    fields: ["folded"],
+    processTerm: (term) => term || null,
+  });
+
+  private constructor(private readonly rows: Map<string, Indexed>) {
+    this.index.addAll([...rows.values()]);
+  }
 
   static empty(): BrTable {
     return new BrTable(new Map());
@@ -93,22 +107,25 @@ export class BrTable {
   }
 
   /**
-   * Codes whose title contains every word of `query` (accent- and case-insensitive).
-   * Ranked: active before inactive, title starting with the query first, then shorter titles,
-   * then by code. Subcategories and their category both appear; the caller decides.
+   * Codes whose title has every word of `query`, accent- and case-insensitive, as a prefix
+   * ("infart") or with a typo ("infrato"). Ranked by relevance (shorter titles win), with
+   * active codes far ahead of inactive ones and titles that start with the query doubled.
+   * Subcategories and their category both appear; the caller decides.
    */
   search(query: string, limit = 12): BrCode[] {
-    const words = foldText(query).split(" ").filter(Boolean);
-    if (words.length === 0) return [];
-    const phrase = words.join(" ");
-    const hits: { r: Indexed; rank: number }[] = [];
-    for (const r of this.rows.values()) {
-      if (!words.every((w) => r.folded.includes(w))) continue;
-      const rank = (r.active ? 0 : 1_000_000) + (r.folded.startsWith(phrase) ? 0 : 100_000) + r.folded.length;
-      hits.push({ r, rank });
-    }
-    hits.sort((a, b) => a.rank - b.rank || a.r.code.localeCompare(b.r.code));
-    return hits.slice(0, limit).map(({ r }) => ({ code: r.code, title: r.title, active: r.active }));
+    const phrase = foldText(query);
+    if (!phrase) return [];
+    const hits = this.index.search(phrase, {
+      prefix: true,
+      // Edits allowed per word: none up to 3 letters, 1 up to 6, then 2 (a swap like "infrato").
+      fuzzy: (term) => (term.length <= 3 ? false : term.length <= 6 ? 1 : 2),
+      combineWith: "AND",
+      boostDocument: (code: string) => {
+        const r = this.rows.get(code)!;
+        return (r.active ? 1 : 0.01) * (r.folded.startsWith(phrase) ? 2 : 1);
+      },
+    });
+    return hits.slice(0, limit).map((h) => toBrCode(this.rows.get(h.id as string)!));
   }
 
   /** Subcategories of a 3-character category ("A41" -> A41.0 … A41.9), by code. */
@@ -116,7 +133,7 @@ export class BrTable {
     const prefix = `${normalize10(category) ?? ""}.`;
     const out: BrCode[] = [];
     for (const r of this.rows.values()) {
-      if (r.code.startsWith(prefix)) out.push({ code: r.code, title: r.title, active: r.active });
+      if (r.code.startsWith(prefix)) out.push(toBrCode(r));
     }
     return out.sort((a, b) => a.code.localeCompare(b.code));
   }

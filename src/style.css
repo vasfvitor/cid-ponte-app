@@ -152,12 +152,6 @@ button {
   background: var(--accent-hover);
 }
 
-.primary:disabled {
-  background: var(--line-strong);
-  color: #fff;
-  cursor: not-allowed;
-}
-
 .link {
   background: none;
   border: 0;
@@ -167,20 +161,8 @@ button {
   text-underline-offset: 2px;
 }
 
-.check {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  margin: 16px 0;
-  cursor: pointer;
-}
-
-.check input {
-  width: 20px;
-  height: 20px;
-  margin: 2px 0 0;
-  accent-color: var(--accent);
-  flex: none;
+#license-accept {
+  margin-top: 16px;
 }
 
 /* search */
@@ -472,8 +454,9 @@ progress {
 
 /* ---------- glossary ---------- */
 
-/* A term inside text: reads as text, dotted underline says "tap for meaning". */
-.term {
+/* A term inside text: reads as text, dotted underline says "tap for meaning".
+   Zero specificity, so .tag keeps its look on term tags. */
+:where(.term) {
   padding: 0;
   border: 0;
   background: none;
@@ -486,12 +469,6 @@ progress {
 }
 
 .tag.term {
-  padding: 2px 8px;
-  border: 1px solid var(--line);
-  background: var(--bg);
-  color: var(--fg-muted);
-  font-family: var(--sans);
-  font-size: 0.8125rem;
   text-decoration: none;
 }
 
@@ -505,9 +482,15 @@ progress {
   color: var(--fg);
 }
 
+/* New-tab links: visible arrow, spoken as text. */
+a[target="_blank"]::after {
+  content: " ↗" / " (abre em nova aba)";
+}
+
 .term-pop {
   position: fixed;
   inset: auto;
+  width: min(320px, 100vw - 32px);
   margin: 0;
   padding: 12px 14px;
   border: 1px solid var(--line-strong);
