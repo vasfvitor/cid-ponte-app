@@ -1,5 +1,8 @@
 /* Light theme only. Tokens first, then layout, then components. No animations beyond focus/hover. */
 
+/* Self-hosted (no request to Google): codes need O/0 and I/1/l to be unmistakable. */
+@import "@fontsource-variable/atkinson-hyperlegible-mono";
+
 :root {
   color-scheme: light;
 
@@ -24,7 +27,7 @@
 
   --radius: 12px;
   --radius-sm: 8px;
-  --mono: ui-monospace, "Cascadia Mono", "SF Mono", Menlo, Consolas, monospace;
+  --mono: "Atkinson Hyperlegible Mono Variable", ui-monospace, "Cascadia Mono", "SF Mono", Menlo, Consolas, monospace;
   --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
 }
 
@@ -351,7 +354,7 @@ progress {
 .tag {
   display: inline-block;
   vertical-align: middle;
-  margin-left: 8px;
+  margin-left: 4px;
   padding: 2px 8px;
   border: 1px solid var(--line);
   border-radius: 999px;
@@ -465,6 +468,93 @@ progress {
 
 .foot p {
   margin-bottom: 10px;
+}
+
+/* ---------- glossary ---------- */
+
+/* A term inside text: reads as text, dotted underline says "tap for meaning". */
+.term {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-decoration: underline dotted;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  cursor: help;
+}
+
+.tag.term {
+  padding: 2px 8px;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--fg-muted);
+  font-family: var(--sans);
+  font-size: 0.8125rem;
+  text-decoration: none;
+}
+
+.tag.term::after {
+  content: "ⓘ" / "";
+  margin-left: 4px;
+}
+
+.tag.term:hover {
+  border-color: var(--line-strong);
+  color: var(--fg);
+}
+
+.term-pop {
+  position: fixed;
+  inset: auto;
+  margin: 0;
+  padding: 12px 14px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--fg);
+  font-size: 0.9375rem;
+  box-shadow: 0 6px 24px rgb(0 0 0 / 0.12);
+}
+
+.term-pop p {
+  margin: 0 0 6px;
+}
+
+.term-pop a {
+  font-size: 0.875rem;
+}
+
+.official {
+  color: var(--fg-muted);
+  font-weight: 400;
+}
+
+.glossary summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--fg);
+  padding: 10px 0;
+}
+
+.glossary dl {
+  margin: 4px 0 16px;
+}
+
+.glossary dt {
+  margin-top: 12px;
+  color: var(--fg);
+}
+
+.glossary dd {
+  margin: 2px 0 0;
+}
+
+.foot hr {
+  margin: 16px 0;
+  border: 0;
+  border-top: 1px solid var(--line);
 }
 
 /* ---------- small screens ---------- */

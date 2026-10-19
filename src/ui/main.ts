@@ -9,6 +9,7 @@ import {
 import {
   CITATION, DEFAULT_RELEASE, LICENSE_URL, browserUrl, codingToolUrl, downloadSizeLabel,
 } from "../data/sources";
+import { mountGlossary, term, termEl } from "./glossary";
 
 const $ = <T extends HTMLElement>(id: string): T => {
   const el = document.getElementById(id);
@@ -38,7 +39,11 @@ function showError(message: string): void {
 
 // ---------------------------------------------------------------- progress
 
-const PHASE_VERB = { cache: "Lendo", verify: "Verificando integridade de", parse: "Indexando" } as const;
+const PHASE_TEXT = {
+  cache: "Lendo as tabelas salvas…",
+  verify: "Conferindo os arquivos baixados…",
+  parse: "Organizando as tabelas…",
+} as const;
 const downloads = new Map<string, { received: number; total: number | null }>();
 const MB = 1_048_576;
 
@@ -69,7 +74,7 @@ function onStatus(s: Status): void {
     panels.loading.setAttribute("aria-busy", "false");
     return;
   }
-  status.textContent = `${PHASE_VERB[s.phase]} ${s.file}…`;
+  status.textContent = PHASE_TEXT[s.phase];
   progress.removeAttribute("value");
 }
 
@@ -86,11 +91,11 @@ async function start(): Promise<void> {
     if (e instanceof LicenseNotAccepted) return;
     if (e instanceof ChecksumMismatch) {
       showError(
-        "O arquivo baixado da OMS não bate com o hash esperado para esta release. " +
-          "Pode ter sido atualizado pela OMS; nada foi guardado. Detalhe: " + e.message,
+        "O arquivo baixado da OMS não confere com a versão esperada (talvez a OMS o tenha atualizado). " +
+          "Nada foi salvo. Detalhe técnico: " + e.message,
       );
     } else {
-      showError(`Não foi possível carregar as tabelas: ${(e as Error).message}`);
+      showError(`Não foi possível carregar as tabelas. Verifique a conexão e tente de novo. Detalhe técnico: ${(e as Error).message}`);
     }
   }
 }
@@ -136,7 +141,7 @@ function suggest(text: string): void {
       b.type = "button";
       b.setAttribute("role", "option");
       b.append(el("span", "code", h.code), el("span", undefined, h.title));
-      if (!h.active) b.append(el("span", "inactive", "inativo"));
+      if (!h.active) b.append(el("span", "inactive", "fora de uso"));
       b.addEventListener("click", () => query(h.code));
       box.append(b);
     }
@@ -200,11 +205,15 @@ function el<K extends keyof HTMLElementTagNameMap>(
   return node;
 }
 
-function extLink(href: string, text: string): HTMLAnchorElement {
+/** Link that opens in a new tab: visible ↗, and the same fact spelled out for screen readers. */
+function extLink(href: string, text: string, note = "abre em nova aba"): HTMLAnchorElement {
   const a = el("a", undefined, text);
   a.href = href;
   a.target = "_blank";
   a.rel = "noopener";
+  const arrow = el("span", undefined, " ↗");
+  arrow.setAttribute("aria-hidden", "true");
+  a.append(arrow, el("span", "sr-only", ` (${note})`));
   return a;
 }
 
@@ -228,45 +237,54 @@ function renderTarget(t: Target, b: Bridge): HTMLElement {
   const codeEl = el("span", "code", t.code ?? "(bloco sem código)");
   codeEl.setAttribute("aria-label", t.code ? `Código CID-11 ${t.code}` : "Bloco sem código");
   head.append(codeEl);
-  if (t.relation) head.append(el("span", "tag", t.relation === "Equivalent" ? "equivalente" : "subclasse"));
-  head.append(el("span", "tag", t.table === "one" ? "principal" : "alternativo"));
+  if (t.relation) {
+    head.append(" ", t.relation === "Equivalent"
+      ? termEl("equivalente", "equivalente", "tag term")
+      : termEl("mais-ampla", "CID-11 mais ampla", "tag term"));
+  }
+  head.append(" ", t.table === "one"
+    ? termEl("principal", "principal", "tag term")
+    : termEl("alternativo", "alternativo", "tag term"));
   card.append(head);
 
   if (t.titlePt) card.append(el("p", "title-pt", t.titlePt));
   if (t.titleEn) card.append(el("p", "title-en", t.titleEn));
-  if (!t.titlePt && t.code) card.append(notice("warn", "Sem título em português na release oficial; título em inglês acima."));
+  if (!t.titlePt && t.code) card.append(notice("warn", "A OMS ainda não traduziu este título; acima, o original em inglês."));
 
   const parsed = parse11(t.code);
   if (parsed && !isSimple(parsed)) {
     const ul = el("ul", "parts");
     for (const s of parsed.stems) {
       const e = b.entityOf(s);
-      ul.append(el("li", undefined, `${s} — ${e?.title ?? e?.titleEn ?? "tronco"}`));
+      ul.append(el("li", undefined, `${s} — ${e?.title ?? e?.titleEn ?? "sem título"}`));
     }
     for (const x of parsed.extensions) {
       const e = b.entityOf(x);
-      ul.append(el("li", undefined, `${x} — ${e?.title ?? e?.titleEn ?? "código de extensão"} (extensão)`));
+      const li = el("li", undefined, `${x} — ${e?.title ?? e?.titleEn ?? "sem título"} (`);
+      li.append(termEl("extensao", "detalhe extra"), ")");
+      ul.append(li);
     }
     card.append(
       notice(
         "warn",
         parsed.stems.length > 1
-          ? "Alvo em <strong>cluster</strong>: mais de um código-tronco ligado por “/”. Não cabe em campos de 4 caracteres do SUS."
-          : "Alvo com <strong>extensão</strong> (“&amp;”): código-tronco mais código de extensão. Não cabe em campos de 4 caracteres do SUS.",
+          ? `<strong>${term("cluster")}</strong> (cluster): a CID-11 representa este caso juntando mais de um código com “/”.`
+          : `<strong>${term("extensao", "Código com detalhe extra")}</strong> (extensão): a CID-11 acrescenta um código com “&amp;” para detalhar o caso (agente, local, lado do corpo etc.).`,
       ),
       ul,
     );
   }
 
   if (b.entityOf(t.code)?.isResidual) {
-    card.append(notice("warn", "Categoria <strong>residual</strong> (outros/não especificado). Provavelmente há código mais específico."));
+    card.append(notice("warn", `<strong>${term("residual")}</strong> (“outros” ou “não especificado”). A CID-11 pode ter um código mais específico para o caso.`));
   }
 
   const meta = el("p", "meta");
   const link = browserUrl(b.release, t.foundationUri);
-  if (link) meta.append(extLink(link, "ver no Browser da CID-11"));
+  if (link) meta.append(extLink(link, "Definição", "site da OMS, abre em nova aba"));
   if (t.relationN !== null && t.relationN < 0) {
-    meta.append(el("span", undefined, `relação herdada de ${-t.relationN} nível(is) acima`));
+    const n = -t.relationN;
+    meta.append(el("span", undefined, `correspondência definida para um código mais geral (${n} ${n === 1 ? "nível" : "níveis"} acima)`));
   }
   card.append(meta);
   return card;
@@ -285,29 +303,30 @@ function render(lk: Lookup): void {
   origin.tabIndex = -1;
   const h = el("div");
   h.append(el("span", "code", lk.code || "—"));
-  if (lk.existsInBr && !lk.active2019) h.append(el("span", "tag", "inativo na v2019"));
-  if (!lk.existsInBr && lk.code) h.append(el("span", "tag", "não consta na CID-10 brasileira"));
+  if (lk.existsInBr && !lk.active2019) h.append(" ", termEl("fora-de-uso", "fora de uso no Brasil", "tag term"));
+  if (!lk.existsInBr && lk.code) h.append(" ", el("span", "tag", "não consta na CID-10 brasileira"));
   origin.append(h);
   if (lk.brTitle) origin.append(el("p", "title", lk.brTitle));
 
+  const codingTool = extLink(codingToolUrl(b.release), "ferramenta de codificação da OMS").outerHTML;
   switch (lk.reason) {
     case "empty":
       origin.append(notice("bad", "Digite um código ou um nome da CID-10."));
       break;
     case "unknown":
-      origin.append(notice("bad", "Código não encontrado no mapa da OMS nem na CID-10 brasileira. Confira a digitação."));
+      origin.append(notice("bad", `Código não encontrado na CID-10 brasileira nem no ${term("mapa", "mapa da OMS")}. Confira a digitação.`));
       break;
     case "no_br_path":
       origin.append(
-        notice("bad", "<strong>Código nacional sem correspondente.</strong> Existe na CID-10 brasileira, mas nem ele nem a categoria aparecem no mapa da OMS. Codifique pelo diagnóstico no Coding Tool."),
+        notice("bad", `<strong>Sem correspondente no ${term("mapa", "mapa da OMS")}.</strong> Este código existe na CID-10 brasileira, mas nem ele nem a categoria dele constam no mapa. Codifique a partir do diagnóstico na ${codingTool}.`),
       );
       break;
     case "no_mapping":
-      origin.append(notice("bad", "<strong>A OMS declara “sem mapeamento”</strong> para este código. Codifique pelo diagnóstico no Coding Tool."));
+      origin.append(notice("bad", `<strong>A OMS não indica um correspondente direto</strong> para este código. Codifique a partir do diagnóstico na ${codingTool}.`));
       break;
     case "parent_category":
       origin.append(
-        notice("warn", `O 4º caractere é <strong>local de ocorrência</strong>, que a CID-11 trata por extensão. Resultado da categoria <code>${esc(lk.effectiveCode ?? "")}</code>.`),
+        notice("warn", `O 4º caractere indica o <strong>${term("local", "local da ocorrência")}</strong> (residência, escola, rua etc.), que o mapa da OMS não cobre. O resultado abaixo é da categoria <code>${esc(lk.effectiveCode ?? "")}</code>; na CID-11, o local entra como ${term("extensao", "detalhe extra")}.`),
       );
       break;
     case "mapped":
@@ -319,26 +338,44 @@ function render(lk: Lookup): void {
   const card0 = main[0];
   if (card0?.cardinality === "1:N") {
     origin.append(
-      notice("warn", `<strong>Mais de um código possível</strong> (${1 + alternatives.length} opções). O primeiro é o principal da OMS; a escolha depende do caso clínico.`),
+      notice("warn", `<strong>Há ${1 + alternatives.length} opções na CID-11.</strong> A primeira é a ${term("principal", "indicada pela OMS")}; as outras são ${term("alternativo", "alternativas")}. Escolha conforme o caso clínico.`),
     );
   } else if (card0?.cardinality === "block") {
-    origin.append(notice("warn", "O alvo é um <strong>bloco</strong> (agrupamento) da CID-11, sem código próprio. Escolha uma categoria dentro dele."));
+    origin.append(notice("warn", `<strong>A OMS aponta para um ${term("bloco", "grupo")}</strong> da CID-11, não para um código. Escolha um código dentro do grupo na ${codingTool}.`));
   } else if (card0?.cardinality === "1:1" && lk.reason === "mapped" && card0.relation === "Equivalent") {
-    origin.append(notice("ok", "Correspondência <strong>equivalente</strong> declarada pela OMS."));
+    origin.append(notice("ok", `<strong>${term("equivalente", "Correspondência direta")}</strong>: segundo a OMS, os dois códigos têm o mesmo significado.`));
   }
 
   out.append(origin);
   for (const t of main) out.append(renderTarget(t, b));
   if (alternatives.length) {
     const sec = el("div", "alternatives");
-    sec.append(el("h3", undefined, "Alternativas (tabela “múltiplas categorias”)"));
+    sec.append(el("h3", undefined, "Outras opções"));
     for (const t of alternatives) sec.append(renderTarget(t, b));
+    out.append(sec);
+  }
+
+  // A category result is generic; its subcategories often map to something more specific.
+  const subs = lk.code && kind10(lk.code) === "category" ? b.subcategoriesBr(lk.code) : [];
+  if (subs.length) {
+    const sec = el("div", "alternatives");
+    sec.append(el("h3", undefined, `Subcategorias de ${lk.code} na CID-10`));
+    const list = el("div", "suggestions");
+    for (const s of subs) {
+      const btn = el("button", "suggestion");
+      btn.type = "button";
+      btn.append(el("span", "code", s.code), el("span", undefined, s.title));
+      if (!s.active) btn.append(el("span", "inactive", "fora de uso"));
+      btn.addEventListener("click", () => query(s.code));
+      list.append(btn);
+    }
+    sec.append(list);
     out.append(sec);
   }
 
   if (lk.code) {
     const ct = el("p", "hint");
-    ct.append(extLink(codingToolUrl(b.release), "Refinar ou pós-coordenar no Coding Tool da OMS"));
+    ct.append(extLink(codingToolUrl(b.release), "Detalhar o código na ferramenta de codificação da OMS"));
     out.append(ct);
   }
   out.hidden = false;
@@ -353,6 +390,7 @@ async function boot(): Promise<void> {
   $<HTMLElement>("download-size").textContent = downloadSizeLabel(release);
   $<HTMLElement>("citation").textContent = CITATION;
   $<HTMLElement>("release").textContent = release;
+  mountGlossary($<HTMLElement>("glossary"));
 
   const check = $<HTMLInputElement>("license-check");
   const accept = $<HTMLButtonElement>("license-accept");

@@ -8,7 +8,7 @@
     <title>CID-10 → CID-11</title>
     <meta
       name="description"
-      content="Digite um código CID-10 e veja o correspondente na CID-11, com título em português e avisos sobre o que o mapa oficial não resolve."
+      content="Digite um código ou nome da CID-10 e veja o correspondente na CID-11, com título em português e avisos sobre o que o mapa da OMS não resolve."
     />
     <link rel="stylesheet" href="/src/style.css" />
   </head>
@@ -21,9 +21,10 @@
       <section id="license" class="panel" hidden aria-labelledby="license-title">
         <h2 id="license-title">Antes de começar</h2>
         <p>
-          As tabelas de mapeamento e os títulos em português são da OMS. São baixados uma única vez
-          de <code>icdcdn.who.int</code> e ficam só no seu navegador. Uso sujeito aos
-          <a id="license-link" href="#" target="_blank" rel="noopener">termos da CID-11</a>
+          Para funcionar, o app baixa da OMS as tabelas de correspondência CID-10 → CID-11 e os
+          títulos em português. O download sai direto do site da OMS (<code>icdcdn.who.int</code>),
+          e os dados ficam só no seu navegador. O uso segue os
+          <a id="license-link" href="#" target="_blank" rel="noopener">termos da CID-11<span aria-hidden="true"> ↗</span><span class="sr-only"> (abre em nova aba)</span></a>
           (CC BY-ND 3.0 IGO).
         </p>
         <div class="notice warn" role="note">
@@ -88,14 +89,40 @@
 
     <footer class="foot">
       <p>
-        <strong>Não substitui a codificação clínica.</strong> O mapa da OMS aponta para
-        códigos-tronco; para causa básica de óbito é só aproximação (a CID-11 usa as regras DORIS).
+        <strong>Use como ponto de partida, não como código final.</strong> O
+        <button type="button" class="term" data-term="mapa" popovertarget="term-mapa">mapa da OMS</button>
+        dá só o código básico; a CID-11 permite
+        <button type="button" class="term" data-term="pos-coordenacao" popovertarget="term-pos-coordenacao">detalhar</button>
+        (gravidade, lado do corpo, causa etc.). Para
+        <button type="button" class="term" data-term="causa-basica" popovertarget="term-causa-basica">causa básica de óbito</button>,
+        a conversão é apenas aproximada, porque a CID-11 aplica regras próprias.
       </p>
+      <ul>
+        <li>
+          <code>E11.3</code> (diabetes tipo 2 com complicações oftálmicas) vira <code>5A11</code>
+          (diabetes tipo 2): a complicação no olho precisa ser codificada à parte.
+        </li>
+        <li>
+          <code>W00.0</code> (queda no gelo ou neve, na residência) vira <code>PA60&amp;XE3LV</code>:
+          o local “residência” não vem no mapa e entra como
+          <button type="button" class="term" data-term="extensao" popovertarget="term-extensao">detalhe extra</button>.
+        </li>
+        <li>
+          <code>O93.0</code> (morte materna associada a acidente de trânsito) é um código nacional sem
+          correspondente: a causa básica precisa ser recodificada a partir da declaração de óbito.
+        </li>
+      </ul>
+      <details class="glossary">
+        <summary>Glossário</summary>
+        <dl id="glossary"></dl>
+      </details>
+      <hr />
       <p id="citation"></p>
       <p>
-        Release <span id="release"></span>. Sem vínculo com a OMS ou o Ministério da Saúde.
+        <button type="button" class="term" data-term="versao" popovertarget="term-versao">Versão da CID-11</button>:
+        <span id="release"></span>. Sem vínculo com a OMS ou o Ministério da Saúde.
         CID-10 brasileira v2019: CC BR-FIC / MS.
-        <a href="https://github.com/vasfvitor/cid-ponte-app" target="_blank" rel="noopener">Código</a>
+        <a href="https://github.com/vasfvitor/cid-ponte-app" target="_blank" rel="noopener">Código-fonte<span aria-hidden="true"> ↗</span><span class="sr-only"> (abre em nova aba)</span></a>
         · <button type="button" id="clear-cache" class="link">limpar dados baixados</button>
       </p>
     </footer>

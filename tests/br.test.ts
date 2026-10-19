@@ -34,3 +34,11 @@ describe("BrTable.search (CID-10 by name)", () => {
     expect(br.search("xyzzy quux")).toEqual([]);
   });
 });
+
+describe("BrTable.subcategories", () => {
+  it("lists the subcategories of a category, in code order", () => {
+    const codes = br.subcategories("a41").map((r) => r.code);
+    expect(codes).toEqual(["A41.0", "A41.1", "A41.2", "A41.3", "A41.4", "A41.5", "A41.8", "A41.9"]);
+    expect(br.subcategories("I10")).toEqual([]);
+  });
+});

@@ -110,6 +110,16 @@ export class BrTable {
     hits.sort((a, b) => a.rank - b.rank || a.r.code.localeCompare(b.r.code));
     return hits.slice(0, limit).map(({ r }) => ({ code: r.code, title: r.title, active: r.active }));
   }
+
+  /** Subcategories of a 3-character category ("A41" -> A41.0 … A41.9), by code. */
+  subcategories(category: string): BrCode[] {
+    const prefix = `${normalize10(category) ?? ""}.`;
+    const out: BrCode[] = [];
+    for (const r of this.rows.values()) {
+      if (r.code.startsWith(prefix)) out.push({ code: r.code, title: r.title, active: r.active });
+    }
+    return out.sort((a, b) => a.code.localeCompare(b.code));
+  }
 }
 
 /**

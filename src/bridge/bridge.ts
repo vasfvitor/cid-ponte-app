@@ -216,6 +216,11 @@ export class Bridge {
     return this.br.search(query, limit);
   }
 
+  /** Brazilian subcategories of a 3-character category (see `BrTable.subcategories`). */
+  subcategoriesBr(category: string): BrCode[] {
+    return this.br.subcategories(category);
+  }
+
   /** ICD-10 codes an ICD-11 code points back to (11To10 table). */
   reverse(code11: string): Origin10[] {
     const out: Origin10[] = [];
