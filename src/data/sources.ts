@@ -1,9 +1,9 @@
 /**
  * Where the WHO data lives, which releases we know, and the hashes we pin.
  *
- * Nothing from WHO ships with this app (terms of use, clause 1.2.4, and project decision):
- * the browser downloads from icdcdn.who.int at run time, checks the SHA-256 pinned per
- * release, and caches in IndexedDB. CORS on the CDN is open (checked 2026-10-16).
+ * No WHO data ships with this app (terms of use, clause 1.2.4, and project decision): the
+ * browser downloads from icdcdn.who.int at run time, checks the SHA-256 pinned per release, and
+ * caches in IndexedDB. CORS on the CDN is open (checked 2026-10-16).
  */
 
 export const CDN = "https://icdcdn.who.int/static/releasefiles";
@@ -36,6 +36,11 @@ export const simpleTabulationZip = (lang = "pt"): string => `SimpleTabulation-IC
 export const mappingUrl = (release: string): string => `${CDN}/${release}/${MAPPING_ZIP}`;
 export const simpleTabulationUrl = (release: string, lang = "pt"): string =>
   `${CDN}/${release}/${simpleTabulationZip(lang)}`;
+
+/** WHO's cloud ICD-API, searched by the "Detalhar aqui" panel. */
+export const ICD_API_URL = "https://id.who.int";
+/** Our token proxy (worker/) for that panel; empty (no panel) in builds without one. */
+export const DETAIL_TOKEN_URL: string = import.meta.env["VITE_DETAIL_TOKEN_URL"] ?? "";
 
 /** WHO's ICD-11 Coding Tool (Portuguese) for a release, e.g. https://icd.who.int/ct/icd11_mms/pt/2026-01 */
 export function codingToolUrl(release: string, lang = "pt"): string {

@@ -10,7 +10,10 @@
 
 export type Reason =
   | "mapped"
-  | "parent_category" // subcategory absent from the map (e.g. W00–Y34 place of occurrence); WHO maps the 3-char category
+  // A subcategory absent from the map falls back to its 3-char category, for one of three reasons:
+  | "place_of_occurrence" // 4th character is place of occurrence (W00–Y34 except Y06–Y07)
+  | "parent_category" // another Brazilian subcategory WHO does not list (e.g. K35.0)
+  | "not_in_br" // not a Brazilian code at all (e.g. a typo like I21.7)
   | "no_mapping" // WHO row exists but declares no target
   | "no_br_path" // Brazilian national code with no path in the WHO map
   | "unknown" // not in the map, not a known Brazilian exception
@@ -28,9 +31,11 @@ export interface Target {
   table: TableName;
   foundationUri: string | null;
   linearizationUri: string | null;
-  relation: string | null; // Equivalent | Subclass (WHO foundation table)
+  // Equivalent | Subclass (WHO foundation table). Only on the OneCategory target: the
+  // foundation table describes that one; null on MultipleCategories alternatives.
+  relation: string | null;
   relationN: number | null; // 0 = stated on the entity itself, -k = inherited k levels up
-  cardinality: Cardinality;
+  cardinality: Cardinality; // 1:N = 2+ distinct targets over OneCategory ∪ MultipleCategories
   normalization: Normalization;
 }
 

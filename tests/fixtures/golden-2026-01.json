@@ -133,7 +133,7 @@
         {
           "code": "1A36.1Y/1D03.3Z",
           "titleEn": "Amoebiasis of other specified sites / Intracranial abscess, unspecified",
-          "titlePt": "Amebíase em outros locais especificados",
+          "titlePt": "Amebíase em outros locais especificados / Abscesso intracraniano, não especificado",
           "kind": "category",
           "table": "one",
           "foundationUri": "http://id.who.int/icd/entity/1992658998",
@@ -157,7 +157,7 @@
         {
           "code": "1A00&XN8P1",
           "titleEn": "Cholera [Vibrio cholerae O1, biovar cholerae]",
-          "titlePt": "Cólera",
+          "titlePt": "Cólera [Vibrio cholerae O1, cepa cholerae]",
           "kind": "category",
           "table": "one",
           "foundationUri": "http://id.who.int/icd/entity/1205958647",
@@ -181,7 +181,7 @@
         {
           "code": "1C41/1G40&XN1P6",
           "titleEn": "Bacterial infection of unspecified site / Sepsis without septic shock [Haemophilus influenzae]",
-          "titlePt": "Infecção bacteriana de localização não especificada",
+          "titlePt": "Infecção bacteriana de localização não especificada / Sepse sem choque séptico [Haemophilus influenzae]",
           "kind": "category",
           "table": "one",
           "foundationUri": "http://id.who.int/icd/entity/1876714317",
@@ -196,7 +196,7 @@
     {
       "input": "W000",
       "code": "W00.0",
-      "reason": "parent_category",
+      "reason": "place_of_occurrence",
       "effectiveCode": "W00",
       "brTitle": "Queda no mesmo nivel envolvendo gelo e neve - residencia",
       "existsInBr": true,
@@ -205,7 +205,7 @@
         {
           "code": "PA60&XE3LV",
           "titleEn": "Unintentional fall on the same level or from less than 1 metre [Snow, ice]",
-          "titlePt": "Queda não intencional no mesmo nível ou de menos de 1 metro de altura",
+          "titlePt": "Queda não intencional no mesmo nível ou de menos de 1 metro de altura [Neve, gelo]",
           "kind": "category",
           "table": "one",
           "foundationUri": "http://id.who.int/icd/entity/1020759823",
@@ -229,7 +229,7 @@
         {
           "code": "PA60&XE3LV",
           "titleEn": "Unintentional fall on the same level or from less than 1 metre [Snow, ice]",
-          "titlePt": "Queda não intencional no mesmo nível ou de menos de 1 metro de altura",
+          "titlePt": "Queda não intencional no mesmo nível ou de menos de 1 metro de altura [Neve, gelo]",
           "kind": "category",
           "table": "one",
           "foundationUri": "http://id.who.int/icd/entity/1020759823",
@@ -279,7 +279,7 @@
           "foundationUri": "http://id.who.int/icd/entity/900320365",
           "linearizationUri": "http://id.who.int/icd/release/11/2026-01/mms/900320365/other",
           "relation": null,
-          "relationN": -1,
+          "relationN": null,
           "cardinality": "no_mapping",
           "normalization": "exact"
         },
@@ -292,7 +292,7 @@
           "foundationUri": "http://id.who.int/icd/entity/46117627",
           "linearizationUri": "http://id.who.int/icd/release/11/2026-01/mms/46117627/unspecified",
           "relation": null,
-          "relationN": -1,
+          "relationN": null,
           "cardinality": "no_mapping",
           "normalization": "exact"
         },
@@ -305,7 +305,7 @@
           "foundationUri": "http://id.who.int/icd/entity/796132216",
           "linearizationUri": "http://id.who.int/icd/release/11/2026-01/mms/796132216",
           "relation": null,
-          "relationN": -1,
+          "relationN": null,
           "cardinality": "no_mapping",
           "normalization": "exact"
         },
@@ -318,7 +318,7 @@
           "foundationUri": "http://id.who.int/icd/entity/236964647",
           "linearizationUri": "http://id.who.int/icd/release/11/2026-01/mms/236964647/unspecified",
           "relation": null,
-          "relationN": -1,
+          "relationN": null,
           "cardinality": "no_mapping",
           "normalization": "exact"
         }
@@ -342,7 +342,7 @@
           "foundationUri": "http://id.who.int/icd/entity/900320365",
           "linearizationUri": "http://id.who.int/icd/release/11/2026-01/mms/900320365/other",
           "relation": null,
-          "relationN": -1,
+          "relationN": null,
           "cardinality": "no_mapping",
           "normalization": "exact"
         },
@@ -355,7 +355,7 @@
           "foundationUri": "http://id.who.int/icd/entity/46117627",
           "linearizationUri": "http://id.who.int/icd/release/11/2026-01/mms/46117627/unspecified",
           "relation": null,
-          "relationN": -1,
+          "relationN": null,
           "cardinality": "no_mapping",
           "normalization": "exact"
         },
@@ -368,7 +368,7 @@
           "foundationUri": "http://id.who.int/icd/entity/796132216",
           "linearizationUri": "http://id.who.int/icd/release/11/2026-01/mms/796132216",
           "relation": null,
-          "relationN": -1,
+          "relationN": null,
           "cardinality": "no_mapping",
           "normalization": "exact"
         },
@@ -381,7 +381,7 @@
           "foundationUri": "http://id.who.int/icd/entity/236964647",
           "linearizationUri": "http://id.who.int/icd/release/11/2026-01/mms/236964647/unspecified",
           "relation": null,
-          "relationN": -1,
+          "relationN": null,
           "cardinality": "no_mapping",
           "normalization": "exact"
         }
@@ -405,7 +405,7 @@
           "foundationUri": "http://id.who.int/icd/entity/491063206",
           "linearizationUri": "http://id.who.int/icd/release/11/2026-01/mms/491063206/unspecified",
           "relation": null,
-          "relationN": -1,
+          "relationN": null,
           "cardinality": "no_mapping",
           "normalization": "exact"
         },
@@ -418,7 +418,7 @@
           "foundationUri": "http://id.who.int/icd/entity/76222516",
           "linearizationUri": "http://id.who.int/icd/release/11/2026-01/mms/76222516/unspecified",
           "relation": null,
-          "relationN": -1,
+          "relationN": null,
           "cardinality": "no_mapping",
           "normalization": "exact"
         }
@@ -521,7 +521,7 @@
           "linearizationUri": "http://id.who.int/icd/release/11/2026-01/mms/142052508/unspecified",
           "relation": "Subclass",
           "relationN": -1,
-          "cardinality": "1:1",
+          "cardinality": "1:N",
           "normalization": "exact"
         },
         {
@@ -532,9 +532,9 @@
           "table": "multiple",
           "foundationUri": "http://id.who.int/icd/entity/22148446",
           "linearizationUri": "http://id.who.int/icd/release/11/2026-01/mms/142052508/other",
-          "relation": "Subclass",
-          "relationN": -1,
-          "cardinality": "1:1",
+          "relation": null,
+          "relationN": null,
+          "cardinality": "1:N",
           "normalization": "exact"
         }
       ]
@@ -558,20 +558,20 @@
           "linearizationUri": "http://id.who.int/icd/release/11/2026-01/mms/570881596",
           "relation": "Subclass",
           "relationN": 0,
-          "cardinality": "1:1",
+          "cardinality": "1:N",
           "normalization": "exact"
         },
         {
           "code": "1B12.40/FA10.0",
           "titleEn": "Tuberculosis of bones or joints / Bacterial infection of joint",
-          "titlePt": "Tuberculose dos ossos ou das articulações",
+          "titlePt": "Tuberculose dos ossos ou das articulações / Infecção bacteriana da articulação",
           "kind": "category",
           "table": "multiple",
           "foundationUri": "http://id.who.int/icd/entity/1055680550",
           "linearizationUri": "http://id.who.int/icd/release/11/2026-01/mms/570881596",
-          "relation": "Subclass",
-          "relationN": 0,
-          "cardinality": "1:1",
+          "relation": null,
+          "relationN": null,
+          "cardinality": "1:N",
           "normalization": "exact"
         }
       ]
@@ -636,7 +636,7 @@
         {
           "code": "1B95&XN7ZW",
           "titleEn": "Brucellosis [Brucella melitensis]",
-          "titlePt": "Brucelose",
+          "titlePt": "Brucelose [Brucella melitensis]",
           "kind": "category",
           "table": "one",
           "foundationUri": "http://id.who.int/icd/entity/1716687275",
@@ -741,6 +741,54 @@
           "relationN": 0,
           "cardinality": "1:1",
           "normalization": "exact"
+        }
+      ]
+    },
+    {
+      "input": "K35.0",
+      "code": "K35.0",
+      "reason": "parent_category",
+      "effectiveCode": "K35",
+      "brTitle": "Apendicite aguda com peritonite generalizada",
+      "existsInBr": true,
+      "active2019": false,
+      "targets": [
+        {
+          "code": "DB10.02",
+          "titleEn": "Acute appendicitis without localised or generalised peritonitis",
+          "titlePt": "Apendicite aguda sem peritonite localizada ou generalizada",
+          "kind": "category",
+          "table": "one",
+          "foundationUri": "http://id.who.int/icd/entity/40398753",
+          "linearizationUri": "http://id.who.int/icd/release/11/2026-01/mms/752235",
+          "relation": "Equivalent",
+          "relationN": 0,
+          "cardinality": "1:1",
+          "normalization": "parent_category"
+        }
+      ]
+    },
+    {
+      "input": "I21.7",
+      "code": "I21.7",
+      "reason": "not_in_br",
+      "effectiveCode": "I21",
+      "brTitle": null,
+      "existsInBr": false,
+      "active2019": false,
+      "targets": [
+        {
+          "code": "BA41.Z",
+          "titleEn": "Acute myocardial infarction, unspecified",
+          "titlePt": "Infarto agudo do miocárdio, não especificado",
+          "kind": "category",
+          "table": "one",
+          "foundationUri": "http://id.who.int/icd/entity/1334938734",
+          "linearizationUri": "http://id.who.int/icd/release/11/2026-01/mms/1334938734/unspecified",
+          "relation": "Equivalent",
+          "relationN": 0,
+          "cardinality": "1:1",
+          "normalization": "parent_category"
         }
       ]
     }

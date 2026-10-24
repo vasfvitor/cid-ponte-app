@@ -62,21 +62,38 @@
 
       <section id="result" hidden aria-live="polite" aria-labelledby="result-title"></section>
 
+      <!-- "Detalhar aqui": see src/ui/detail.ts. -->
+      <section id="detail" class="panel" hidden aria-labelledby="detail-title">
+        <div class="detail-head">
+          <h2 id="detail-title" tabindex="-1">Detalhar <span id="detail-context"></span></h2>
+          <button type="button" id="detail-close" class="link">Fechar</button>
+        </div>
+        <input type="text" class="ctw-input" data-ctw-ino="1" autocomplete="off" aria-label="Buscar na CID-11" />
+        <p id="detail-status" class="hint" role="status"></p>
+        <div class="detail-tools">
+          <button type="button" id="detail-words" class="link" aria-expanded="false">Palavras relacionadas</button>
+          <a id="detail-who" href="#" target="_blank" rel="noopener">Abrir no site da OMS</a>
+        </div>
+        <div class="ctw-window" data-ctw-ino="1"></div>
+        <div id="detail-output" aria-live="polite" tabindex="-1"></div>
+      </section>
+
       <section id="error" class="panel error" hidden role="alert"></section>
     </main>
 
     <footer class="foot">
       <!-- How to read the result: shown once the WHO data is loaded (main.ts start). -->
       <div id="guide" hidden>
-        <p><strong>Use como ponto de partida, não como código final.</strong></p>
-        <ul class="rules">
+        <details class="rules-box">
+          <summary>Use como ponto de partida, não como código final.</summary>
+          <ul class="rules">
           <li>
             <strong>O correspondente pode ser menos específico que o original.</strong>
             <button type="button" class="chip" data-code="E11.3">E11.3</button>
             (diabetes tipo 2 com complicações oftálmicas) vira <code>5A11</code> (diabetes tipo 2). A
             complicação deve ser codificada também, por exemplo <code>9B71.0</code> (retinopatia
             diabética); veja
-            <button type="button" class="term" data-term="pos-coordenacao" popovertarget="term-pos-coordenacao">detalhar</button>.
+            <span class="nowrap"><button type="button" class="term" data-term="pos-coordenacao" popovertarget="term-pos-coordenacao">detalhar</button>.</span>
           </li>
           <li>
             <strong>O
@@ -97,7 +114,8 @@
             <button type="button" class="term" data-term="mapa" popovertarget="term-mapa">mapa da OMS</button>;
             a causa básica deve ser selecionada de novo a partir da declaração de óbito, pelas regras da CID-11.
           </li>
-        </ul>
+          </ul>
+        </details>
         <details class="glossary">
           <summary>Glossário</summary>
           <dl id="glossary"></dl>

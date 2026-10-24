@@ -1,0 +1,21 @@
+# Token proxy for the Embedded Coding Tool. Deploy steps in README.md.
+name = "cid-ponte-token"
+main = "src/index.ts"
+compatibility_date = "2026-09-01"
+
+[vars]
+# The app's origin (GitHub Pages). Local dev origins: [env.dev] below.
+ALLOWED_ORIGINS = "https://vasfvitor.github.io"
+
+# Per-IP limit on token requests, so our WHO credentials are not used in volume.
+[[ratelimits]]
+name = "LIMITER"
+namespace_id = "1001"
+simple = { limit = 30, period = 60 }
+
+# `wrangler dev --env dev`: Vite's dev server instead of GitHub Pages. (.dev.vars and --var do
+# not override [vars] in wrangler 4.151.)
+[env.dev.vars]
+ALLOWED_ORIGINS = "http://localhost:5173,http://localhost:5199"
+
+# Secrets (not here): ICD_CLIENT_ID, ICD_CLIENT_SECRET, set with `wrangler secret put`.

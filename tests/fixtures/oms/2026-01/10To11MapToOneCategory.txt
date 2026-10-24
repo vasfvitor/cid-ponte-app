@@ -25,7 +25,9 @@ category	2	F41.0	V	Panic disorder [episodic paroxysmal anxiety]	category	1	http:
 chapter	1	IX	IX	Diseases of the circulatory system	category	1	http://id.who.int/icd/entity/426429380	http://id.who.int/icd/release/11/2026-01/mms/426429380/unspecified	BE2Z	11	Diseases of the circulatory system, unspecified
 block	1	I10-I15	IX	Hypertensive diseases	category	1	http://id.who.int/icd/entity/924915526	http://id.who.int/icd/release/11/2026-01/mms/1331849426	BA04	11	Secondary hypertension
 category	1	I10	IX	Essential (primary) hypertension	category	2	http://id.who.int/icd/entity/761947693	http://id.who.int/icd/release/11/2026-01/mms/761947693/unspecified	BA00.Z	11	Essential hypertension, unspecified
+category	1	I21	IX	Acute myocardial infarction	category	2	http://id.who.int/icd/entity/1334938734	http://id.who.int/icd/release/11/2026-01/mms/1334938734/unspecified	BA41.Z	11	Acute myocardial infarction, unspecified
 category	2	J18.9	X	Pneumonia, unspecified	category	2	http://id.who.int/icd/entity/142052508	http://id.who.int/icd/release/11/2026-01/mms/142052508/unspecified	CA40.Z	12	Pneumonia, organism unspecified
+category	1	K35	XI	Acute appendicitis	category	3	http://id.who.int/icd/entity/40398753	http://id.who.int/icd/release/11/2026-01/mms/752235	DB10.02	13	Acute appendicitis without localised or generalised peritonitis
 category	2	L73.9	XII	Follicular disorder, unspecified			No Mapping				
 category	1	O80	XV	Single spontaneous delivery	category	2	http://id.who.int/icd/entity/1902649856	http://id.who.int/icd/release/11/2026-01/mms/1902649856/unspecified	JB20.Z	18	Single spontaneous delivery, unspecified
 category	2	T74.8	XIX	Other maltreatment syndromes			No Mapping				

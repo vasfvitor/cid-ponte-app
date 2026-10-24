@@ -1,0 +1,299 @@
+/*
+ * The ECT's stylesheet, then our rules over its rendered markup (class names seen in the page,
+ * ECT 1.8.0; license notes in src/ui/detail.ts), using the tokens of src/style.css. Where the ECT
+ * uses !important, so do we. Recheck after updating @whoicd/icd11ect.
+ */
+
+@import "@whoicd/icd11ect/style.css";
+
+#detail .ectComponent {
+  font-family: var(--sans);
+  font-size: 0.9375rem;
+  line-height: 1.45;
+  color: var(--fg);
+}
+
+/* Related words: hidden until "Palavras relacionadas" is pressed. */
+#detail:not(.show-words) .searchresults > .ctwFlexItem25,
+#detail:not(.show-words) .statusFlexWords {
+  display: none;
+}
+
+#detail:not(.show-words) .searchresults > .ctwFlexItem75 {
+  width: 100%;
+}
+
+/* Headings and highlights: orange → our text and accent colours. */
+#detail .ectComponent h4 {
+  margin: 8px 0;
+  color: var(--fg-muted);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+#detail .ectComponent em.found {
+  font-style: normal;
+  font-weight: 650;
+  color: var(--accent);
+}
+
+#detail .ectComponent select,
+#detail .ectComponent .sortoption,
+#detail .ectComponent .showlink {
+  font: inherit;
+  font-size: 0.875rem;
+  color: var(--accent);
+}
+
+/* Codes in the app's code font. */
+#detail .entityTheCode,
+#detail .entityDetailsTheCode,
+#detail .postcoordCode {
+  font-family: var(--mono);
+  color: var(--fg);
+}
+
+#detail .pcicon {
+  font-family: var(--mono);
+  color: var(--fg-muted);
+}
+
+/* "Os resultados exibidos estão incompletos" (WHO's API cut the list at 50): a quiet note, not an
+   orange alert, with the app's info icon. */
+#detail .chopped {
+  display: block;
+  margin: 6px 0 2px;
+  color: var(--fg-muted);
+  font-size: 0.8125rem;
+  text-align: left;
+}
+
+#detail .chopped::before {
+  content: "" / "";
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  margin-right: 6px;
+  vertical-align: -0.15em;
+  background: currentColor;
+  -webkit-mask: var(--icon-info) center / contain no-repeat;
+  mask: var(--icon-info) center / contain no-repeat;
+}
+
+/* Result rows: more air, rounded; the best match tinted with our accent instead of light blue. */
+#detail .entityHead {
+  padding: 6px;
+  border-radius: var(--radius-sm);
+  align-items: flex-start;
+}
+
+/* The whole code: the ECT cuts it with "…" at 105px, narrower than a composite (1C41/1G40&XN1P6,
+   ~121px). A column it fits in, wrapped when longer. */
+#detail .entityTheCode {
+  flex: 0 0 8rem;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  overflow: visible;
+}
+
+#detail .ectComponent .importantlabel {
+  background-color: var(--accent-tint) !important;
+}
+
+#detail .ectComponent .importantlabel:not(.keyboardOnlyHighlight):hover,
+#detail .ectComponent .importantlabelCurrentEntityHighlighted {
+  background-color: color-mix(in srgb, var(--accent) 14%, var(--surface)) !important;
+}
+
+/* Wide screen (not the phone query below, so no width falls between the two): the lists scroll
+   inside the panel instead of stretching the page. */
+@media not all and (max-width: 640px) {
+  #detail .searchresults > .overflowBox {
+    max-height: 60vh;
+    overflow-y: auto;
+  }
+}
+
+/* "+" (postcoordinate) and "[Detalhes]": bigger targets. */
+#detail .circleicon,
+#detail .circleiconWithinDetails {
+  display: inline-grid;
+  place-items: center;
+  min-width: 28px;
+  min-height: 28px;
+  font-size: 1rem;
+}
+
+#detail .showlink {
+  display: inline-block;
+  padding: 4px 2px;
+}
+
+/* Postcoordination window. */
+#detail .browserContent {
+  font-family: var(--sans);
+  color: var(--fg);
+  border-radius: var(--radius);
+}
+
+/* Axis names, their left rule and the "Código:" bar: orange → our colours. */
+#detail .rtitle {
+  color: var(--fg);
+  font-weight: 600;
+}
+
+#detail .postcoordColored,
+#detail em.nonwbe {
+  color: var(--fg-muted);
+}
+
+#detail .postcoordAction {
+  border-left-color: var(--line-strong);
+}
+
+#detail .ectComponent .postcoordForSelection,
+#detail .ectComponent .labelinh.selected {
+  background-color: var(--accent-tint) !important;
+  border-color: var(--line);
+  border-radius: var(--radius-sm);
+}
+
+/* "Selecionar" (confirm the postcoordinated code) as the app's primary button. */
+#detail .postcoordForSelection button {
+  min-height: 36px;
+  padding: 0 14px;
+  font: inherit;
+  font-weight: 600;
+  color: var(--accent-fg);
+  background: var(--accent);
+  border: 0;
+  border-radius: var(--radius-sm);
+}
+
+#detail .postcoordForSelection button:hover {
+  background: var(--accent-hover);
+}
+
+#detail .browserCloseiconWrapper {
+  display: grid;
+  place-items: center;
+  min-width: 36px;
+  min-height: 36px;
+  cursor: pointer;
+}
+
+#detail .browserCloseiconWrapper .closeicon {
+  font-size: 1.25rem;
+}
+
+#detail .postcoordSearchInput input {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 32rem;
+  min-height: 36px;
+  padding: 0 8px;
+  font: inherit;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+}
+
+@media (max-width: 640px) {
+  /* Results: code above title (the code's flex-basis is its desktop width). */
+  #detail .entityHead {
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  #detail .entityTheCode {
+    flex-basis: auto;
+  }
+
+  /* Related words, when shown: a block above the results instead of a narrow column. */
+  #detail .searchresults > .overflowBox,
+  #detail .statusdiv .ctwFlexItem25,
+  #detail .statusdiv .ctwFlexItem50 {
+    width: 100%;
+  }
+
+  #detail .statusdiv > div > div,
+  #detail .searchresults {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Title on its own line, the touch-sized icons and [Detalhes] below it: beside it, they left
+     the title a ~160px column. */
+  #detail .entityTitleAndIcons {
+    width: 100%;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  #detail .entityTitle {
+    flex-basis: 100%;
+  }
+
+  /* Index terms under a result: under the title (the ECT indents them past the code column). */
+  #detail .entityPv .pvs {
+    margin-left: 6px; /* .entityHead's padding */
+  }
+
+  #detail .circleicon,
+  #detail .circleiconWithinDetails,
+  #detail .browserCloseiconWrapper {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  /* The ⨉ closing a result's details: 15x17px as drawn. */
+  #detail .entityDetailsCloseicon {
+    display: inline-grid;
+    place-items: center;
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  /* Postcoordination window: full screen, one scroll, hierarchy (shorter) above the details. */
+  #detail .browserContent {
+    position: fixed;
+    inset: 0;
+    width: auto;
+    height: auto;
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+    overflow-y: auto;
+  }
+
+  #detail .browserBody {
+    display: block;
+    height: auto;
+  }
+
+  #detail .browserBodyLeft {
+    width: auto;
+    max-width: none;
+    height: auto;
+    max-height: 30vh;
+    resize: none;
+    border-bottom: 1px solid var(--line);
+  }
+
+  #detail .browserBodyRight {
+    width: auto;
+    height: auto;
+    overflow: visible;
+  }
+
+  #detail .postcoordSearchInput input {
+    max-width: none;
+    min-height: 44px;
+  }
+
+  /* Each axis's list in full, in the window's one scroll: a 300px box of its own inside it is a
+     scroll within a scroll on a touch screen. Its tree starts collapsed, so it stays short. */
+  #detail .postcoordSearch .hierarchy {
+    max-height: none;
+    overflow: visible;
+  }
+}

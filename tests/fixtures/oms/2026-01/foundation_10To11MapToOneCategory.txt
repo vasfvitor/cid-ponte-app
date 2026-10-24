@@ -25,7 +25,9 @@ Category	2	F41.0	V	Panic disorder [episodic paroxysmal anxiety]	http://id.who.in
 Chapter	1	IX	IX	Diseases of the circulatory system	http://id.who.int/icd/entity/426429380	Diseases of the circulatory system	Equivalent	0
 Block	1	I10-I15	IX	Hypertensive diseases	http://id.who.int/icd/entity/924915526	Hypertensive diseases	Equivalent	0
 Category	1	I10	IX	Essential (primary) hypertension	http://id.who.int/icd/entity/761947693	Essential hypertension	Equivalent	0
+Category	1	I21	IX	Acute myocardial infarction	http://id.who.int/icd/entity/1334938734	Acute myocardial infarction	Equivalent	0
 Category	2	J18.9	X	Pneumonia, unspecified	http://id.who.int/icd/entity/142052508	Pneumonia	Subclass	-1
+Category	1	K35	XI	Acute appendicitis	http://id.who.int/icd/entity/40398753	Acute appendicitis	Equivalent	0
 Category	2	L73.9	XII	Follicular disorder, unspecified	No Mapping			-1
 Category	1	O80	XV	Single spontaneous delivery	http://id.who.int/icd/entity/1902649856	Single spontaneous delivery	Equivalent	0
 Category	2	T74.8	XIX	Other maltreatment syndromes	No Mapping			-1

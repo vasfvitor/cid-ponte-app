@@ -1,8 +1,8 @@
 /** `Bridge`: applies the WHO 10↔11 tables to Brazilian ICD-10 codes. Port of cid-ponte's `Mapa`. */
 
-import { BrTable, NO_BR_PATH, mappableParent } from "./br";
+import { BrTable, NO_BR_PATH, isPlaceOfOccurrence, mappableParent } from "./br";
 import type { BrCode } from "./br";
-import { normalize10, parse11 } from "./codes";
+import { isSimple, normalize10, parse11 } from "./codes";
 import { MAPPING_FILES, readMappingTable, readSimpleTabulation, simpleTabulationFile } from "./tables";
 import type {
   Cardinality, Entity11, Lookup, Normalization, Origin10, Reason, Row, TableName, Target,
@@ -31,6 +31,12 @@ type Resolved =
 
 /** WHO marks "No Mapping" with an empty target: no class kind on the row. */
 const hasNoMapping = (row: Row): boolean => !row["icd11_class_kind"];
+
+/** Why a subcategory fell back to its 3-char category `effective` (same order as cid-ponte). */
+function fallbackReason(existsInBr: boolean, effective: string): Reason {
+  if (!existsInBr) return "not_in_br";
+  return isPlaceOfOccurrence(effective) ? "place_of_occurrence" : "parent_category";
+}
 
 export class Bridge {
   readonly release: string;
@@ -106,6 +112,29 @@ export class Bridge {
     return p ? this.titles.get(p.stems[0]!) : undefined;
   }
 
+  /** Title of a single MMS code from the SimpleTabulation: Portuguese, else English, else null. */
+  titleOf(code: string): string | null {
+    const e = this.titles.get(code);
+    return e?.title ?? e?.titleEn ?? null;
+  }
+
+  /**
+   * Portuguese title of an MMS code. Composite targets ("1C41/1G40&XN1P6") are not in the
+   * SimpleTabulation: their title joins the parts in WHO's English-title format,
+   * "stem / stem [extension, extension]", each part falling back to English, then to its code.
+   * A simple code missing from the SimpleTabulation has no Portuguese title (null).
+   */
+  private titlePt(code: string | null): string | null {
+    if (!code) return null;
+    const exact = this.titles.get(code);
+    if (exact) return exact.title;
+    const p = parse11(code);
+    if (!p || isSimple(p)) return null;
+    const part = (c: string): string => this.titleOf(c) ?? c;
+    const ext = p.extensions.length ? ` [${p.extensions.map(part).join(", ")}]` : "";
+    return p.stems.map(part).join(" / ") + ext;
+  }
+
   private resolve(input: string | null | undefined): Resolved {
     const code = normalize10(input) ?? "";
     if (!code) return { code, effective: null, reason: "empty" };
@@ -122,11 +151,13 @@ export class Bridge {
   private cardinality(effective: string, row: Row): Cardinality {
     if (hasNoMapping(row)) return "no_mapping";
     if (row["icd11_class_kind"] === "block") return "block";
+    // The OneCategory target is not always among the MultipleCategories ones.
     const distinct = new Set<string>();
     for (const r of this.multiple.get(effective) ?? []) {
       const c = r["icd11_code"];
       if (c) distinct.add(c);
     }
+    if (row["icd11_code"]) distinct.add(row["icd11_code"]);
     return distinct.size >= 2 ? "1:N" : "1:1";
   }
 
@@ -135,12 +166,13 @@ export class Bridge {
     cardinality: Cardinality,
   ): Target {
     const code = row["icd11_code"] ?? null;
-    const f = this.foundation.get(effective);
+    // The foundation table describes the OneCategory target only.
+    const f = table === "one" ? this.foundation.get(effective) : undefined;
     const n = f?.["relation_n"];
     return {
       code,
       titleEn: row["icd11_title"] ?? null,
-      titlePt: this.entityOf(code)?.title ?? null,
+      titlePt: this.titlePt(code),
       kind: row["icd11_class_kind"] ?? null,
       table,
       foundationUri: row["icd11_foundation_uri"] ?? null,
@@ -180,9 +212,10 @@ export class Bridge {
     if (r.effective === null) {
       reason = r.reason;
     } else {
+      // "not in BR" needs the BR table: without one (BrTable.empty()) nothing is known to exist.
       reason = hasNoMapping(r.row)
         ? "no_mapping"
-        : r.normalization === "exact" ? "mapped" : "parent_category";
+        : r.normalization === "exact" ? "mapped" : fallbackReason(info.exists || this.br.size === 0, r.effective);
       targets = this.targetsFor(r);
     }
     return {

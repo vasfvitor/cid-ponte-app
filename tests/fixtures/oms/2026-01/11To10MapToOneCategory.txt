@@ -39,9 +39,11 @@ http://id.who.int/icd/release/11/2026-01/mms/767044268/unspecified	6C20.Z	06	Bod
 http://id.who.int/icd/release/11/2026-01/mms/334423054/unspecified	6E8Z	06	Mental, behavioural or neurodevelopmental disorders, unspecified	F99-F99	V	Unspecified mental disorder
 http://id.who.int/icd/release/11/2026-01/mms/761947693/unspecified	BA00.Z	11	Essential hypertension, unspecified	I10	IX	Essential (primary) hypertension
 http://id.who.int/icd/release/11/2026-01/mms/1331849426	BA04	11	Secondary hypertension	I15	IX	Secondary hypertension
+http://id.who.int/icd/release/11/2026-01/mms/1334938734/unspecified	BA41.Z	11	Acute myocardial infarction, unspecified	I21.9	IX	Acute myocardial infarction, unspecified
 http://id.who.int/icd/release/11/2026-01/mms/426429380/unspecified	BE2Z	11	Diseases of the circulatory system, unspecified	IX	IX	Diseases of the circulatory system
 http://id.who.int/icd/release/11/2026-01/mms/142052508/other	CA40.Y	12	Other specified pneumonia	J09-J18	X	Influenza and pneumonia
 http://id.who.int/icd/release/11/2026-01/mms/142052508/unspecified	CA40.Z	12	Pneumonia, organism unspecified	J09-J18	X	Influenza and pneumonia
+http://id.who.int/icd/release/11/2026-01/mms/752235	DB10.02	13	Acute appendicitis without localised or generalised peritonitis	K35	XI	Acute appendicitis
 http://id.who.int/icd/release/11/2026-01/mms/236964647/unspecified	ED91.Z	14	Disorders of the sebaceous gland, unspecified	L73.9	XII	Follicular disorder, unspecified
 http://id.who.int/icd/release/11/2026-01/mms/900320365/other	ED9Y	14	Other specified disorders involving the hair follicle	XII	XII	Diseases of the skin and subcutaneous tissue
 http://id.who.int/icd/release/11/2026-01/mms/796132216	EG30.0	14	Scalp folliculitis	L73.9	XII	Follicular disorder, unspecified

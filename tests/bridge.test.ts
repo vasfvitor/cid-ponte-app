@@ -6,21 +6,15 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 
-import { Bridge, MAPPING_FILES, simpleTabulationFile } from "../src/bridge";
 import type { Lookup, Origin10 } from "../src/bridge";
-import { loadBrTable, readFixture } from "./helpers";
+import { fixtureBridge, loadBrTable } from "./helpers";
 
 const golden = JSON.parse(
   readFileSync(new URL("./fixtures/golden-2026-01.json", import.meta.url), "utf8"),
 ) as { release: string; lookups: Lookup[]; reverse: Record<string, Origin10[]> };
 
 const br = loadBrTable();
-const files = [...Object.values(MAPPING_FILES), simpleTabulationFile("pt")];
-const bridge = Bridge.fromTexts(
-  golden.release,
-  Object.fromEntries(files.map((f) => [f, readFixture(golden.release, f)])),
-  br,
-);
+const bridge = fixtureBridge(golden.release, br);
 
 describe("golden lookups (same answers as cid-ponte)", () => {
   for (const c of golden.lookups) {
@@ -64,5 +58,21 @@ describe("titles and entities", () => {
     const ex = bridge.explain("O80");
     expect(ex.one[0]?.["icd10_code"]).toBe("O80");
     expect(["Equivalent", "Subclass"]).toContain(ex.foundation[0]?.["relation"]);
+  });
+});
+
+describe("without the Brazilian table", () => {
+  const bare = fixtureBridge(golden.release);
+
+  it("does not call a fallback code 'not in BR' when there is no BR table to check", () => {
+    expect(bare.lookup("W00.0").reason).toBe("place_of_occurrence");
+    expect(bare.lookup("K35.0").reason).toBe("parent_category");
+  });
+});
+
+describe("titleOf", () => {
+  it("gives the pt title, else null (no code fallback for a simple code)", () => {
+    expect(bridge.titleOf("BA00.Z")).toMatch(/hipertens/i);
+    expect(bridge.titleOf("ZZ99")).toBeNull();
   });
 });

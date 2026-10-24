@@ -50,11 +50,14 @@ describe.skipIf(!process.env["LIVE"] && !process.env["WHO_FILES_DIR"])(`live WHO
     expect(bridge.lookup("U071").targets[0]?.code).toBe("RA01.0");
 
     const w000 = bridge.lookup("W000");
-    expect(w000.reason).toBe("parent_category");
+    expect(w000.reason).toBe("place_of_occurrence");
     expect(w000.effectiveCode).toBe("W00");
     expect(w000.targets.length).toBeGreaterThan(0);
 
     expect(bridge.lookup("O930").reason).toBe("no_br_path");
+    // Other fallbacks to the 3-char category (cid-ponte 0.2.0)
+    expect(bridge.lookup("K350").reason).toBe("parent_category");
+    expect(bridge.lookup("I21.7").reason).toBe("not_in_br");
 
     // Codes the footer cites as what completes E11.3 and W00.0 (index.html, "Use como ponto de partida")
     expect(bridge.entityOf("9B71.0")?.title).toMatch(/retinopatia diabética/i);

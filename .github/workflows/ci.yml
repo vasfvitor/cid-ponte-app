@@ -22,7 +22,10 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm test
       - run: pnpm build
-      - name: dist contains only the expected files (nothing from WHO)
+        env:
+          # Token proxy (worker/README.md); without it the "Detalhar aqui" panel is left out.
+          VITE_DETAIL_TOKEN_URL: ${{ vars.VITE_DETAIL_TOKEN_URL }}
+      - name: dist contains only the expected files (no WHO data)
         run: |
           if find dist -type f | sort | grep -vE '^dist/(index\.html|assets/[A-Za-z0-9_-]+\.(js|css|woff2)|data/(cid10_v2019\.csv|FONTES\.md))$'; then
             echo "unexpected files in dist/"; exit 1
